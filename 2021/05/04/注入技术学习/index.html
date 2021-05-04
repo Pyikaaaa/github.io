@@ -7,15 +7,38 @@
   
   
   
-  <title>Pyikaaaa</title>
+  <title>注入技术学习 | Pyikaaaa</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Pyikaaaa">
-<meta property="og:url" content="http://example.com/index.html">
+  <meta name="description" content="注入技术DLL注入技术0x00  概述DLL注入技术，一般来讲是向一个正在运行的进程插入&#x2F;注入代码的过程。我们注入的代码以动态链接库（DLL）的形式存在。DLL文件在运行时将按需加载（类似于UNIX系统中的共享库）。本工程中，我将仅使用DLL文件，然而实际上，我们可以以其他的多种形式“注入“代码（正如恶意软件中所常见的，任意PE文件，shellcode代码&#x2F;程序集等）。   同时要记住，你需要合适">
+<meta property="og:type" content="article">
+<meta property="og:title" content="注入技术学习">
+<meta property="og:url" content="http://example.com/2021/05/04/%E6%B3%A8%E5%85%A5%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/index.html">
 <meta property="og:site_name" content="Pyikaaaa">
+<meta property="og:description" content="注入技术DLL注入技术0x00  概述DLL注入技术，一般来讲是向一个正在运行的进程插入&#x2F;注入代码的过程。我们注入的代码以动态链接库（DLL）的形式存在。DLL文件在运行时将按需加载（类似于UNIX系统中的共享库）。本工程中，我将仅使用DLL文件，然而实际上，我们可以以其他的多种形式“注入“代码（正如恶意软件中所常见的，任意PE文件，shellcode代码&#x2F;程序集等）。   同时要记住，你需要合适">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.imgur.com/chRl9J9.png">
+<meta property="og:image" content="https://i.imgur.com/8PQbTZR.png">
+<meta property="og:image" content="https://i.imgur.com/BsVqvKg.png">
+<meta property="og:image" content="https://i.imgur.com/7vrVxs1.png">
+<meta property="og:image" content="https://i.imgur.com/91cPkmh.png">
+<meta property="og:image" content="https://i.imgur.com/PvwF4fX.png">
+<meta property="og:image" content="https://i.imgur.com/4DGAiHp.png">
+<meta property="og:image" content="https://i.imgur.com/LRwTZzr.png">
+<meta property="og:image" content="https://i.imgur.com/opVC7fF.png">
+<meta property="og:image" content="https://i.imgur.com/rFHDTGG.png">
+<meta property="og:image" content="https://i.imgur.com/Y8Gnccg.png">
+<meta property="og:image" content="https://i.imgur.com/dhaagOm.png">
+<meta property="og:image" content="https://i.imgur.com/nHTTwyf.png">
+<meta property="og:image" content="https://i.imgur.com/5ESa6Zj.png">
+<meta property="og:image" content="https://i.imgur.com/LPYc4XB.png">
+<meta property="og:image" content="https://i.imgur.com/j1o83n3.png">
+<meta property="og:image" content="https://i.imgur.com/5mfgPvg.png">
+<meta property="article:published_time" content="2021-05-04T08:40:20.000Z">
+<meta property="article:modified_time" content="2021-05-04T09:08:24.001Z">
 <meta property="article:author" content="Pyikaaaa">
+<meta property="article:tag" content="RE">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/chRl9J9.png">
   
     <link rel="alternative" href="/atom.xml" title="Pyikaaaa" type="application/atom+xml">
   
@@ -33,9 +56,6 @@
   <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   
-    
-    
-  
   
       <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
   
@@ -46,8 +66,8 @@
       var yiliaConfig = {
           fancybox: true,
           animate: true,
-          isHome: true,
-          isPost: false,
+          isHome: false,
+          isPost: true,
           isArchive: false,
           isTag: false,
           isCategory: false,
@@ -232,9 +252,7 @@
         </header>
     </div>
 </nav>
-      <div class="body-wrap">
-  
-    <article id="post-注入技术学习" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-注入技术学习" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
       <a  href="/2021/05/04/%E6%B3%A8%E5%85%A5%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/" class="article-date">
@@ -251,13 +269,24 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a  class="article-title" href="/2021/05/04/%E6%B3%A8%E5%85%A5%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/">注入技术学习</a>
+    <h1 class="article-title" itemprop="name">
+      注入技术学习
     </h1>
   
 
 
       </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RE/" rel="tag">RE</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
       
     
     <div class="article-entry" itemprop="articleBody">
@@ -473,517 +502,129 @@
       
     </div>
     
-    <div class="article-info article-info-index">
-      
-      
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RE/" rel="tag">RE</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
   </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a  href="/2021/05/04/%E6%B3%A8%E5%85%A5%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/">注入技术学习</a></p>
+        <p><span>文章作者:</span><a  href="/" title="访问  的个人博客"></a></p>
+        <p><span>发布时间:</span>2021年05月04日 - 16时40分</p>
+        <p><span>最后更新:</span>2021年05月04日 - 17时08分</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2021/05/04/%E6%B3%A8%E5%85%A5%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/" title="注入技术学习">http://example.com/2021/05/04/%E6%B3%A8%E5%85%A5%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://example.com/2021/05/04/%E6%B3%A8%E5%85%A5%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/　　作者: " title=""></span>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" title="中国大陆 (CC BY-NC-SA 3.0 CN)" target = "_blank">"署名-非商用-相同方式共享 3.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+<nav id="article-nav">
+  
+  
+    <a  href="/2021/04/17/MEMZ%E5%88%86%E6%9E%90/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">MEMZ分析</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+
   
 </article>
 
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B3%A8%E5%85%A5%E6%8A%80%E6%9C%AF"><span class="toc-number">1.</span> <span class="toc-text">注入技术</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DLL%E6%B3%A8%E5%85%A5%E6%8A%80%E6%9C%AF"><span class="toc-number">2.</span> <span class="toc-text">DLL注入技术</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x00-%E6%A6%82%E8%BF%B0"><span class="toc-number">2.1.</span> <span class="toc-text">0x00  概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-dll%E6%B3%A8%E5%85%A5%E6%B5%81%E7%A8%8B"><span class="toc-number">2.1.1.</span> <span class="toc-text">1.dll注入流程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-CreateRemoteThread"><span class="toc-number">2.2.</span> <span class="toc-text">0x01 CreateRemoteThread()   ***</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DLL%E6%B3%A8%E5%85%A5%E6%8A%80%E6%9C%AF-1"><span class="toc-number">3.</span> <span class="toc-text">DLL注入技术</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x00-%E6%A6%82%E8%BF%B0-1"><span class="toc-number">3.1.</span> <span class="toc-text">0x00  概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-dll%E6%B3%A8%E5%85%A5%E6%B5%81%E7%A8%8B-1"><span class="toc-number">3.1.1.</span> <span class="toc-text">1.dll注入流程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-CreateRemoteThread-1"><span class="toc-number">3.2.</span> <span class="toc-text">0x01 CreateRemoteThread()   ***</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DLL%E6%B3%A8%E5%85%A5%E6%8A%80%E6%9C%AF-2"><span class="toc-number">4.</span> <span class="toc-text">DLL注入技术</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x00-%E6%A6%82%E8%BF%B0-2"><span class="toc-number">4.1.</span> <span class="toc-text">0x00  概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-dll%E6%B3%A8%E5%85%A5%E6%B5%81%E7%A8%8B-2"><span class="toc-number">4.1.1.</span> <span class="toc-text">1.dll注入流程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-CreateRemoteThread-2"><span class="toc-number">4.2.</span> <span class="toc-text">0x01 CreateRemoteThread()   ***</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DLL%E6%B3%A8%E5%85%A5%E6%8A%80%E6%9C%AF-3"><span class="toc-number">5.</span> <span class="toc-text">DLL注入技术</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x00-%E6%A6%82%E8%BF%B0-3"><span class="toc-number">5.1.</span> <span class="toc-text">0x00  概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-dll%E6%B3%A8%E5%85%A5%E6%B5%81%E7%A8%8B-3"><span class="toc-number">5.1.1.</span> <span class="toc-text">1.dll注入流程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-CreateRemoteThread-3"><span class="toc-number">5.2.</span> <span class="toc-text">0x01 CreateRemoteThread()   ***</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DLL%E6%B3%A8%E5%85%A5%E6%8A%80%E6%9C%AF-4"><span class="toc-number">6.</span> <span class="toc-text">DLL注入技术</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x00-%E6%A6%82%E8%BF%B0-4"><span class="toc-number">6.1.</span> <span class="toc-text">0x00  概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-dll%E6%B3%A8%E5%85%A5%E6%B5%81%E7%A8%8B-4"><span class="toc-number">6.1.1.</span> <span class="toc-text">1.dll注入流程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-CreateRemoteThread-4"><span class="toc-number">6.2.</span> <span class="toc-text">0x01 CreateRemoteThread()   ***</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%B5%81%E7%A8%8B%E6%80%BB%E7%BB%93%EF%BC%9A"><span class="toc-number">6.2.1.</span> <span class="toc-text">2.流程总结：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%8D%B8%E8%BD%BDdll%EF%BC%9A"><span class="toc-number">6.2.2.</span> <span class="toc-text">3.卸载dll：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9%EF%BC%9A"><span class="toc-number">6.2.3.</span> <span class="toc-text">4.注意事项：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-NtCreateThreadEx"><span class="toc-number">6.3.</span> <span class="toc-text">0x02  NtCreateThreadEx() **</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-RtlCreateUserThread"><span class="toc-number">6.4.</span> <span class="toc-text">0x03 RtlCreateUserThread() ***</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-RtlCreateUserThread-%E5%AE%9E%E7%8E%B0dll%E6%B3%A8%E5%85%A5-%E4%BB%A3%E7%A0%811"><span class="toc-number">6.4.1.</span> <span class="toc-text">1.RtlCreateUserThread()   实现dll注入  代码1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-RtlCreateUserThread-%E5%AE%9E%E7%8E%B0dll%E6%B3%A8%E5%85%A5-%E4%BB%A3%E7%A0%812"><span class="toc-number">6.4.2.</span> <span class="toc-text">2.RtlCreateUserThread()   实现dll注入  代码2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E6%B5%81%E7%A8%8B%E6%80%BB%E7%BB%93"><span class="toc-number">6.4.3.</span> <span class="toc-text">3.流程总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x04-%E8%BF%9C%E7%A8%8B%E7%BA%BF%E7%A8%8B%E6%B3%A8%E5%85%A5%E7%9A%84%E4%B8%89%E4%B8%AA%E5%87%BD%E6%95%B0%E7%9A%84%E5%8C%BA%E5%88%AB%E4%B8%8E%E6%80%BB%E7%BB%93"><span class="toc-number">6.5.</span> <span class="toc-text">0x04  远程线程注入的三个函数的区别与总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x05-SetThreadContext"><span class="toc-number">6.6.</span> <span class="toc-text">0x05  SetThreadContext()</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%A6%82%E8%BF%B0%E5%8E%9F%E7%90%86"><span class="toc-number">6.6.1.</span> <span class="toc-text">1.概述原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B01"><span class="toc-number">6.6.2.</span> <span class="toc-text">2.代码实现1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B02"><span class="toc-number">6.6.3.</span> <span class="toc-text">3.代码实现2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E6%B5%81%E7%A8%8B%E6%80%BB%E7%BB%93%EF%BC%9A"><span class="toc-number">6.6.4.</span> <span class="toc-text">4.流程总结：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x06-SetWindowsHook"><span class="toc-number">6.7.</span> <span class="toc-text">0x06 SetWindowsHook</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%A6%82%E8%BF%B0%E5%8E%9F%E7%90%86-1"><span class="toc-number">6.7.1.</span> <span class="toc-text">1.概述原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E5%AE%9E%E7%8E%B0%E9%94%AE%E7%9B%98%E9%92%A9%E5%AD%90%E4%BB%A3%E7%A0%81"><span class="toc-number">6.7.2.</span> <span class="toc-text">4.实现键盘钩子代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E7%90%86%E8%A7%A3"><span class="toc-number">6.7.3.</span> <span class="toc-text">5.理解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E6%B5%81%E7%A8%8B%EF%BC%9A"><span class="toc-number">6.7.4.</span> <span class="toc-text">6.流程：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x07-%E5%8F%8D%E5%B0%84%E5%9E%8Bdll%E6%B3%A8%E5%85%A5"><span class="toc-number">6.8.</span> <span class="toc-text">0x07 反射型dll注入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x08-APC%E6%B3%A8%E5%85%A5"><span class="toc-number">6.9.</span> <span class="toc-text">0x08 APC注入</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86%EF%BC%88APC%EF%BC%89"><span class="toc-number">6.9.1.</span> <span class="toc-text">1.前置知识（APC）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x09-AppLint-DLLs-%E6%B3%A8%E5%86%8C%E8%A1%A8%E9%A1%B9%E6%B3%A8%E5%85%A5"><span class="toc-number">6.10.</span> <span class="toc-text">0x09 AppLint_DLLs 注册表项注入</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%A6%82%E8%BF%B0%EF%BC%9A"><span class="toc-number">6.10.1.</span> <span class="toc-text">1.概述：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%B5%81%E7%A8%8B%EF%BC%9A"><span class="toc-number">6.10.2.</span> <span class="toc-text">2.流程：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x0A-PE%E6%9C%89%E5%85%B3%E6%B3%A8%E5%85%A5"><span class="toc-number">6.11.</span> <span class="toc-text">0x0A PE有关注入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x0B-dll%E5%8A%AB%E6%8C%81%E6%B3%95"><span class="toc-number">6.12.</span> <span class="toc-text">0x0B dll劫持法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x0C-%E5%86%85%E6%A0%B8%E4%B8%AD%E9%80%9A%E8%BF%87Hook-Notify-%E5%B9%B2%E9%A2%84%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B%E6%B3%95"><span class="toc-number">6.13.</span> <span class="toc-text">0x0C  内核中通过Hook&#x2F;Notify 干预执行流程法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#oxoD-%E5%86%85%E6%A0%B8-KeUserModeCallback"><span class="toc-number">6.14.</span> <span class="toc-text">oxoD 内核 KeUserModeCallback</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#oxoE-%E8%BE%93%E5%85%A5%E6%B3%95%E6%B3%A8%E5%85%A5"><span class="toc-number">6.15.</span> <span class="toc-text">oxoE 输入法注入</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AD%A6%E4%B9%A0%E9%80%94%E5%BE%84%EF%BC%9A"><span class="toc-number">7.</span> <span class="toc-text">学习途径：</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#NO"><span class="toc-number">7.1.</span> <span class="toc-text">NO</span></a></li></ol></li></ol>
+</div>
+<style>
+    .left-col .switch-btn {
+        display: none;
+    }
+    .left-col .switch-area {
+        display: none;
+    }
+</style>
+<input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+
+<script>
+    var valueHide = "隐藏目录";
+    var valueShow = "显示目录";
+    if ($(".left-col").is(":hidden")) {
+        $("#tocButton").attr("value", valueShow);
+    }
+    $("#tocButton").click(function() {
+        if ($("#toc").is(":hidden")) {
+            $("#tocButton").attr("value", valueHide);
+            $("#toc").slideDown(320);
+            $(".switch-btn, .switch-area").fadeOut(300);
+        }
+        else {
+            $("#tocButton").attr("value", valueShow);
+            $("#toc").slideUp(350);
+            $(".switch-btn, .switch-area").fadeIn(500);
+        }
+    })
+    if ($(".toc").length < 1) {
+        $("#toc, #tocButton").hide();
+        $(".switch-btn, .switch-area").show();
+    }
+</script>
 
 
 
 
 
 
-
-
-
-
-  
-    <article id="post-MEMZ分析" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a  href="/2021/04/17/MEMZ%E5%88%86%E6%9E%90/" class="article-date">
-      <time datetime="2021-04-17T10:24:00.000Z" itemprop="datePublished">2021-04-17</time>
-</a>
-
-    </div>
-  
-  <div class="article-inner">
     
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
+
+
+
+    <div class="scroll" id="post-nav-button">
         
-  
-    <h1 itemprop="name">
-      <a  class="article-title" href="/2021/04/17/MEMZ%E5%88%86%E6%9E%90/">MEMZ分析</a>
-    </h1>
-  
-
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <p>流程：</p>
-<p>​    弹框  病毒提示信息  若两次都是是  则 执行5次线程  watchdog  </p>
-<p>watchdog（）</p>
-<p>{</p>
-<p>注册窗口  ；</p>
-<p>创建窗口；</p>
-<p>创建文件 physicaldrive；</p>
-<p>写入恶意代码进新开辟的堆内存空间；</p>
-<p>（覆盖完主引导扇区的512个字节空间后  继续写入恶意代码）</p>
-<p>把恶意代码写进文件physicaldrive；</p>
-<p>创建文件 note     把一些内容写进文件呢note，txt中  </p>
-<p>用notepad把note。txt打开</p>
-<p>创建线程</p>
-<p>}</p>
-<p>之后执行main进程  </p>
-<p>main（）</p>
-<p>{</p>
-<p>}</p>
-<p>end</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Pc%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" rel="tag">Pc样本分析</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-反调试" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a  href="/2021/04/13/%E5%8F%8D%E8%B0%83%E8%AF%95/" class="article-date">
-      <time datetime="2021-04-13T04:47:55.000Z" itemprop="datePublished">2021-04-13</time>
-</a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
+            <a  href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
-  
-    <h1 itemprop="name">
-      <a  class="article-title" href="/2021/04/13/%E5%8F%8D%E8%B0%83%E8%AF%95/">反调试</a>
-    </h1>
-  
-
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h1 id="反调试"><a href="#反调试" class="headerlink" title="反调试"></a>反调试</h1><h2 id="OXOO-简介"><a href="#OXOO-简介" class="headerlink" title="OXOO 简介"></a>OXOO 简介</h2><p>反调试技术，恶意代码用它识别是否被调试，或者让调试器失效。恶意代码编写者意识到分析人员经常使用调试器来观察恶意代码的操作，因此他们使用反调试技术尽可能地延长恶意代码的分析时间。为了阻止调试器的分析，当恶意代码意识到自己被调试时，它们可能改变正常的执行路径或者修改自身程序让自己崩溃，从而增加调试时间和复杂度。</p>
-<h2 id="0x01-window提供的用来探测调试器的API"><a href="#0x01-window提供的用来探测调试器的API" class="headerlink" title="0x01 window提供的用来探测调试器的API"></a>0x01 window提供的用来探测调试器的API</h2><h3 id="IsDebuggerPresent"><a href="#IsDebuggerPresent" class="headerlink" title="IsDebuggerPresent"></a><strong>IsDebuggerPresent</strong></h3><p><strong>原理</strong>：这个API的作用是查询<strong>进程环境块（Process Environment Block, PEB）</strong>中的<strong>IsDebugged</strong>标识。如果进程没有运行在调试器环境中，函数返回值为0；如果调试附加了进程的话，函数返回的是一个非0值。</p>
-<p><strong>绕过</strong>：想要克服这些检测, 只需要将<code>BeingDebugged</code>标志设为<code>0</code>即可 (或改变一下返回值).</p>
-<h3 id="CheckRemoteDebuggerPresent"><a href="#CheckRemoteDebuggerPresent" class="headerlink" title="CheckRemoteDebuggerPresent"></a><strong>CheckRemoteDebuggerPresent</strong></h3><p><strong>原理</strong>：看名字估计会以为这个是<strong>检测远程调试</strong>的，其实这东西跟上面那个基本上差不多，也是用来检测本机进程是不是运行在调试器中，但不会检测远程主机的调试器。这货也检查<strong>PEB里面的IsDebugged属性</strong>，这个API不仅可以探测进程自己本身是不是被调试，也可以探测本机系统的<strong>其他进程</strong>是不是被调试。<strong>函数本身将一个进程的句柄作为参数</strong>，检查句柄对应的是不是被调试attach了。同时，这个API也可以通过传递自身句柄来检查自己是不是被调试了。</p>
-<p><img src="https://i.imgur.com/8qFMQB2.png"></p>
-<p>如果调试器存在 (通常是检测自己是否正在被调试), 该函数会将<code>pbDebuggerPresent</code>指向的值设为<code>0xffffffff</code>.SEH异常处理</p>
-<p><strong>绕过</strong>：</p>
-<p>比如有如下代码：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    BOOL isDebuggerPresent = FALSE;</span><br><span class="line">    <span class="keyword">if</span> (CheckRemoteDebuggerPresent(GetCurrentProcess(), &amp;isDebuggerPresent ))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (isDebuggerPresent )</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;Stop debugging program!&quot;</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">            <span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>我们可以直接修改<code>isDebuggerPresent</code>的值或修改跳转条件来绕过 (注意不是<code>CheckRemoteDebuggerPresent</code>的 返回值, 它的返回值是用于表示函数是否正确执行).</p>
-<p>但如果要针对<code>CheckRemoteDebuggerPresent</code>这个 api 函数进行修改的话. 首先要知道<code>CheckRemoteDebuggerPresent</code>内部其实是通过调用<code>NtQueryInformationProcess</code>来完成功能的. 而我们就需要对<code>NtQueryInformationProcess</code>的返回值进行修改</p>
-<h3 id="NtQueryInformationProcess"><a href="#NtQueryInformationProcess" class="headerlink" title="NtQueryInformationProcess"></a><strong>NtQueryInformationProcess</strong></h3><h2 id="时间差检测"><a href="#时间差检测" class="headerlink" title="时间差检测"></a>时间差检测</h2><h2 id="覆写调试端口、自调试"><a href="#覆写调试端口、自调试" class="headerlink" title="覆写调试端口、自调试"></a>覆写调试端口、自调试</h2>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%8F%8D%E8%B0%83%E8%AF%95-%E9%80%86%E5%90%91/" rel="tag">反调试 逆向</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-creakeme160" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a  href="/2021/04/10/creakeme160/" class="article-date">
-      <time datetime="2021-04-10T13:31:51.000Z" itemprop="datePublished">2021-04-10</time>
-</a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
         
-  
-    <h1 itemprop="name">
-      <a  class="article-title" href="/2021/04/10/creakeme160/">creakeme160</a>
-    </h1>
-  
-
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
+            <a  href="/2021/04/17/MEMZ%E5%88%86%E6%9E%90/" title="下一篇: MEMZ分析">
+                <i class="fa fa-angle-right"></i>
+            </a>
         
-      
     </div>
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2021/05/04/%E6%B3%A8%E5%85%A5%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/">注入技术学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/17/MEMZ%E5%88%86%E6%9E%90/">MEMZ分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/13/%E5%8F%8D%E8%B0%83%E8%AF%95/">反调试</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/10/creakeme160/">creakeme160</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/10/%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%E5%AE%9E%E6%88%98Lab/">恶意代码分析实战Lab</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/10/%E5%AD%A6%E4%B9%A0%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">学习数据结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/09/%E7%AE%80%E5%8D%95%E6%80%BB%E7%BB%93%E6%8C%87%E9%92%88/">简单总结指针</a></li></ul>
     
-    <div class="article-info article-info-index">
-      
-      
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
 
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%A0%B4%E8%A7%A3/" rel="tag">破解</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
+    <script>
+        $(".post-list").addClass("toc-article");
+        // $(".post-list-item a").attr("target","_blank");
+        $("#post-nav-button > a:nth-child(2)").click(function() {
+            $(".fa-bars, .fa-times").toggle();
+            $(".post-list").toggle(300);
+            if ($(".toc").length > 0) {
+                $("#toc, #tocButton").toggle(200, function() {
+                    if ($(".switch-area").is(":visible")) {
+                        $("#toc, .switch-btn, .switch-area").toggle();
+                        $("#tocButton").attr("value", valueHide);
+                        }
+                    })
+            }
+            else {
+                $(".switch-btn, .switch-area").fadeToggle(300);
+            }
+        })
+    </script>
 
 
 
 
-  
-    <article id="post-恶意代码分析实战Lab" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a  href="/2021/04/10/%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%E5%AE%9E%E6%88%98Lab/" class="article-date">
-      <time datetime="2021-04-10T13:31:33.000Z" itemprop="datePublished">2021-04-10</time>
-</a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
+    <script>
         
-  
-    <h1 itemprop="name">
-      <a  class="article-title" href="/2021/04/10/%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%E5%AE%9E%E6%88%98Lab/">恶意代码分析实战Lab</a>
-    </h1>
-  
-
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%88%86%E6%9E%90/" rel="tag">分析</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-学习数据结构" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a  href="/2021/04/10/%E5%AD%A6%E4%B9%A0%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="article-date">
-      <time datetime="2021-04-10T13:21:44.000Z" itemprop="datePublished">2021-04-10</time>
-</a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a  class="article-title" href="/2021/04/10/%E5%AD%A6%E4%B9%A0%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">学习数据结构</a>
-    </h1>
-  
-
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h1 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h1><h2 id="0x00-预备知识"><a href="#0x00-预备知识" class="headerlink" title="0x00 预备知识"></a>0x00 预备知识</h2><h2 id="0x01-顺序存储"><a href="#0x01-顺序存储" class="headerlink" title="0x01 顺序存储"></a>0x01 顺序存储</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="0x02-链式存储"><a href="#0x02-链式存储" class="headerlink" title="0x02 链式存储"></a>0x02 链式存储</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h2 id="0x03-栈"><a href="#0x03-栈" class="headerlink" title="0x03 栈"></a>0x03 栈</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="0x04-队列"><a href="#0x04-队列" class="headerlink" title="0x04 队列"></a>0x04 队列</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<p>学习视频：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV11s41167h6?p=1">【郝斌】-数据结构入门_哔哩哔哩 (゜-゜)つロ 干杯~-bilibili</a></p>
-<p>复习链接：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/flmei/p/10768617.html">https://www.cnblogs.com/flmei/p/10768617.html</a></p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-简单总结指针" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a  href="/2021/04/09/%E7%AE%80%E5%8D%95%E6%80%BB%E7%BB%93%E6%8C%87%E9%92%88/" class="article-date">
-      <time datetime="2021-04-09T09:09:12.000Z" itemprop="datePublished">2021-04-09</time>
-</a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a  class="article-title" href="/2021/04/09/%E7%AE%80%E5%8D%95%E6%80%BB%E7%BB%93%E6%8C%87%E9%92%88/">简单总结指针</a>
-    </h1>
-  
-
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="指针"><a href="#指针" class="headerlink" title="指针"></a>指针</h2><p>1.任何类型都可以带*  加上*就是指针类型  *可以是任意多个</p>
-<p>2.指针类型的变量宽度永远是四个字节无论类型是什么  无论有几个*   （因为四个字节  绝对满足需求）</p>
-<p>3.指针类型 ++  或者–  增加（减少）的数量是去掉一个*后  变量的宽度    （因为有可能有多个 *）      </p>
-<ol start="4">
-<li>指针类型变量+N =指针类型变量+N*(去掉一个 *后类型的宽度)        -N同理     —–这个就是 你之前看的那个面试题</li>
-</ol>
-<p>5.指针类型可以做大小比较     指针无符号类型</p>
-<p>6.&amp;   取某一个变量的内存地址   不能是常量   常量不是容器</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">char  a;</span><br><span class="line">&amp;a   就是  char * a</span><br></pre></td></tr></table></figure>
-
-<p>7.*号后面一定是指针类型</p>
-<p>8.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">int ****  a;</span><br><span class="line">*(a) n  就是 *** a</span><br></pre></td></tr></table></figure>
-
-<p>对指针类型   前面加一个*  就是类型减少一个 *</p>
-<p>9.数组  传递的是地址  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">printf（&quot;%d\n&quot;,arr[i]）;</span><br><span class="line"></span><br><span class="line">部分汇编：</span><br><span class="line">mov  edx，dword ptr [ebp-4]</span><br><span class="line">mov  eax,dword ptr [ebp+8]</span><br><span class="line">mov  ecx,dword ptr [eax+edx*4]</span><br><span class="line">push ecx</span><br><span class="line">push ....&quot;%d\n&quot;....</span><br><span class="line">call printf(函数地址)</span><br><span class="line">add esp，8</span><br></pre></td></tr></table></figure>
-
-<p>edx做索引   ebp-4中  存储的是i</p>
-<p>传递给edx做索引，  ebp-8中存的是数组的首地址</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">printf(&quot;&amp;d\n&quot;,*(p+i));</span><br><span class="line"></span><br><span class="line">反汇编中与   数组作为参数传递 没区别</span><br></pre></td></tr></table></figure>
-
-<p>arr[i]=<em>(p+i)=p[i]</em></p>
-<p><em>=</em>(arr+i)    <strong>本质是地址   所以等价</strong></p>
-<p>10  指针与字符串</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> str[<span class="number">6</span>] = &#123;<span class="string">&#x27;a&#x27;</span>,<span class="string">&#x27;b&#x27;</span>,<span class="string">&#x27;c&#x27;</span>,<span class="string">&#x27;d&#x27;</span>,<span class="string">&#x27;e&#x27;</span>&#125; ;<span class="comment">//&#x27;\0&#x27; 或者 0有点忘了  具体的 </span></span><br><span class="line">char str[] = &#123;&#x27;abcde&#x27;&#125; ;//    先存在常量区  在复制到数组中      编译器末尾填0    有点忘了  具体的   </span><br><span class="line">char * str=&#x27;&#x27;abcde&#x27;&#x27;; //先在常量区存字符串   在指针里存地址 </span><br></pre></td></tr></table></figure>
-
-
-
-<p>11, 指针函数   就是普通的函数   但是返回值是指针类型</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">int *fun(int x,int y);</span><br></pre></td></tr></table></figure>
-
-<ol start="12">
-<li><p>函数指针</p>
-<p> 函数指针类型变量的定义</p>
-<p>定义的格式：</p>
-<p>返回类型 (调用约定  *变量名)(参数列表);</p>
-<p>int (__cdecl *pFun)(int,int);</p>
-</li>
-</ol>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"></span><br><span class="line"> <span class="comment">// 定义函数指针变量</span></span><br><span class="line"> <span class="keyword">int</span> (__cdecl *pFun)(<span class="keyword">int</span>,<span class="keyword">int</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//为函数指针变量赋值(赋的是地址)</span></span><br><span class="line">pFun =<span class="keyword">int</span> (__cdecl *)(<span class="keyword">int</span>,<span class="keyword">int</span>)<span class="number">10</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用函数指针变量</span></span><br><span class="line"><span class="keyword">int</span> r =pFun(<span class="number">1</span>,<span class="number">2</span>);</span><br><span class="line"> </span><br><span class="line"> <span class="keyword">return</span>; <span class="comment">//结束</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>// 我知道的是  定义函数指针   可以简单防止函数被下断点</p>
-<p>  断的是函数指针的位置</p>
-<ol start="12">
-<li>*（）和 [ ]</li>
-</ol>
-<p>可以相互转换</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">*(p+i)=p[i];</span><br><span class="line">*(*(p+i)+k)=p[i][K]</span><br><span class="line">*(*(*(p+i)+k)+m)=p[i][k][m]</span><br><span class="line">    </span><br></pre></td></tr></table></figure>
-
-<p>13  结构体指针</p>
-<p>（类似于  xx指针就是 指向xx  的 这种话是错误的     指针的类型只是说明 他的特性（就是宽度   4     加减操作这些））</p>
-<p>例如：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">struct Point&#123;</span><br><span class="line">int x;</span><br><span class="line">int y;</span><br><span class="line">&#125;</span><br><span class="line">void main（）</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">int arr[10]&#x3D;&#123;1,2,3,4,5,6,7,8,9,10&#125;</span><br><span class="line">Point* pp&#x3D;（struct Point *）arr；</span><br><span class="line">int x&#x3D;px-&gt;x;</span><br><span class="line">int y&#x3D;px-&gt;y;</span><br><span class="line">&#x2F;&#x2F;这个就是将结构体指针指向数组   但是需要强转</span><br><span class="line">这里  x就是1   y就是2</span><br><span class="line">px++；</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;指针++  px大小8个字节  所以之后指向 地址+8后 </span><br><span class="line">此时 px-&gt;x   就是 3    px-&gt;y  就是4</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>14 指针数组  和数组指针</p>
-<p>（1）指针数组   </p>
-<p>就是数组   </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">char* arr[10];&#x2F;&#x2F; 指针数组  10个指针 宽度四个字节</span><br><span class="line">Point* arr[10];&#x2F;&#x2F;宽度四个字节</span><br><span class="line">int******   arr[10];&#x2F;&#x2F;宽度四个字节</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">char* a &#x3D;&#39;&#39;hello&#39;&#39;;</span><br><span class="line"></span><br><span class="line">char* b&#x3D;&#39;&#39;world&#39;&#39;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">(1)char* arr[2]&#x3D;&#123;a,b&#125;;</span><br><span class="line">(2)char* arr[2];</span><br><span class="line">arr[0]&#x3D;a;</span><br><span class="line">arr[1]&#x3D;b;</span><br><span class="line">(3) char* arr[2]&#x3D;</span><br><span class="line">&#123;</span><br><span class="line">&#39;&#39;hello&#39;&#39;,</span><br><span class="line">&#39;&#39;world&#39;&#39;</span><br><span class="line"></span><br><span class="line">&#125;;&#x2F;&#x2F; 指针数组   成员还是指针类型  所以存的是字符串的内存地址 而不是字符串的ascll 码值</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 三种方式在内存布局上相同</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>（2）数组指针</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">int (*p)[10];</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>数组首地址的指针     p就是指向数组的指针</p>
-<p><img src="https://i.imgur.com/SWEtLSq.png"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">void main()</span><br><span class="line">&#123;</span><br><span class="line">int arr[]&#x3D;&#123;1,2,3,4,5,6,7,8,9,10&#125;</span><br><span class="line">int* x&#x3D;arr; &#x2F;&#x2F; int *</span><br><span class="line">int* y &#x3D;（int *）&amp;arr；&#x2F;&#x2F; int (*)[10]</span><br><span class="line">return</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/" rel="tag">c</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-
-  
-  
+    </script>
 
 </div>
       <footer id="footer">
