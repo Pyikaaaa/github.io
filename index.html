@@ -179,7 +179,7 @@
                 
                 <section class="switch-part switch-part2">
                     <div class="widget tagcloud" id="js-tagcloud">
-                        <a href="/tags/Pc%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" style="font-size: 10px;">Pc样本分析</a> <a href="/tags/RE/" style="font-size: 10px;">RE</a> <a href="/tags/c/" style="font-size: 10px;">c</a> <a href="/tags/%E5%88%86%E6%9E%90/" style="font-size: 20px;">分析</a> <a href="/tags/%E5%8F%8D%E8%B0%83%E8%AF%95-%E9%80%86%E5%90%91/" style="font-size: 10px;">反调试 逆向</a> <a href="/tags/%E6%83%B3%E6%B3%95/" style="font-size: 10px;">想法</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 10px;">数据结构</a> <a href="/tags/%E7%A0%B4%E8%A7%A3/" style="font-size: 10px;">破解</a>
+                        <a href="/tags/Pc%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" style="font-size: 10px;">Pc样本分析</a> <a href="/tags/RE/" style="font-size: 10px;">RE</a> <a href="/tags/c/" style="font-size: 10px;">c</a> <a href="/tags/linuxRE/" style="font-size: 10px;">linuxRE</a> <a href="/tags/%E5%88%86%E6%9E%90/" style="font-size: 20px;">分析</a> <a href="/tags/%E5%8F%8D%E8%B0%83%E8%AF%95-%E9%80%86%E5%90%91/" style="font-size: 10px;">反调试 逆向</a> <a href="/tags/%E6%83%B3%E6%B3%95/" style="font-size: 10px;">想法</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 10px;">数据结构</a> <a href="/tags/%E7%A0%B4%E8%A7%A3/" style="font-size: 10px;">破解</a>
                     </div>
                 </section>
                 
@@ -233,6 +233,142 @@
     </div>
 </nav>
       <div class="body-wrap">
+  
+    <article id="post-初步学习linux下的RE" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2021/05/06/%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0linux%E4%B8%8B%E7%9A%84RE/" class="article-date">
+      <time datetime="2021-05-06T12:36:23.000Z" itemprop="datePublished">2021-05-06</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a  class="article-title" href="/2021/05/06/%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0linux%E4%B8%8B%E7%9A%84RE/">初步学习linux下的RE</a>
+    </h1>
+  
+
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>开始linux下的RE学习   </p>
+<p>初来乍到  学习下基础的东西</p>
+<p>先把yara下载了 sudo   apt-get install  yara</p>
+<p>下载yara官方的规则库： </p>
+<p>git clone git://github.com/Yara-Rules/rules </p>
+<p>验证是否成功：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;rule dummy &#123; condition: true &#125;&quot; &gt; my_first_rule</span><br><span class="line"></span><br><span class="line">yara yara my_first_rule my_first_rule</span><br></pre></td></tr></table></figure>
+
+<p>apt-get install vim</p>
+<p>vim  使用：</p>
+<p>简单使用：</p>
+<p>vim 文件名</p>
+<p>i 进入插入模式 ，esc 普通模式 ，接着按：wq   保存并退出  ：！q  不保存  直接退出 。   ：q  保存 ，可以通过ctrl + z 推出</p>
+<p>cat 文件名  查看文件内容</p>
+<p>gcc a.c  </p>
+<p>./a.out   运行文件</p>
+<p>aot-get install gdb</p>
+<p>gdb：调试器</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linuxRE/" rel="tag">linuxRE</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-linux" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2021/05/06/linux/" class="article-date">
+      <time datetime="2021-05-06T12:36:02.000Z" itemprop="datePublished">2021-05-06</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a  class="article-title" href="/2021/05/06/linux/">linux</a>
+    </h1>
+  
+
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+
   
     <article id="post-yara使用" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -1014,136 +1150,10 @@
 
 
   
-    <article id="post-简单总结指针" class="article article-type-post" itemscope itemprop="blogPost">
   
-    <div class="article-meta">
-      <a  href="/2021/04/09/%E7%AE%80%E5%8D%95%E6%80%BB%E7%BB%93%E6%8C%87%E9%92%88/" class="article-date">
-      <time datetime="2021-04-09T09:09:12.000Z" itemprop="datePublished">2021-04-09</time>
-</a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a  class="article-title" href="/2021/04/09/%E7%AE%80%E5%8D%95%E6%80%BB%E7%BB%93%E6%8C%87%E9%92%88/">简单总结指针</a>
-    </h1>
-  
-
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="指针"><a href="#指针" class="headerlink" title="指针"></a>指针</h2><p>1.任何类型都可以带*  加上*就是指针类型  *可以是任意多个</p>
-<p>2.指针类型的变量宽度永远是四个字节无论类型是什么  无论有几个*   （因为四个字节  绝对满足需求）</p>
-<p>3.指针类型 ++  或者–  增加（减少）的数量是去掉一个*后  变量的宽度    （因为有可能有多个 *）      </p>
-<ol start="4">
-<li>指针类型变量+N =指针类型变量+N*(去掉一个 *后类型的宽度)        -N同理     —–这个就是 你之前看的那个面试题</li>
-</ol>
-<p>5.指针类型可以做大小比较     指针无符号类型</p>
-<p>6.&amp;   取某一个变量的内存地址   不能是常量   常量不是容器</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">char  a;</span><br><span class="line">&amp;a   就是  char * a</span><br></pre></td></tr></table></figure>
-
-<p>7.*号后面一定是指针类型</p>
-<p>8.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">int ****  a;</span><br><span class="line">*(a) n  就是 *** a</span><br></pre></td></tr></table></figure>
-
-<p>对指针类型   前面加一个*  就是类型减少一个 *</p>
-<p>9.数组  传递的是地址  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">printf（&quot;%d\n&quot;,arr[i]）;</span><br><span class="line"></span><br><span class="line">部分汇编：</span><br><span class="line">mov  edx，dword ptr [ebp-4]</span><br><span class="line">mov  eax,dword ptr [ebp+8]</span><br><span class="line">mov  ecx,dword ptr [eax+edx*4]</span><br><span class="line">push ecx</span><br><span class="line">push ....&quot;%d\n&quot;....</span><br><span class="line">call printf(函数地址)</span><br><span class="line">add esp，8</span><br></pre></td></tr></table></figure>
-
-<p>edx做索引   ebp-4中  存储的是i</p>
-<p>传递给edx做索引，  ebp-8中存的是数组的首地址</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">printf(&quot;&amp;d\n&quot;,*(p+i));</span><br><span class="line"></span><br><span class="line">反汇编中与   数组作为参数传递 没区别</span><br></pre></td></tr></table></figure>
-
-<p>arr[i]=<em>(p+i)=p[i]</em></p>
-<p><em>=</em>(arr+i)    <strong>本质是地址   所以等价</strong></p>
-<p>10  指针与字符串</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> str[<span class="number">6</span>] = &#123;<span class="string">&#x27;a&#x27;</span>,<span class="string">&#x27;b&#x27;</span>,<span class="string">&#x27;c&#x27;</span>,<span class="string">&#x27;d&#x27;</span>,<span class="string">&#x27;e&#x27;</span>&#125; ;<span class="comment">//&#x27;\0&#x27; 或者 0有点忘了  具体的 </span></span><br><span class="line">char str[] = &#123;&#x27;abcde&#x27;&#125; ;//    先存在常量区  在复制到数组中      编译器末尾填0    有点忘了  具体的   </span><br><span class="line">char * str=&#x27;&#x27;abcde&#x27;&#x27;; //先在常量区存字符串   在指针里存地址 </span><br></pre></td></tr></table></figure>
-
-
-
-<p>11, 指针函数   就是普通的函数   但是返回值是指针类型</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">int *fun(int x,int y);</span><br></pre></td></tr></table></figure>
-
-<ol start="12">
-<li><p>函数指针</p>
-<p> 函数指针类型变量的定义</p>
-<p>定义的格式：</p>
-<p>返回类型 (调用约定  *变量名)(参数列表);</p>
-<p>int (__cdecl *pFun)(int,int);</p>
-</li>
-</ol>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"></span><br><span class="line"> <span class="comment">// 定义函数指针变量</span></span><br><span class="line"> <span class="keyword">int</span> (__cdecl *pFun)(<span class="keyword">int</span>,<span class="keyword">int</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//为函数指针变量赋值(赋的是地址)</span></span><br><span class="line">pFun =<span class="keyword">int</span> (__cdecl *)(<span class="keyword">int</span>,<span class="keyword">int</span>)<span class="number">10</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用函数指针变量</span></span><br><span class="line"><span class="keyword">int</span> r =pFun(<span class="number">1</span>,<span class="number">2</span>);</span><br><span class="line"> </span><br><span class="line"> <span class="keyword">return</span>; <span class="comment">//结束</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>// 我知道的是  定义函数指针   可以简单防止函数被下断点</p>
-<p>  断的是函数指针的位置</p>
-<ol start="12">
-<li>*（）和 [ ]</li>
-</ol>
-<p>可以相互转换</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">*(p+i)=p[i];</span><br><span class="line">*(*(p+i)+k)=p[i][K]</span><br><span class="line">*(*(*(p+i)+k)+m)=p[i][k][m]</span><br><span class="line">    </span><br></pre></td></tr></table></figure>
-
-<p>13  结构体指针</p>
-<p>（类似于  xx指针就是 指向xx  的 这种话是错误的     指针的类型只是说明 他的特性（就是宽度   4     加减操作这些））</p>
-<p>例如：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">struct Point&#123;</span><br><span class="line">int x;</span><br><span class="line">int y;</span><br><span class="line">&#125;</span><br><span class="line">void main（）</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">int arr[10]&#x3D;&#123;1,2,3,4,5,6,7,8,9,10&#125;</span><br><span class="line">Point* pp&#x3D;（struct Point *）arr；</span><br><span class="line">int x&#x3D;px-&gt;x;</span><br><span class="line">int y&#x3D;px-&gt;y;</span><br><span class="line">&#x2F;&#x2F;这个就是将结构体指针指向数组   但是需要强转</span><br><span class="line">这里  x就是1   y就是2</span><br><span class="line">px++；</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;指针++  px大小8个字节  所以之后指向 地址+8后 </span><br><span class="line">此时 px-&gt;x   就是 3    px-&gt;y  就是4</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>14 指针数组  和数组指针</p>
-<p>（1）指针数组   </p>
-<p>就是数组   </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">char* arr[10];&#x2F;&#x2F; 指针数组  10个指针 宽度四个字节</span><br><span class="line">Point* arr[10];&#x2F;&#x2F;宽度四个字节</span><br><span class="line">int******   arr[10];&#x2F;&#x2F;宽度四个字节</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">char* a &#x3D;&#39;&#39;hello&#39;&#39;;</span><br><span class="line"></span><br><span class="line">char* b&#x3D;&#39;&#39;world&#39;&#39;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">(1)char* arr[2]&#x3D;&#123;a,b&#125;;</span><br><span class="line">(2)char* arr[2];</span><br><span class="line">arr[0]&#x3D;a;</span><br><span class="line">arr[1]&#x3D;b;</span><br><span class="line">(3) char* arr[2]&#x3D;</span><br><span class="line">&#123;</span><br><span class="line">&#39;&#39;hello&#39;&#39;,</span><br><span class="line">&#39;&#39;world&#39;&#39;</span><br><span class="line"></span><br><span class="line">&#125;;&#x2F;&#x2F; 指针数组   成员还是指针类型  所以存的是字符串的内存地址 而不是字符串的ascll 码值</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 三种方式在内存布局上相同</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>（2）数组指针</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">int (*p)[10];</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>数组首地址的指针     p就是指向数组的指针</p>
-<p><img src="https://i.imgur.com/SWEtLSq.png"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">void main()</span><br><span class="line">&#123;</span><br><span class="line">int arr[]&#x3D;&#123;1,2,3,4,5,6,7,8,9,10&#125;</span><br><span class="line">int* x&#x3D;arr; &#x2F;&#x2F; int *</span><br><span class="line">int* y &#x3D;（int *）&amp;arr；&#x2F;&#x2F; int (*)[10]</span><br><span class="line">return</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/" rel="tag">c</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-
-  
+    <nav id="page-nav">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
+    </nav>
   
 
 </div>
