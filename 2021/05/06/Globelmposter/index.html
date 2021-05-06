@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="baidu-site-verification" content="L6Lm9d5Crl"/>
+  
+  
+  
+  
+  <title>Globelmposter | Pyikaaaa</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="GlobeImposter病毒分析报告0x00 基础信息病毒背景： 这个勒索病毒关键在于加密文件 运行环境：win10  一个勒索病毒  去微步下个样本回来  0x01 简单分析1.DIE查壳  无壳 图： 2. 图：   很多很多   大概都是  创建文件 注册表相关的 3.简单运行：     发现后缀名.Snake4444    HOW_TO_BACK_FILES.txt E9………..文件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Globelmposter">
+<meta property="og:url" content="http://example.com/2021/05/06/Globelmposter/index.html">
+<meta property="og:site_name" content="Pyikaaaa">
+<meta property="og:description" content="GlobeImposter病毒分析报告0x00 基础信息病毒背景： 这个勒索病毒关键在于加密文件 运行环境：win10  一个勒索病毒  去微步下个样本回来  0x01 简单分析1.DIE查壳  无壳 图： 2. 图：   很多很多   大概都是  创建文件 注册表相关的 3.简单运行：     发现后缀名.Snake4444    HOW_TO_BACK_FILES.txt E9………..文件">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.imgur.com/bwqXvfZ.png">
+<meta property="og:image" content="https://i.imgur.com/IVzxN61.png">
+<meta property="og:image" content="c:/Users/lenovo/AppData/Roaming/Typora/typora-user-images/image-20210422211436355.png">
+<meta property="og:image" content="c:/Users/lenovo/AppData/Roaming/Typora/typora-user-images/image-20210506204728059.png">
+<meta property="og:image" content="https://i.imgur.com/7LuaP33.png">
+<meta property="og:image" content="https://i.imgur.com/oDczpqb.png">
+<meta property="og:image" content="https://i.imgur.com/Si7nMhr.png">
+<meta property="og:image" content="https://i.imgur.com/QzVrwfl.png">
+<meta property="og:image" content="https://i.imgur.com/O0vpeLR.png">
+<meta property="og:image" content="https://i.imgur.com/PyeniKD.png">
+<meta property="og:image" content="https://i.imgur.com/lf3vN2U.png">
+<meta property="og:image" content="https://i.imgur.com/v26COZU.png">
+<meta property="og:image" content="https://i.imgur.com/guOM2ne.png">
+<meta property="og:image" content="https://i.imgur.com/ZbeEg1P.png">
+<meta property="og:image" content="https://i.imgur.com/WlvuWJJ.png">
+<meta property="og:image" content="c:/Users/lenovo/AppData/Roaming/Typora/typora-user-images/image-20210506205216451.png">
+<meta property="og:image" content="c:/Users/lenovo/AppData/Roaming/Typora/typora-user-images/image-20210506205229003.png">
+<meta property="og:image" content="https://i.imgur.com/UoPlGS9.png">
+<meta property="og:image" content="https://i.imgur.com/imaZMXQ.png">
+<meta property="og:image" content="https://i.imgur.com/hDkhAS1.png">
+<meta property="og:image" content="https://i.imgur.com/VV2wvdv.png">
+<meta property="og:image" content="https://i.imgur.com/WfcDyPn.png">
+<meta property="og:image" content="https://i.imgur.com/4DKAiFK.png">
+<meta property="og:image" content="https://i.imgur.com/z9poYhc.png">
+<meta property="og:image" content="https://i.imgur.com/fSsP1DY.png">
+<meta property="og:image" content="https://i.imgur.com/agRs9rQ.png">
+<meta property="og:image" content="https://i.imgur.com/Kl8Ee3q.png">
+<meta property="og:image" content="https://i.imgur.com/HiOLY4a.png">
+<meta property="og:image" content="https://i.imgur.com/G23Zpo2.png">
+<meta property="og:image" content="https://i.imgur.com/rNrWlxE.png">
+<meta property="og:image" content="https://i.imgur.com/15BJqbn.png">
+<meta property="og:image" content="https://i.imgur.com/SaZg32a.png">
+<meta property="og:image" content="https://i.imgur.com/U1pgMGi.png">
+<meta property="og:image" content="c:/Users/lenovo/AppData/Roaming/Typora/typora-user-images/image-20210506205730635.png">
+<meta property="article:published_time" content="2021-05-06T12:46:10.000Z">
+<meta property="article:modified_time" content="2021-05-06T12:57:37.626Z">
+<meta property="article:author" content="Pyikaaaa">
+<meta property="article:tag" content="pc样本分析">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/bwqXvfZ.png">
+  
+    <link rel="alternative" href="/atom.xml" title="Pyikaaaa" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/img/favicon.png">
+  
+  
+  
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  
+  
+      <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  
+  <!-- 加载特效 -->
+    <script src="/js/pace.js"></script>
+    <link href="/css/pace/pace-theme-flash.css" rel="stylesheet" />
+  <script>
+      var yiliaConfig = {
+          fancybox: true,
+          animate: true,
+          isHome: false,
+          isPost: true,
+          isArchive: false,
+          isTag: false,
+          isCategory: false,
+          open_in_new: false
+      }
+  </script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+
+        <a href="/" class="profilepic">
+            
+            <img lazy-src="/img/avatar.png" class="js-avatar">
+            
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/"></a></h1>
+        </hgroup>
+        
+        
+            <form>
+                <input type="text" class="st-default-search-input search" id="local-search-input" placeholder="搜索一下" autocomplete="off">
+            </form>
+            <div id="local-search-result"></div>
+        
+        
+            <script type="text/javascript">
+                (function() {
+                    'use strict';
+                    function getMatchData(keyword, data) {
+                        var matchData = [];
+                        for(var i =0;i<data.length;i++){
+                            if(data[i].title.toLowerCase().indexOf(keyword)>=0) 
+                                matchData.push(data[i])
+                        }
+                        return matchData;
+                    }
+                    var $input = $('#local-search-input');
+                    var $resultContent = $('#local-search-result');
+                    $input.keyup(function(){
+                        $.ajax({
+                            url: '/search.json',
+                            dataType: "json",
+                            success: function( json ) {
+                                var str='<ul class=\"search-result-list\">';                
+                                var keyword = $input.val().trim().toLowerCase();
+                                $resultContent.innerHTML = "";
+                                if ($input.val().trim().length <= 0) {
+                                    $resultContent.empty();
+                                    $('#switch-area').show();
+                                    return;
+                                }
+                                var results = getMatchData(keyword, json);
+                                if(results.length === 0){
+                                    $resultContent.empty();
+                                    $('#switch-area').show();
+                                    return;
+                                } 
+                                for(var i =0; i<results.length; i++){
+                                    str += "<li><a href='"+ results[i].url +"' class='search-result-title'>"+ results[i].title +"</a></li>";
+                                }
+                                str += "</ul>";
+                                $resultContent.empty();
+                                $resultContent.append(str);
+                                $('#switch-area').hide();
+                            }
+                        });
+                    });
+                })();
+            </script>
+        
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a  href="/archives/">所有文章</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fl github"  target="_blank" href="https://github.com/Pyikaaaa" title="github">github</a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <a href="/tags/Pc%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" style="font-size: 10px;">Pc样本分析</a> <a href="/tags/RE/" style="font-size: 10px;">RE</a> <a href="/tags/c/" style="font-size: 10px;">c</a> <a href="/tags/linuxRE/" style="font-size: 10px;">linuxRE</a> <a href="/tags/pc%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" style="font-size: 10px;">pc样本分析</a> <a href="/tags/%E5%88%86%E6%9E%90/" style="font-size: 20px;">分析</a> <a href="/tags/%E5%8F%8D%E8%B0%83%E8%AF%95-%E9%80%86%E5%90%91/" style="font-size: 10px;">反调试 逆向</a> <a href="/tags/%E6%83%B3%E6%B3%95/" style="font-size: 10px;">想法</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 10px;">数据结构</a> <a href="/tags/%E7%A0%B4%E8%A7%A3/" style="font-size: 10px;">破解</a>
+                    </div>
+                </section>
+                
+                
+                
+                
+                <section class="switch-part switch-part3">
+                
+                    <div id="js-aboutme">喜新念旧   芜湖!</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页"></a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                
+                    <img lazy-src="/img/avatar.png" class="js-avatar">
+                
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页"></a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a class="github" target="_blank" href="https://github.com/Pyikaaaa" title="github">github</a>
+                    
+                </div>
+            </nav>
+        </header>
+    </div>
+</nav>
+      <div class="body-wrap"><article id="post-Globelmposter" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2021/05/06/Globelmposter/" class="article-date">
+      <time datetime="2021-05-06T12:46:10.000Z" itemprop="datePublished">2021-05-06</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Globelmposter
+    </h1>
+  
+
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/pc%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" rel="tag">pc样本分析</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h1 id="GlobeImposter病毒分析报告"><a href="#GlobeImposter病毒分析报告" class="headerlink" title="GlobeImposter病毒分析报告"></a>GlobeImposter病毒分析报告</h1><h2 id="0x00-基础信息"><a href="#0x00-基础信息" class="headerlink" title="0x00 基础信息"></a>0x00 基础信息</h2><p>病毒背景：</p>
+<p>这个勒索病毒关键在于加密文件</p>
+<p>运行环境：win10 </p>
+<p>一个勒索病毒  去微步下个样本回来</p>
+<p><img src="https://i.imgur.com/bwqXvfZ.png"></p>
+<h2 id="0x01-简单分析"><a href="#0x01-简单分析" class="headerlink" title="0x01 简单分析"></a>0x01 简单分析</h2><p>1.DIE查壳  无壳</p>
+<p>图：</p>
+<p>2.</p>
+<p>图：</p>
+<p><img src="https://i.imgur.com/IVzxN61.png"></p>
+<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210422211436355.png" alt="image-20210422211436355"></p>
+<p>很多很多  </p>
+<p>大概都是  创建文件 注册表相关的</p>
+<p>3.简单运行：</p>
+<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210506204728059.png"></p>
+<p><img src="https://i.imgur.com/7LuaP33.png"></p>
+<p><img src="https://i.imgur.com/oDczpqb.png"></p>
+<p><img src="https://i.imgur.com/Si7nMhr.png"></p>
+<p>发现后缀名.Snake4444   </p>
+<p>HOW_TO_BACK_FILES.txt</p>
+<p>E9………..文件</p>
+<p>根据提示消息  发现  E9.。。。。。文件的 后部分内容就是personal  id </p>
+<h2 id="0x02-进一步分析"><a href="#0x02-进一步分析" class="headerlink" title="0x02 进一步分析"></a>0x02 进一步分析</h2><p>start函数—&gt; 跟进函数 sub_409C6B—–&gt;</p>
+<p><img src="https://i.imgur.com/QzVrwfl.png"></p>
+<p><img src="https://i.imgur.com/O0vpeLR.png"></p>
+<p>跟进sub_408B19 函数  以下是加密解密相关的  </p>
+<p>学了AES RSA  继续分析后</p>
+<h3 id="sub-408B19-函数"><a href="#sub-408B19-函数" class="headerlink" title="sub_408B19 函数"></a>sub_408B19 函数</h3><p>结论：用AES内置的密钥解密出内置的RSA公钥</p>
+<p>分析：</p>
+<p><img src="https://i.imgur.com/PyeniKD.png"></p>
+<h3 id="sub-4088F4函数"><a href="#sub-4088F4函数" class="headerlink" title="sub_4088F4函数"></a>sub_4088F4函数</h3><p>结论：计算解密出来的RSA公钥的SHA256</p>
+<p>分析：</p>
+<p><img src="https://i.imgur.com/lf3vN2U.png"></p>
+<h3 id="下一步分析"><a href="#下一步分析" class="headerlink" title="下一步分析"></a>下一步分析</h3><p><img src="https://i.imgur.com/v26COZU.png"></p>
+<p>可以看到GetModuleFileNameW 函数：获取当前程序运行的路径  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GetModuleFileNameW </span><br><span class="line">参数：第一个参数为句柄（NULL则指向当前程序本身）。第二个参数用于存放地址的指针，第三个参数，系统自带的宏定义  不用管。</span><br></pre></td></tr></table></figure>
+
+<p>接着调用两次sub_408B19函数（AES解密函数）：传入RSA公钥的SAH256值作为AES的密钥</p>
+<p>第一次调用：</p>
+<p><img src="https://i.imgur.com/guOM2ne.png"></p>
+<p>动调发现解密出.Snake4444 ，经过简单运行观察到，这是被加密文件的后缀名</p>
+<p><img src="https://i.imgur.com/ZbeEg1P.png"></p>
+<p>第二次调用：</p>
+<p>动调发现解密出HOW_TO_BACK_FILES.txt</p>
+<p><img src="https://i.imgur.com/WlvuWJJ.png"></p>
+<h3 id="sub-409ABF函数"><a href="#sub-409ABF函数" class="headerlink" title="sub_409ABF函数"></a>sub_409ABF函数</h3><p>结论：解密函数  内部有408B19 函数  还是一个 AES解密函数</p>
+<p>分析： </p>
+<p>第一次调用：</p>
+<p>还看到下面有关于逗号的操作，不重要，不重点分析</p>
+<p>动调： 跟到解密出的数据  是一些文件名</p>
+<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210506205216451.png"></p>
+<p>图：</p>
+<p>第二次调用：同理  是利用AES解密</p>
+<p>动调观看解密出的内容：</p>
+<p>图：是一些目录名</p>
+<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210506205229003.png"></p>
+<h3 id="接着分析"><a href="#接着分析" class="headerlink" title="接着分析"></a>接着分析</h3><p>发现调用GetEnvironmentVariableW函数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">从调用该函数的进程的环境变量中,返回指定的变量名的值 参数：lpName:要获取值的变量名字符串指针.lpBuffer:接收变量值的字符串指针nSize:接收变量值的内存大小. 函数成功执行返回字符数量</span><br></pre></td></tr></table></figure>
+
+
+
+<p>PathAddBackslashW函数：对应路径加上反斜杠 构成正确语法</p>
+<p><img src="https://i.imgur.com/UoPlGS9.png"></p>
+<p>这部分内容就是，判断运行文件的路径是否为LOACLAPPDATA环境变量路径，如果不是的话，路径后加\ 构成合理语法，根据运行程序的路径 ，获取文件名，接着拼接到路径上，之后 比较环境变量的路径值和当前程序运行的目录，判断运行文件的路径是否是LOACLAPPDATA环境变量路径 ，如果不是则把文件复制过去。如图</p>
+<p><img src="https://i.imgur.com/imaZMXQ.png"></p>
+<h3 id="sub-409624函数"><a href="#sub-409624函数" class="headerlink" title="sub_409624函数"></a>sub_409624函数</h3><p>结论：设置注册表的自启动</p>
+<p>分析：路径相同  goto_lable_8</p>
+<p>跟进函数：</p>
+<p><img src="https://i.imgur.com/hDkhAS1.png"></p>
+<p>发现都是注册表相关的函数，</p>
+<p>RegOpenKeyExW</p>
+<p>RegQueryValueExW</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">hKey是主键。</span><br><span class="line"></span><br><span class="line">lpValueName是键值名称。</span><br><span class="line"></span><br><span class="line">lpType是类型。</span><br><span class="line"></span><br><span class="line">lpData是读出来数据保存地方。</span><br><span class="line"></span><br><span class="line">lpcbData是读取数据多少。</span><br></pre></td></tr></table></figure>
+
+
+
+<p>RegCreateKeyExW ：创建指定的注册表项。如果键已经存在，函数将打开它。</p>
+<p>RegSetValueExW：RegSetValueEx函数在注册表项下设置指定值的数据和类型。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">LONG RegSetValueEx(</span><br><span class="line">  HKEY hKey,           &#x2F;&#x2F; handle to key</span><br><span class="line">  LPCTSTR lpValueName, &#x2F;&#x2F; value name</span><br><span class="line">  DWORD Reserved,      &#x2F;&#x2F; reserved</span><br><span class="line">  DWORD dwType,        &#x2F;&#x2F; value type</span><br><span class="line">  CONST BYTE *lpData,  &#x2F;&#x2F; value data</span><br><span class="line">  DWORD cbData         &#x2F;&#x2F; size of value data</span><br><span class="line">);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>RegCloseKey</p>
+<p>subkey<img src="https://i.imgur.com/VV2wvdv.png"></p>
+<p>总结就是 必须先通过RegOpenKey来找到Key，然后再通过RegQueryValueEx来找到这个Key中包含的Valuename。</p>
+<p>如果传进来的参数（路径）不等于 根据RegQueryValueExW这个函数找到的数据 （也就是自启动没有这个路径）就创建</p>
+<p>总结： 这个就是实现程序开机自启动的</p>
+<h3 id="接着分析-1"><a href="#接着分析-1" class="headerlink" title="接着分析"></a>接着分析</h3><p><img src="https://i.imgur.com/WfcDyPn.png"></p>
+<p>运行文件的路径是否为Public环境变量路径 ,如果是</p>
+<p>{</p>
+<p>sub_402828：用rsa-sha256 做参数 做些改变  然后存进一段堆空间中   也是吧rsa公钥的sha256 转为字符串</p>
+<p>sub_409408：转换 </p>
+<p><img src="https://i.imgur.com/4DKAiFK.png"></p>
+<p>现在lpstring2  就是根据rsa公钥的SAH256值  做改变后的字符串</p>
+<p><img src="https://i.imgur.com/z9poYhc.png"></p>
+<p>sub_4017E8 在前面分析过 是HOW_TO BACK_FILE.txt</p>
+<p>还是个转换</p>
+<p>HOW_TO BACK_FILE.txt 复制给lpstring1</p>
+<p>路径加反斜杠   与lpstring2进行拼接  </p>
+<p>拼接后</p>
+<h4 id="C-用户-public-E93F1BcB76F796……-E93F1BcB76F796……-这一串是-解密出的rsa的-sha256的值"><a href="#C-用户-public-E93F1BcB76F796……-E93F1BcB76F796……-这一串是-解密出的rsa的-sha256的值" class="headerlink" title="C:\用户\public\E93F1BcB76F796……..     E93F1BcB76F796……..   这一串是  解密出的rsa的 sha256的值"></a>C:\用户\public\E93F1BcB76F796……..     E93F1BcB76F796……..   这一串是  解密出的rsa的 sha256的值</h4><p>}</p>
+<p>v7 v8 控制循环次数</p>
+<h3 id="sub-409B4B函数"><a href="#sub-409B4B函数" class="headerlink" title="sub_409B4B函数"></a>sub_409B4B函数</h3><p>结论：生成user-rsa密钥对 ，并把生成的公钥和计算生成的personalid写入<strong>E93F1BcB76F796……..</strong> 文件中</p>
+<p>分析：从</p>
+<p>把拼接后的路径作为参数传入sub_409B4B函数 </p>
+<p>创建个文件名是拼接的内容的文件 ，直接看else的内容，（因为getlasterror()   返回值只有是0的时候 操作功能完成）</p>
+<p><img src="https://i.imgur.com/fSsP1DY.png"></p>
+<h3 id="sub-40A116函数"><a href="#sub-40A116函数" class="headerlink" title="sub_40A116函数"></a>sub_40A116函数</h3><p>跟进sub_40A116函数</p>
+<p>观察参数  有解密后的RSA公钥，有拼接后的路径名，有加密后缀Snake4444，有HOW_TO_BACK_FILES.txt</p>
+<p>看到有rsa_genkey   这是个有关于RSA函数</p>
+<p><img src="https://i.imgur.com/agRs9rQ.png"></p>
+<p><img src="https://i.imgur.com/Kl8Ee3q.png"></p>
+<p>跟进sub_409FC8—&gt;sub_409FC8—&gt; 然后调用Wirtefile 向c:..E9… 文件中写入lpstring </p>
+<p>lpstring 是 生成的user rsa pub </p>
+<p>根据最初简单运行时发现的HOW_TO_BACK_FILES.txt  中的提示信息可以知道  第二部分是personalid</p>
+<p>personal id  的生成{</p>
+<p>用生成的 user-rsa-public 和  私钥  与 一个字符串进行拼接  </p>
+<p>拼接后的 字符串   被内置的黑客的 rsa公钥  加密  </p>
+<p>加密后当做  personal  id  存进  E9.。。。。文件中</p>
+<p>}</p>
+<p>总结：sub_409B4B 函数  作用  利用RSA加密生成用户的公钥和私钥 </p>
+<p> 然后把生成的personalid写入拼接后的文件</p>
+<h4 id=""><a href="#" class="headerlink" title=""></a></h4><h3 id="sub-4099A3函数"><a href="#sub-4099A3函数" class="headerlink" title="sub_4099A3函数"></a>sub_4099A3函数</h3><p>跟进函数，</p>
+<p><img src="https://i.imgur.com/HiOLY4a.png"></p>
+<p>遍历盘符，为每一个盘符创建一个线程，跟进startaddress—》</p>
+<p><img src="https://i.imgur.com/G23Zpo2.png"></p>
+<p><img src="https://i.imgur.com/rNrWlxE.png"></p>
+<p>遍历文件 ，比较是不是.snake4444   是不是HOW..文件，是不是保存用户id的文件，获取当前运行的文件的路径，看是否是当前的文件本身，如果都不是，</p>
+<p>跟进函数sub_408D8B</p>
+<p>看不出来要干嘛  但是有个 用rsa加密的函数   猜测这个函数与加密有关</p>
+<p>所以是遍历文件进行加密  ，加密成功之后，会对文件拼接一个.snake4444 后缀</p>
+<p>确定sub_408D8B  函数  就是对文件及进行加密的函数</p>
+<p>!!!!!!! 具体的如何实现的文件加密  太乱了  我不会 sos   </p>
+<p>查看资料后：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">生成随机的key----》key1-----》用参数传入的生成的RSA公钥加密key1-----》调用AES进行文件的加密</span><br></pre></td></tr></table></figure>
+
+
+
+<p>跟进函数sub_40935E</p>
+<h3 id="sub-40935E函数"><a href="#sub-40935E函数" class="headerlink" title="sub_40935E函数"></a>sub_40935E函数</h3><p>结论：释放how_to_back_file.txt在相应目录</p>
+<p><img src="https://i.imgur.com/15BJqbn.png"></p>
+<h3 id="sub-409449函数"><a href="#sub-409449函数" class="headerlink" title="sub_409449函数"></a>sub_409449函数</h3><p>结论：创建.bat文件  （内容是解密后写进去的）执行这个文件</p>
+<p><img src="https://i.imgur.com/SaZg32a.png"></p>
+<p>调用8B19函数  对数据进行解密，写进bat文件中，</p>
+<p>sub_409305函数：跟进有个creatprocess函数 ，应该是执行这个bat文件</p>
+<p>图：   .bat内容</p>
+<p>《看不懂，看的别人的》  作用：Bat会删除远程桌面连接信息文件 default.rdp，并通过wevtutil.execl命令删除日志信息</p>
+<p><img src="https://i.imgur.com/U1pgMGi.png"></p>
+<h3 id="sub-409509函数："><a href="#sub-409509函数：" class="headerlink" title="sub_409509函数："></a>sub_409509函数：</h3><p>结论：执行当前运行的程序的自我删除</p>
+<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210506205730635.png"></p>
+<h2 id="0x0x总结流程"><a href="#0x0x总结流程" class="headerlink" title="0x0x总结流程"></a>0x0x总结流程</h2><p>1.解密一些东西 为之后加密文件做准备</p>
+<p>2.把自己复制到localappdata路径</p>
+<p>3.设置自启动</p>
+<p>4.生成名为RSA公钥的sha256的文件 文件内容是生成的user_rsa_public 和 personal id </p>
+<p>5.遍历磁盘 遍历文件加密</p>
+<p>6.把HOW_TO_BACK_FILE.txt文件释放到每个对应的文件下</p>
+<p>7.创建个批处理文件 解密内容 执行操作</p>
+<p>8.自我删除</p>
+<h2 id="-1"><a href="#-1" class="headerlink" title=""></a></h2><h2 id="文件加密的一个总结-（SOS！-不总结实在是太乱了）"><a href="#文件加密的一个总结-（SOS！-不总结实在是太乱了）" class="headerlink" title="文件加密的一个总结  （SOS！  不总结实在是太乱了）"></a>文件加密的一个总结  （SOS！  不总结实在是太乱了）</h2><p>《内置的rsa 的sha256 值》 文件中 ：</p>
+<p>生成的user rsa pub</p>
+<p>还有 （生成的  user  公钥私钥  与字符串拼接  再用hacker  自己的  公钥  对拼接后的  ） 字符串  进行RSA加密    密钥用的是  内置的RSA 公钥</p>
+<p>文件加密  参数 用户id  和 生成的rsa公钥</p>
+<p>文件加密：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">生成随机的key----》key1-----》用参数传入的生成的RSA公钥加密key1-----》key 2   ----》调用AES进行文件的加密 （key2  为AES加密的，密钥）</span><br></pre></td></tr></table></figure>
+
+
+
+<p>用参数传入的RSA公钥加密生成AES的key1，其中off_40111C为公钥指数e:固定为0x010001</p>
+<p>sos！！！！！！！</p>
+<h2 id="动调过程："><a href="#动调过程：" class="headerlink" title="动调过程："></a>动调过程：</h2><p>00409c84：调用MYAESDecode()    解密出 不被加密的RSA值</p>
+<p>00409cfe：调用MYAESDecode()  解密出 被加密文件的后缀名.Snake4444<br>00409d13:调用MYAESDecode()  解密出 HOW_TO_BACK_FILES.txt<br>00409ad5:调用 MYAESDecode()  解密出 不被加密的文件名<br>00409ad5:调用 MYAESDecode()  解密出 不被加密的目录名</p>
+<p>得等文件加密完才会断下来  不等了</p>
+<p>004094b8：调用 MYAESDecode()  解密出.bat文件的内容</p>
+<p>00409fa0：把生成的user_rsa_piublic 写进e9.。。文件中</p>
+<p>0040A2AF：把生成的user 密钥 与  字符串进行拼接</p>
+<p>0040A2DD：使用内置的rsa公钥 加密拼接好的密钥字符串</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a  href="/2021/05/06/Globelmposter/">Globelmposter</a></p>
+        <p><span>文章作者:</span><a  href="/" title="访问  的个人博客"></a></p>
+        <p><span>发布时间:</span>2021年05月06日 - 20时46分</p>
+        <p><span>最后更新:</span>2021年05月06日 - 20时57分</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2021/05/06/Globelmposter/" title="Globelmposter">http://example.com/2021/05/06/Globelmposter/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://example.com/2021/05/06/Globelmposter/　　作者: " title=""></span>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" title="中国大陆 (CC BY-NC-SA 3.0 CN)" target = "_blank">"署名-非商用-相同方式共享 3.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+<nav id="article-nav">
+  
+  
+    <a  href="/2021/05/06/%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0linux%E4%B8%8B%E7%9A%84RE/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">初步学习linux下的RE</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#GlobeImposter%E7%97%85%E6%AF%92%E5%88%86%E6%9E%90%E6%8A%A5%E5%91%8A"><span class="toc-number">1.</span> <span class="toc-text">GlobeImposter病毒分析报告</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x00-%E5%9F%BA%E7%A1%80%E4%BF%A1%E6%81%AF"><span class="toc-number">1.1.</span> <span class="toc-text">0x00 基础信息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-%E7%AE%80%E5%8D%95%E5%88%86%E6%9E%90"><span class="toc-number">1.2.</span> <span class="toc-text">0x01 简单分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-%E8%BF%9B%E4%B8%80%E6%AD%A5%E5%88%86%E6%9E%90"><span class="toc-number">1.3.</span> <span class="toc-text">0x02 进一步分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#sub-408B19-%E5%87%BD%E6%95%B0"><span class="toc-number">1.3.1.</span> <span class="toc-text">sub_408B19 函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sub-4088F4%E5%87%BD%E6%95%B0"><span class="toc-number">1.3.2.</span> <span class="toc-text">sub_4088F4函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E4%B8%80%E6%AD%A5%E5%88%86%E6%9E%90"><span class="toc-number">1.3.3.</span> <span class="toc-text">下一步分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sub-409ABF%E5%87%BD%E6%95%B0"><span class="toc-number">1.3.4.</span> <span class="toc-text">sub_409ABF函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A5%E7%9D%80%E5%88%86%E6%9E%90"><span class="toc-number">1.3.5.</span> <span class="toc-text">接着分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sub-409624%E5%87%BD%E6%95%B0"><span class="toc-number">1.3.6.</span> <span class="toc-text">sub_409624函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A5%E7%9D%80%E5%88%86%E6%9E%90-1"><span class="toc-number">1.3.7.</span> <span class="toc-text">接着分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#C-%E7%94%A8%E6%88%B7-public-E93F1BcB76F796%E2%80%A6%E2%80%A6-E93F1BcB76F796%E2%80%A6%E2%80%A6-%E8%BF%99%E4%B8%80%E4%B8%B2%E6%98%AF-%E8%A7%A3%E5%AF%86%E5%87%BA%E7%9A%84rsa%E7%9A%84-sha256%E7%9A%84%E5%80%BC"><span class="toc-number">1.3.7.1.</span> <span class="toc-text">C:\用户\public\E93F1BcB76F796……..     E93F1BcB76F796……..   这一串是  解密出的rsa的 sha256的值</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sub-409B4B%E5%87%BD%E6%95%B0"><span class="toc-number">1.3.8.</span> <span class="toc-text">sub_409B4B函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sub-40A116%E5%87%BD%E6%95%B0"><span class="toc-number">1.3.9.</span> <span class="toc-text">sub_40A116函数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.3.9.1.</span> <span class="toc-text"></span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sub-4099A3%E5%87%BD%E6%95%B0"><span class="toc-number">1.3.10.</span> <span class="toc-text">sub_4099A3函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sub-40935E%E5%87%BD%E6%95%B0"><span class="toc-number">1.3.11.</span> <span class="toc-text">sub_40935E函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sub-409449%E5%87%BD%E6%95%B0"><span class="toc-number">1.3.12.</span> <span class="toc-text">sub_409449函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sub-409509%E5%87%BD%E6%95%B0%EF%BC%9A"><span class="toc-number">1.3.13.</span> <span class="toc-text">sub_409509函数：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x0x%E6%80%BB%E7%BB%93%E6%B5%81%E7%A8%8B"><span class="toc-number">1.4.</span> <span class="toc-text">0x0x总结流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-1"><span class="toc-number">1.5.</span> <span class="toc-text"></span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E5%8A%A0%E5%AF%86%E7%9A%84%E4%B8%80%E4%B8%AA%E6%80%BB%E7%BB%93-%EF%BC%88SOS%EF%BC%81-%E4%B8%8D%E6%80%BB%E7%BB%93%E5%AE%9E%E5%9C%A8%E6%98%AF%E5%A4%AA%E4%B9%B1%E4%BA%86%EF%BC%89"><span class="toc-number">1.6.</span> <span class="toc-text">文件加密的一个总结  （SOS！  不总结实在是太乱了）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%A8%E8%B0%83%E8%BF%87%E7%A8%8B%EF%BC%9A"><span class="toc-number">1.7.</span> <span class="toc-text">动调过程：</span></a></li></ol></li></ol>
+</div>
+<style>
+    .left-col .switch-btn {
+        display: none;
+    }
+    .left-col .switch-area {
+        display: none;
+    }
+</style>
+<input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+
+<script>
+    var valueHide = "隐藏目录";
+    var valueShow = "显示目录";
+    if ($(".left-col").is(":hidden")) {
+        $("#tocButton").attr("value", valueShow);
+    }
+    $("#tocButton").click(function() {
+        if ($("#toc").is(":hidden")) {
+            $("#tocButton").attr("value", valueHide);
+            $("#toc").slideDown(320);
+            $(".switch-btn, .switch-area").fadeOut(300);
+        }
+        else {
+            $("#tocButton").attr("value", valueShow);
+            $("#toc").slideUp(350);
+            $(".switch-btn, .switch-area").fadeIn(500);
+        }
+    })
+    if ($(".toc").length < 1) {
+        $("#toc, #tocButton").hide();
+        $(".switch-btn, .switch-area").show();
+    }
+</script>
+
+
+
+
+
+
+    
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a  href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+        
+            <a  href="/2021/05/06/%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0linux%E4%B8%8B%E7%9A%84RE/" title="下一篇: 初步学习linux下的RE">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2021/05/06/Globelmposter/">Globelmposter</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/06/%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0linux%E4%B8%8B%E7%9A%84RE/">初步学习linux下的RE</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/06/linux/">linux</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/05/yara%E4%BD%BF%E7%94%A8/">yara使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/04/%E6%83%B3%E6%B3%95/">想法</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/04/%E6%B3%A8%E5%85%A5%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/">注入技术学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/17/MEMZ%E5%88%86%E6%9E%90/">MEMZ分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/13/%E5%8F%8D%E8%B0%83%E8%AF%95/">反调试</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/10/creakeme160/">creakeme160</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/10/%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%E5%AE%9E%E6%88%98Lab/">恶意代码分析实战Lab</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/10/%E5%AD%A6%E4%B9%A0%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">学习数据结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/09/%E7%AE%80%E5%8D%95%E6%80%BB%E7%BB%93%E6%8C%87%E9%92%88/">简单总结指针</a></li></ul>
+    
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+
+    <script>
+        $(".post-list").addClass("toc-article");
+        // $(".post-list-item a").attr("target","_blank");
+        $("#post-nav-button > a:nth-child(2)").click(function() {
+            $(".fa-bars, .fa-times").toggle();
+            $(".post-list").toggle(300);
+            if ($(".toc").length > 0) {
+                $("#toc, #tocButton").toggle(200, function() {
+                    if ($(".switch-area").is(":visible")) {
+                        $("#toc, .switch-btn, .switch-area").toggle();
+                        $("#tocButton").attr("value", valueHide);
+                        }
+                    })
+            }
+            else {
+                $(".switch-btn, .switch-area").fadeToggle(300);
+            }
+        })
+    </script>
+
+
+
+
+    <script>
+        
+    </script>
+
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                &copy; 2021 Pyikaaaa
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank">Hexo &nbsp;&nbsp;</a><a href="https://github.com/Pyikaaaa" target="_blank">Blog</a> ❤ Pyikaaaa
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" >极客到访数: 
+                            <span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>, </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit">本页阅读量: 
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+
+    </div>
+    
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+
+    <script>
+        $(document).ready(function() {
+            var backgroundnum = 1;
+            var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+            $("#mobile-nav").css({"background-image": backgroundimg,"background-size": "cover","background-position": "center"});
+            $(".left-col").css({"background-image": backgroundimg,"background-size": "cover","background-position": "center"});
+        })
+    </script>
+
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    $(document).ready(function() {
+        if ($("#comments").length < 1) {
+            $("#scroll > a:nth-child(2)").hide();
+        };
+    })
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+  <script language="javascript">
+    $(function() {
+        $("a[title]").each(function() {
+            var a = $(this);
+            var title = a.attr('title');
+            if (title == undefined || title == "") return;
+            a.data('title', title).removeAttr('title').hover(
+            function() {
+                var offset = a.offset();
+                $("<div id=\"anchortitlecontainer\"></div>").appendTo($("body")).html(title).css({
+                    top: offset.top - a.outerHeight() - 15,
+                    left: offset.left + a.outerWidth()/2 + 1
+                }).fadeIn(function() {
+                    var pop = $(this);
+                    setTimeout(function() {
+                        pop.remove();
+                    }, pop.text().length * 800);
+                });
+            }, function() {
+                $("#anchortitlecontainer").remove();
+            });
+        });
+    });
+</script>
+
+
+  </div>
+</body>
+</html>
