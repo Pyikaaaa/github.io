@@ -7,18 +7,25 @@
   
   
   
-  <title>creakeme160 | Pyikaaaa</title>
+  <title>yara使用 | Pyikaaaa</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="article">
-<meta property="og:title" content="creakeme160">
-<meta property="og:url" content="http://example.com/2021/04/10/creakeme160/index.html">
+  <meta name="description" content="yara使用前言：Yara是一款用于识别恶意软件及对其行为进行分类的安全利器。Yara会根据我们自己编写的yara规则，来对可疑软件进行一个模式匹配，若可疑软件中的一些特征与我们的yara规则匹配上了，则可以初步认定可疑软件为恶意软件。 官方的github库地址：https:&#x2F;&#x2F;github.com&#x2F;VirusTotal&#x2F;yara&#x2F;releases 官方文档说明： Getting started">
+<meta property="og:type" content="article">
+<meta property="og:title" content="yara使用">
+<meta property="og:url" content="http://example.com/2021/05/05/yara%E4%BD%BF%E7%94%A8/index.html">
 <meta property="og:site_name" content="Pyikaaaa">
+<meta property="og:description" content="yara使用前言：Yara是一款用于识别恶意软件及对其行为进行分类的安全利器。Yara会根据我们自己编写的yara规则，来对可疑软件进行一个模式匹配，若可疑软件中的一些特征与我们的yara规则匹配上了，则可以初步认定可疑软件为恶意软件。 官方的github库地址：https:&#x2F;&#x2F;github.com&#x2F;VirusTotal&#x2F;yara&#x2F;releases 官方文档说明： Getting started">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2021-04-10T13:31:51.000Z">
-<meta property="article:modified_time" content="2021-04-10T13:32:16.415Z">
+<meta property="og:image" content="https://i.imgur.com/Zo7ktcS.png">
+<meta property="og:image" content="https://i.imgur.com/jkDRvX7.png">
+<meta property="og:image" content="https://i.imgur.com/1dqzLfk.png">
+<meta property="og:image" content="https://i.imgur.com/0nXccmb.png">
+<meta property="article:published_time" content="2021-05-05T13:21:38.000Z">
+<meta property="article:modified_time" content="2021-05-06T06:57:38.685Z">
 <meta property="article:author" content="Pyikaaaa">
-<meta property="article:tag" content="破解">
+<meta property="article:tag" content="分析">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/Zo7ktcS.png">
   
     <link rel="alternative" href="/atom.xml" title="Pyikaaaa" type="application/atom+xml">
   
@@ -232,11 +239,11 @@
         </header>
     </div>
 </nav>
-      <div class="body-wrap"><article id="post-creakeme160" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-yara使用" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a  href="/2021/04/10/creakeme160/" class="article-date">
-      <time datetime="2021-04-10T13:31:51.000Z" itemprop="datePublished">2021-04-10</time>
+      <a  href="/2021/05/05/yara%E4%BD%BF%E7%94%A8/" class="article-date">
+      <time datetime="2021-05-05T13:21:38.000Z" itemprop="datePublished">2021-05-05</time>
 </a>
 
     </div>
@@ -250,7 +257,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      creakeme160
+      yara使用
     </h1>
   
 
@@ -262,7 +269,7 @@
 
         
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%A0%B4%E8%A7%A3/" rel="tag">破解</a></li></ul>
+        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%88%86%E6%9E%90/" rel="tag">分析</a></li></ul>
     </div>
 
         <div class="clearfix"></div>
@@ -272,7 +279,46 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        
+        <h1 id="yara使用"><a href="#yara使用" class="headerlink" title="yara使用"></a>yara使用</h1><h2 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h2><p>Yara是一款用于识别恶意软件及对其行为进行分类的安全利器。Yara会根据我们自己编写的yara规则，来对可疑软件进行一个模式匹配，若可疑软件中的一些特征与我们的yara规则匹配上了，则可以初步认定可疑软件为恶意软件。</p>
+<p>官方的github库地址：<a target="_blank" rel="noopener" href="https://github.com/VirusTotal/yara/releases">https://github.com/VirusTotal/yara/releases</a></p>
+<p>官方文档说明： Getting started — yara 4.1.0 documentation](<a target="_blank" rel="noopener" href="https://yara.readthedocs.io/en/v4.1.0/gettingstarted.html">https://yara.readthedocs.io/en/v4.1.0/gettingstarted.html</a>)</p>
+<h2 id="安装与使用："><a href="#安装与使用：" class="headerlink" title="安装与使用："></a>安装与使用：</h2><p>安装yara：最新版本 </p>
+<p><img src="https://i.imgur.com/Zo7ktcS.png"></p>
+<p>下载yara-v4.1.0-1612-win64.zip  ，将压缩包中的yarac64和yara64解压到C:\Windows目录下并分别重命名为yarac.exe和yara.exe</p>
+<p>启动cmd 输入yara –help查看yara的参数</p>
+<p><img src="https://i.imgur.com/jkDRvX7.png"></p>
+<p>yara给我们提供了一个现成的yara规则库</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Yara-Rules/rules">https://github.com/Yara-Rules/rules</a></p>
+<p><strong>规则分11大类：</strong></p>
+<blockquote>
+<p>Antidebug_AntiVM：反调试/反沙箱类yara规则<br>Crypto：加密类yara规则<br>CVE_Rules：CVE漏洞利用类yara规则<br>email：恶意邮件类yara规则<br>Exploit-Kits：EK类yara规则<br>Malicious_Documents：恶意文档类yara规则<br>malware：恶意软件类yara规则<br>Mobile_Malware：移动恶意软件类yara规则<br>Packers：加壳类yara规则<br>utils：通用类yara规则<br>Webshells：Webshell类yara规则</p>
+</blockquote>
+<p>使用yara开始检测 ：</p>
+<p>yara  yara规则 被检测的文件的路径  </p>
+<p>使用加密类的规则对其进行扫描：</p>
+<p><img src="https://i.imgur.com/1dqzLfk.png"></p>
+<p>检测结果：</p>
+<p>Yara的结果输出大致就是这种格式（特征+样本路径）</p>
+<p>警告的原因：</p>
+<p>原来是因为$c0使用了{ 0-9，a-f，A-F }的大范围匹配，导致Yara运行时间大大增长，故而输出了警告。扫描单个样本的时候差别不大，但扫描大量样本的时候就会消耗大量时间，所以我们编写yara规则的时候要多加谨慎。</p>
+<p><img src="https://i.imgur.com/0nXccmb.png"></p>
+<h2 id="yara规则编写："><a href="#yara规则编写：" class="headerlink" title="yara规则编写："></a>yara规则编写：</h2><p><a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/system/26373.html">恶意软件模式匹配利器 - YARA - FreeBuf网络安全行业门户</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_37552052/article/details/78986097">静态扫描之Yara第二话–编写yara规则（1）_安全杂货铺-CSDN博客</a></p>
+<p>yarGen :yara规则生成器  </p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Neo23x0/yarGen">GitHub - Neo23x0/yarGen: yarGen is a generator for YARA rules</a></p>
+<p>yarGen从恶意样本中提取所有ASCII和UNICODE字符串，并删除所有也出现在良性字符串数据库中的字符串。 然后使用模糊正则表达式和“Gibberish Detector”来评估和评分每个字符串，这使得yarGen能够选出最优的特征字符串。 这些字符串的前20位将被整合到最终的规则中。</p>
+<p>如果不想使用或下载yarGen，也可以使用由Joe Security提供的在线工具<a target="_blank" rel="noopener" href="https://www.joesandbox.com/">Yara Rule Generator</a>，它也是基于yarGen的。</p>
+<h3 id="生成高效通用的yara规则"><a href="#生成高效通用的yara规则" class="headerlink" title="生成高效通用的yara规则"></a>生成高效通用的yara规则</h3><p>如果你的规则可以检测出恶意样本，且不会匹配到合法软件，那么你的yara规则就可以算是合格了</p>
+<p>yarAnalyzer:</p>
+<p>yarAnalyzer是我推出的又一个强大的工具，专注于分析规则的通用性。 在创建了一个大的规则集或一个通用型的规则后，你想检查这些规则的通用性如何，便可以使用这款工具，yarAnalyzer则会输出以下结果：</p>
+<ol>
+<li>检测到一个以上样本的规则</li>
+<li>被多条规则检测到的样本</li>
+<li>没有检测到样本的规则</li>
+<li>没有被检测到的样本</li>
+</ol>
+<p><a target="_blank" rel="noopener" href="https://github.com/Neo23x0/yarAnalyzer">https://github.com/Neo23x0/yarAnalyzer</a></p>
+
       
     </div>
     
@@ -280,13 +326,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a  href="/2021/04/10/creakeme160/">creakeme160</a></p>
+        <p><span>本文标题:</span><a  href="/2021/05/05/yara%E4%BD%BF%E7%94%A8/">yara使用</a></p>
         <p><span>文章作者:</span><a  href="/" title="访问  的个人博客"></a></p>
-        <p><span>发布时间:</span>2021年04月10日 - 21时31分</p>
-        <p><span>最后更新:</span>2021年04月10日 - 21时32分</p>
+        <p><span>发布时间:</span>2021年05月05日 - 21时21分</p>
+        <p><span>最后更新:</span>2021年05月06日 - 14时57分</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2021/04/10/creakeme160/" title="creakeme160">http://example.com/2021/04/10/creakeme160/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://example.com/2021/04/10/creakeme160/　　作者: " title=""></span>
+            <span>原始链接:</span><a class="post-url" href="/2021/05/05/yara%E4%BD%BF%E7%94%A8/" title="yara使用">http://example.com/2021/05/05/yara%E4%BD%BF%E7%94%A8/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://example.com/2021/05/05/yara%E4%BD%BF%E7%94%A8/　　作者: " title=""></span>
         </p>
         <p>
             <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" title="中国大陆 (CC BY-NC-SA 3.0 CN)" target = "_blank">"署名-非商用-相同方式共享 3.0"</a> 转载请保留原文链接及作者。
@@ -297,18 +343,9 @@
 
 <nav id="article-nav">
   
-    <a  href="/2021/04/13/%E5%8F%8D%E8%B0%83%E8%AF%95/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption"><</strong>
-      <div class="article-nav-title">
-        
-          反调试
-        
-      </div>
-    </a>
   
-  
-    <a  href="/2021/04/10/%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%E5%AE%9E%E6%88%98Lab/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">恶意代码分析实战Lab</div>
+    <a  href="/2021/05/04/%E6%83%B3%E6%B3%95/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">想法</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -320,7 +357,7 @@
 
     <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
-    
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#yara%E4%BD%BF%E7%94%A8"><span class="toc-number">1.</span> <span class="toc-text">yara使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80%EF%BC%9A"><span class="toc-number">1.1.</span> <span class="toc-text">前言：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8%EF%BC%9A"><span class="toc-number">1.2.</span> <span class="toc-text">安装与使用：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#yara%E8%A7%84%E5%88%99%E7%BC%96%E5%86%99%EF%BC%9A"><span class="toc-number">1.3.</span> <span class="toc-text">yara规则编写：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E6%88%90%E9%AB%98%E6%95%88%E9%80%9A%E7%94%A8%E7%9A%84yara%E8%A7%84%E5%88%99"><span class="toc-number">1.3.1.</span> <span class="toc-text">生成高效通用的yara规则</span></a></li></ol></li></ol></li></ol>
 </div>
 <style>
     .left-col .switch-btn {
@@ -369,13 +406,11 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a  href="/2021/04/13/%E5%8F%8D%E8%B0%83%E8%AF%95/" title="上一篇: 反调试">
-                <i class="fa fa-angle-left"></i>
-            </a>
+            <a  href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
         
-            <a  href="/2021/04/10/%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%E5%AE%9E%E6%88%98Lab/" title="下一篇: 恶意代码分析实战Lab">
+            <a  href="/2021/05/04/%E6%83%B3%E6%B3%95/" title="下一篇: 想法">
                 <i class="fa fa-angle-right"></i>
             </a>
         
