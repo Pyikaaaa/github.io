@@ -179,7 +179,7 @@
                 
                 <section class="switch-part switch-part2">
                     <div class="widget tagcloud" id="js-tagcloud">
-                        <a href="/tags/Pc%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" style="font-size: 20px;">Pc样本分析</a> <a href="/tags/RE/" style="font-size: 10px;">RE</a> <a href="/tags/c/" style="font-size: 10px;">c</a> <a href="/tags/linuxRE/" style="font-size: 10px;">linuxRE</a> <a href="/tags/%E5%88%86%E6%9E%90/" style="font-size: 20px;">分析</a> <a href="/tags/%E5%8F%8D%E8%B0%83%E8%AF%95-%E9%80%86%E5%90%91/" style="font-size: 10px;">反调试 逆向</a> <a href="/tags/%E6%83%B3%E6%B3%95/" style="font-size: 10px;">想法</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 10px;">数据结构</a> <a href="/tags/%E7%A0%B4%E8%A7%A3/" style="font-size: 10px;">破解</a>
+                        <a href="/tags/Pc%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" style="font-size: 20px;">Pc样本分析</a> <a href="/tags/RE/" style="font-size: 10px;">RE</a> <a href="/tags/c/" style="font-size: 10px;">c</a> <a href="/tags/linuxRE/" style="font-size: 10px;">linuxRE</a> <a href="/tags/%E5%88%86%E6%9E%90/" style="font-size: 15px;">分析</a> <a href="/tags/%E5%8F%8D%E8%B0%83%E8%AF%95-%E9%80%86%E5%90%91/" style="font-size: 10px;">反调试 逆向</a> <a href="/tags/%E6%83%B3%E6%B3%95/" style="font-size: 10px;">想法</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 10px;">数据结构</a> <a href="/tags/%E7%A0%B4%E8%A7%A3/" style="font-size: 10px;">破解</a>
                     </div>
                 </section>
                 
@@ -233,6 +233,123 @@
     </div>
 </nav>
       <div class="body-wrap">
+  
+    <article id="post-Thallium病毒分析" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2021/05/11/Thallium%E7%97%85%E6%AF%92%E5%88%86%E6%9E%90/" class="article-date">
+      <time datetime="2021-05-11T07:13:56.000Z" itemprop="datePublished">2021-05-11</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a  class="article-title" href="/2021/05/11/Thallium%E7%97%85%E6%AF%92%E5%88%86%E6%9E%90/">Thallium病毒分析</a>
+    </h1>
+  
+
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h1 id="分析过程"><a href="#分析过程" class="headerlink" title="分析过程"></a>分析过程</h1><p>样本类型：doc</p>
+<p>样本利用方式：宏代码利用</p>
+<p><img src="https://i.imgur.com/ghxLpqB.png"></p>
+<p>原始病毒样本是通过 宏代码 利用  然后远程连接c2服务器  进行下载.so文件  </p>
+<p>把通过c2 服务器下载的 payload 后缀名改为.exe</p>
+<p>直接分析.exe 文件  后续的payload文件</p>
+<p>下载的TEMP.so为exe文件，md5为：                               f160c057fded2c01bfdb65bb7aa9dfcc    </p>
+<p>行为分析：用process monitor 监测 payload的行为 ，设置过滤器  重命名为 tt.exe </p>
+<p>可以看到一些对文件的操作 ， 还有注册表之类的</p>
+<p>主要行为：</p>
+<p>在c：programdata \a7963 下  拷贝自身过去</p>
+<p><img src="https://i.imgur.com/NUzQiPo.png"></p>
+<p><img src="https://i.imgur.com/vysRksB.png"></p>
+<p>查壳  无壳 </p>
+<p>分析过程：</p>
+<p>1.查了资料后  知道这是 MFC的程序 ，看代码的特征，确实是MFC独有的</p>
+<p>2.行为分析的时候（检测行为时）也可以感受到 在运行之后  有个明显的时间差  才有弹窗</p>
+<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210511210004487.png" alt="image-20210511210004487"></p>
+<p>大循环   造成延迟的主要原因</p>
+<p>0x0BAADBEEF —-&gt;   3131948783 </p>
+<p>VirtualProtect：</p>
+<p>当做对应之 Win32 函数的逻辑包装函数。VirtualProtect 的 Win32 实作会在呼叫处理序的虚拟位址空间里，变更认可页面区域上的保护。</p>
+<p><img src="https://i.imgur.com/88Oz8Cu.png"></p>
+<p>0x40 : 启用对已提交页区域的执行、读和写访问  </p>
+<p><strong>循环结束之后，先用VirtualProtect函数更改0x422548到0x42A548的内存属性为0x40，也就是可读可写可执行，</strong></p>
+<p>之后调用401670 函数，函数不能反汇编出来，直接看汇编代码</p>
+<p><img src="https://i.imgur.com/yuMSb4U.png"></p>
+<p><img src="https://i.imgur.com/WuRgdAB.png"></p>
+<p><img src="https://i.imgur.com/CR5idIG.png"></p>
+<p><img src="https://i.imgur.com/gHrciG0.png"></p>
+<p>加载有效地址（load effective address）指令就是lea,他的指令形式就是从内存读取数据到寄存器，但是实际上他没有引用内存，而是将有效地址写入到目的的操作数</p>
+<p><img src="https://i.imgur.com/eunlYQg.png"></p>
+<p>直接在427068 处下断点  就是下不下来 ，在4012A2 处下断点，之后f8   查看407068处的汇编  发现内容已经改变</p>
+<p><img src="https://i.imgur.com/tvwUVHd.png"></p>
+<p><img src="https://i.imgur.com/4bg5fS3.png"></p>
+<p>前：</p>
+<p><img src="https://i.imgur.com/G6wIcJg.png"></p>
+<p>后：</p>
+<p><img src="https://i.imgur.com/8t69XTI.png"></p>
+<p>对 00427068下断点   断下来了！！！！！！！！</p>
+<p>一步步跟一下 看看解密后的内容都干了什么</p>
+<p><img src="https://i.imgur.com/cKFZ6FZ.png"></p>
+<p>当执行 00427115 的指令时  发现很大的延迟 。回车跟进 004255c8 函数  看一下内容：</p>
+<p><img src="https://i.imgur.com/KPvrYJI.png"></p>
+<p>熟悉的大循环</p>
+<p>接着向下跟，观察寄存器的值的变化，</p>
+<p><img src="https://i.imgur.com/CDoypKT.png"></p>
+<p>出现字符串</p>
+<p><img src="https://i.imgur.com/kRS26EG.png"></p>
+<p>疑似解密  具体不清楚干啥 接着跟</p>
+<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210513201316844.png" alt="image-20210513201316844"></p>
+<p>运行到这的时候  弹出cmd窗口，速度太快 截不到图</p>
+<h1 id="总结断点："><a href="#总结断点：" class="headerlink" title="总结断点："></a>总结断点：</h1><p>004012a2  内存解密前</p>
+<p>00427068  解密后的 enum。。。回调函数 </p>
+<p>00427115   大循环</p>
+<p>004245c0</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Pc%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" rel="tag">Pc样本分析</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+
   
     <article id="post-Globelmposter" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -642,6 +759,7 @@
 <p>下载yara-v4.1.0-1612-win64.zip  ，将压缩包中的yarac64和yara64解压到C:\Windows目录下并分别重命名为yarac.exe和yara.exe</p>
 <p>启动cmd 输入yara –help查看yara的参数</p>
 <p><img src="https://i.imgur.com/jkDRvX7.png"></p>
+<p>参数简单翻译：</p>
 <p>yara给我们提供了一个现成的yara规则库</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/Yara-Rules/rules">https://github.com/Yara-Rules/rules</a></p>
 <p><strong>规则分11大类：</strong></p>
@@ -673,6 +791,28 @@
 <li>没有被检测到的样本</li>
 </ol>
 <p><a target="_blank" rel="noopener" href="https://github.com/Neo23x0/yarAnalyzer">https://github.com/Neo23x0/yarAnalyzer</a></p>
+<h2 id="yara使用实例"><a href="#yara使用实例" class="headerlink" title="yara使用实例"></a>yara使用实例</h2><p>准备一些恶意样本 </p>
+<p>进行检测</p>
+<p><img src="https://i.imgur.com/Cdi64H5.png"></p>
+<p>规则1 检测pe文件结构</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">rule Mzzz</span><br><span class="line">&#123;</span><br><span class="line">	meta:</span><br><span class="line">		author &#x3D;&quot;pyikaaaa&quot;</span><br><span class="line">		description &#x3D; &quot;Look&quot;</span><br><span class="line">		date &#x3D; &quot;2020-5&quot;</span><br><span class="line">	strings:</span><br><span class="line">		$c0 &#x3D;&#123;4D 5A&#125;</span><br><span class="line">	condition:</span><br><span class="line">		$c0</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p><img src="https://i.imgur.com/gjuF6Js.png"></p>
+<h3 id="规则2-ps-yar"><a href="#规则2-ps-yar" class="headerlink" title="规则2 ps.yar"></a>规则2 ps.yar</h3><p>用来检测cs生成的powershell马</p>
+<p>提取cs生成的powershell马的特征：</p>
+<p>对比32位和64位可以发现，。。。。。。。。。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">rule ps</span><br><span class="line">&#123;</span><br><span class="line">meta:</span><br><span class="line">        description&#x3D;&quot;description&quot;</span><br><span class="line">        author&#x3D;&quot;author&quot;</span><br><span class="line">        date&#x3D;&quot;2021-05&quot;</span><br><span class="line">        reference&#x3D;&quot;reference&quot;</span><br><span class="line">        hash&#x3D;&quot;hash&quot;</span><br><span class="line"></span><br><span class="line">strings:</span><br><span class="line">        $str1&#x3D;&quot;$var_va.Invoke([IntPtr]::Zero, $var_code.Length, 0x3000, 0x40)&quot;</span><br><span class="line">        $str2&#x3D;&quot;[System.Runtime.InteropServices.Marshal]::Copy($var_code, 0, $var_buffer, $var_code.length)&quot;</span><br><span class="line"></span><br><span class="line">condition:</span><br><span class="line">        $str1 and $str2</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>检测：</p>
+<p><img src="https://i.imgur.com/1Tr0iue.png"></p>
+<p>使用webshells类检测样本</p>
+<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210512162404728.png" alt="image-20210512162404728"></p>
+<p>使用官方给的yara规则进行 加密类的检测</p>
+<p><img src="https://i.imgur.com/x3mPASB.png"></p>
 
       
     </div>
@@ -1227,67 +1367,6 @@
       
     <div class="article-tag tagcloud">
         <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%A0%B4%E8%A7%A3/" rel="tag">破解</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-恶意代码分析实战Lab" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a  href="/2021/04/10/%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%E5%AE%9E%E6%88%98Lab/" class="article-date">
-      <time datetime="2021-04-10T13:31:33.000Z" itemprop="datePublished">2021-04-10</time>
-</a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a  class="article-title" href="/2021/04/10/%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%E5%AE%9E%E6%88%98Lab/">恶意代码分析实战Lab</a>
-    </h1>
-  
-
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%88%86%E6%9E%90/" rel="tag">分析</a></li></ul>
     </div>
 
       
