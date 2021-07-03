@@ -7,17 +7,19 @@
   
   
   
-  <title>恶意代码分析实战Lab | Pyikaaaa</title>
+  <title>pe资源提取 | Pyikaaaa</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="article">
-<meta property="og:title" content="恶意代码分析实战Lab">
-<meta property="og:url" content="http://example.com/2021/04/10/%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%E5%AE%9E%E6%88%98Lab/index.html">
+  <meta name="description" content="最近分析的病毒样本  ，是释放器类型的，接触到的一类简单的释放器样本，数据不进行加密直接存在pe资源中，想办法把pe文件资源提取出来存在文件中，或者是弄个类似resource hacker 那种，提取资源文件。 pe文件资源提取出来存在文件中1.调试器后拷贝文件 释放器释放文件会用到writefile函数  ，可以在用调试器调试过程中，在wirtefile之后，直接拷贝文件，在对后续样本进行分析">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pe资源提取">
+<meta property="og:url" content="http://example.com/2021/07/01/PE/pe%E8%B5%84%E6%BA%90%E6%8F%90%E5%8F%96/index.html">
 <meta property="og:site_name" content="Pyikaaaa">
+<meta property="og:description" content="最近分析的病毒样本  ，是释放器类型的，接触到的一类简单的释放器样本，数据不进行加密直接存在pe资源中，想办法把pe文件资源提取出来存在文件中，或者是弄个类似resource hacker 那种，提取资源文件。 pe文件资源提取出来存在文件中1.调试器后拷贝文件 释放器释放文件会用到writefile函数  ，可以在用调试器调试过程中，在wirtefile之后，直接拷贝文件，在对后续样本进行分析">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2021-04-10T13:31:33.000Z">
-<meta property="article:modified_time" content="2021-04-10T13:32:08.470Z">
+<meta property="article:published_time" content="2021-07-01T09:05:13.000Z">
+<meta property="article:modified_time" content="2021-07-02T09:41:29.248Z">
 <meta property="article:author" content="Pyikaaaa">
-<meta property="article:tag" content="分析">
+<meta property="article:tag" content="PE">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="Pyikaaaa" type="application/atom+xml">
@@ -179,7 +181,7 @@
                 
                 <section class="switch-part switch-part2">
                     <div class="widget tagcloud" id="js-tagcloud">
-                        <a href="/tags/Pc%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" style="font-size: 20px;">Pc样本分析</a> <a href="/tags/RE/" style="font-size: 10px;">RE</a> <a href="/tags/c/" style="font-size: 10px;">c</a> <a href="/tags/linuxRE/" style="font-size: 10px;">linuxRE</a> <a href="/tags/%E5%88%86%E6%9E%90/" style="font-size: 15px;">分析</a> <a href="/tags/%E5%8F%8D%E8%B0%83%E8%AF%95-%E9%80%86%E5%90%91/" style="font-size: 10px;">反调试 逆向</a> <a href="/tags/%E6%83%B3%E6%B3%95/" style="font-size: 10px;">想法</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 10px;">数据结构</a> <a href="/tags/%E7%A0%B4%E8%A7%A3/" style="font-size: 10px;">破解</a>
+                        <a href="/tags/PE/" style="font-size: 10px;">PE</a> <a href="/tags/Pc%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" style="font-size: 20px;">Pc样本分析</a> <a href="/tags/RE/" style="font-size: 15px;">RE</a> <a href="/tags/c/" style="font-size: 10px;">c</a> <a href="/tags/linuxRE/" style="font-size: 10px;">linuxRE</a> <a href="/tags/%E5%8F%8D%E8%B0%83%E8%AF%95-%E9%80%86%E5%90%91/" style="font-size: 10px;">反调试 逆向</a> <a href="/tags/%E6%83%B3%E6%B3%95/" style="font-size: 10px;">想法</a>
                     </div>
                 </section>
                 
@@ -232,11 +234,11 @@
         </header>
     </div>
 </nav>
-      <div class="body-wrap"><article id="post-恶意代码分析实战Lab" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-PE/pe资源提取" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a  href="/2021/04/10/%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%E5%AE%9E%E6%88%98Lab/" class="article-date">
-      <time datetime="2021-04-10T13:31:33.000Z" itemprop="datePublished">2021-04-10</time>
+      <a  href="/2021/07/01/PE/pe%E8%B5%84%E6%BA%90%E6%8F%90%E5%8F%96/" class="article-date">
+      <time datetime="2021-07-01T09:05:13.000Z" itemprop="datePublished">2021-07-01</time>
 </a>
 
     </div>
@@ -250,7 +252,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      恶意代码分析实战Lab
+      pe资源提取
     </h1>
   
 
@@ -262,7 +264,7 @@
 
         
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%88%86%E6%9E%90/" rel="tag">分析</a></li></ul>
+        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PE/" rel="tag">PE</a></li></ul>
     </div>
 
         <div class="clearfix"></div>
@@ -272,7 +274,17 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        
+        <p> 最近分析的病毒样本  ，是释放器类型的，接触到的一类简单的释放器样本，数据不进行加密直接存在pe资源中，想办法把pe文件资源提取出来存在文件中，或者是弄个类似resource hacker 那种，提取资源文件。</p>
+<h2 id="pe文件资源提取出来存在文件中"><a href="#pe文件资源提取出来存在文件中" class="headerlink" title="pe文件资源提取出来存在文件中"></a>pe文件资源提取出来存在文件中</h2><p>1.调试器后拷贝文件</p>
+<p>释放器释放文件会用到writefile函数  ，可以在用调试器调试过程中，在wirtefile之后，直接拷贝文件，在对后续样本进行分析。</p>
+<p>2.利用ida脚本</p>
+<p>需要知道写入文件的地址，文件的大小</p>
+<p>利用方式：</p>
+<p>创建的文件和当前idb文件在同目录下，用IDA打开一个idb文件，file–&gt;script file –&gt;xxx.idc</p>
+<p>自行填写填入资源的文件名   数据地址   大小（file ，addstart，size）</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;idc.idc&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">         </span><br><span class="line">        <span class="keyword">auto</span> file =<span class="string">&quot;xxx.bin&quot;</span>;<span class="comment">//写入pe文件资源的文件</span></span><br><span class="line">         </span><br><span class="line">        <span class="keyword">auto</span> addstart=<span class="number">0</span>x。。。。。;<span class="comment">//数据的地址</span></span><br><span class="line">         </span><br><span class="line">        <span class="keyword">auto</span> size=<span class="number">0</span>x。。。;<span class="comment">//大小</span></span><br><span class="line">         </span><br><span class="line">         </span><br><span class="line">        <span class="keyword">auto</span> hfile=openfile(file);</span><br><span class="line">         </span><br><span class="line">         </span><br><span class="line">        writefile(hfile,addstart,size);</span><br><span class="line">         </span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">         </span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="title">openfile</span><span class="params">(file)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        <span class="keyword">auto</span> hfile=fopen(file,<span class="string">&quot;wb&quot;</span>);</span><br><span class="line">        <span class="keyword">if</span>(hfile==<span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">                Message(<span class="string">&quot;create file failed\n&quot;</span>);</span><br><span class="line">                <span class="keyword">return</span> hfile ;</span><br><span class="line">        &#125;</span><br><span class="line">         </span><br><span class="line">        <span class="keyword">return</span> hfile;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="title">writefile</span><span class="params">(hfile,addstart,size)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        <span class="keyword">auto</span> ret=savefile(hfile,<span class="number">0</span>,addstart,size);</span><br><span class="line">         </span><br><span class="line">        <span class="keyword">if</span>(ret==<span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">                Mesage(<span class="string">&quot;write file error\n&quot;</span>);</span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">         </span><br><span class="line">        Message(<span class="string">&quot;success!&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="类似resource-hacker-的资源提取工具"><a href="#类似resource-hacker-的资源提取工具" class="headerlink" title="类似resource hacker 的资源提取工具"></a>类似resource hacker 的资源提取工具</h2><h3 id="pe资源相关知识"><a href="#pe资源相关知识" class="headerlink" title="pe资源相关知识"></a>pe资源相关知识</h3><h3 id="资源提取器代码实现"><a href="#资源提取器代码实现" class="headerlink" title="资源提取器代码实现"></a>资源提取器代码实现</h3>
       
     </div>
     
@@ -280,13 +292,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a  href="/2021/04/10/%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%E5%AE%9E%E6%88%98Lab/">恶意代码分析实战Lab</a></p>
+        <p><span>本文标题:</span><a  href="/2021/07/01/PE/pe%E8%B5%84%E6%BA%90%E6%8F%90%E5%8F%96/">pe资源提取</a></p>
         <p><span>文章作者:</span><a  href="/" title="访问  的个人博客"></a></p>
-        <p><span>发布时间:</span>2021年04月10日 - 21时31分</p>
-        <p><span>最后更新:</span>2021年04月10日 - 21时32分</p>
+        <p><span>发布时间:</span>2021年07月01日 - 17时05分</p>
+        <p><span>最后更新:</span>2021年07月02日 - 17时41分</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2021/04/10/%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%E5%AE%9E%E6%88%98Lab/" title="恶意代码分析实战Lab">http://example.com/2021/04/10/%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%E5%AE%9E%E6%88%98Lab/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://example.com/2021/04/10/%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%E5%AE%9E%E6%88%98Lab/　　作者: " title=""></span>
+            <span>原始链接:</span><a class="post-url" href="/2021/07/01/PE/pe%E8%B5%84%E6%BA%90%E6%8F%90%E5%8F%96/" title="pe资源提取">http://example.com/2021/07/01/PE/pe%E8%B5%84%E6%BA%90%E6%8F%90%E5%8F%96/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://example.com/2021/07/01/PE/pe%E8%B5%84%E6%BA%90%E6%8F%90%E5%8F%96/　　作者: " title=""></span>
         </p>
         <p>
             <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" title="中国大陆 (CC BY-NC-SA 3.0 CN)" target = "_blank">"署名-非商用-相同方式共享 3.0"</a> 转载请保留原文链接及作者。
@@ -297,18 +309,9 @@
 
 <nav id="article-nav">
   
-    <a  href="/2021/04/10/creakeme160/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption"><</strong>
-      <div class="article-nav-title">
-        
-          creakeme160
-        
-      </div>
-    </a>
   
-  
-    <a  href="/2021/04/10/%E5%AD%A6%E4%B9%A0%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">学习数据结构</div>
+    <a  href="/2021/05/30/HOOK/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">HOOK</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -320,7 +323,7 @@
 
     <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
-    
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#pe%E6%96%87%E4%BB%B6%E8%B5%84%E6%BA%90%E6%8F%90%E5%8F%96%E5%87%BA%E6%9D%A5%E5%AD%98%E5%9C%A8%E6%96%87%E4%BB%B6%E4%B8%AD"><span class="toc-number">1.</span> <span class="toc-text">pe文件资源提取出来存在文件中</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B1%BB%E4%BC%BCresource-hacker-%E7%9A%84%E8%B5%84%E6%BA%90%E6%8F%90%E5%8F%96%E5%B7%A5%E5%85%B7"><span class="toc-number">2.</span> <span class="toc-text">类似resource hacker 的资源提取工具</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#pe%E8%B5%84%E6%BA%90%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86"><span class="toc-number">2.1.</span> <span class="toc-text">pe资源相关知识</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B5%84%E6%BA%90%E6%8F%90%E5%8F%96%E5%99%A8%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.2.</span> <span class="toc-text">资源提取器代码实现</span></a></li></ol></li></ol>
 </div>
 <style>
     .left-col .switch-btn {
@@ -369,18 +372,16 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a  href="/2021/04/10/creakeme160/" title="上一篇: creakeme160">
-                <i class="fa fa-angle-left"></i>
-            </a>
+            <a  href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
         
-            <a  href="/2021/04/10/%E5%AD%A6%E4%B9%A0%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" title="下一篇: 学习数据结构">
+            <a  href="/2021/05/30/HOOK/" title="下一篇: HOOK">
                 <i class="fa fa-angle-right"></i>
             </a>
         
     </div>
-    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2021/05/25/%E8%BF%9B%E7%A8%8B%E9%9A%90%E8%97%8F%E6%8A%80%E6%9C%AF/">进程隐藏技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/23/%E6%B5%B7%E8%8E%B2%E8%8A%B1%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/">海莲花样本分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/22/%E5%9B%BE/">图</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/16/baby%E9%A2%98%E8%A7%A3/">baby题解</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/11/Thallium%E7%97%85%E6%AF%92%E5%88%86%E6%9E%90/">Thallium病毒分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/06/Globelmposter/">Globelmposter</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/06/%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0linux%E4%B8%8B%E7%9A%84RE/">初步学习linux下的RE</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/06/linux/">linux</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/05/yara%E4%BD%BF%E7%94%A8/">yara使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/04/%E6%83%B3%E6%B3%95/">想法</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/04/%E6%B3%A8%E5%85%A5%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/">注入技术学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/17/MEMZ%E5%88%86%E6%9E%90/">MEMZ分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/13/%E5%8F%8D%E8%B0%83%E8%AF%95/">反调试</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/10/creakeme160/">creakeme160</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/10/%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%E5%AE%9E%E6%88%98Lab/">恶意代码分析实战Lab</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/10/%E5%AD%A6%E4%B9%A0%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">学习数据结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/09/%E7%AE%80%E5%8D%95%E6%80%BB%E7%BB%93%E6%8C%87%E9%92%88/">简单总结指针</a></li></ul>
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2021/07/01/PE/pe%E8%B5%84%E6%BA%90%E6%8F%90%E5%8F%96/">pe资源提取</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/30/HOOK/">HOOK</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/25/CVE-2017-11882%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">CVE-2017-11882漏洞复现</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/25/%E8%BF%9B%E7%A8%8B%E9%9A%90%E8%97%8F%E6%8A%80%E6%9C%AF/">进程隐藏技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/23/%E6%B5%B7%E8%8E%B2%E8%8A%B1%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/">海莲花样本分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/11/Thallium%E7%97%85%E6%AF%92%E5%88%86%E6%9E%90/">Thallium病毒分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/06/Globelmposter/">Globelmposter</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/06/%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0linux%E4%B8%8B%E7%9A%84RE/">初步学习linux下的RE</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/06/linux/">linux</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/05/yara%E4%BD%BF%E7%94%A8/">yara使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/04/%E6%83%B3%E6%B3%95/">想法</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/04/%E6%B3%A8%E5%85%A5%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/">注入技术学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/17/MEMZ%E5%88%86%E6%9E%90/">MEMZ分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/13/%E5%8F%8D%E8%B0%83%E8%AF%95/">反调试</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/09/%E7%AE%80%E5%8D%95%E6%80%BB%E7%BB%93%E6%8C%87%E9%92%88/">简单总结指针</a></li></ul>
     
 <script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
 

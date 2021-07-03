@@ -179,7 +179,7 @@
                 
                 <section class="switch-part switch-part2">
                     <div class="widget tagcloud" id="js-tagcloud">
-                        <a href="/tags/Pc%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" style="font-size: 20px;">Pc样本分析</a> <a href="/tags/RE/" style="font-size: 10px;">RE</a> <a href="/tags/c/" style="font-size: 10px;">c</a> <a href="/tags/linuxRE/" style="font-size: 10px;">linuxRE</a> <a href="/tags/%E5%88%86%E6%9E%90/" style="font-size: 15px;">分析</a> <a href="/tags/%E5%8F%8D%E8%B0%83%E8%AF%95-%E9%80%86%E5%90%91/" style="font-size: 10px;">反调试 逆向</a> <a href="/tags/%E6%83%B3%E6%B3%95/" style="font-size: 10px;">想法</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 10px;">数据结构</a> <a href="/tags/%E7%A0%B4%E8%A7%A3/" style="font-size: 10px;">破解</a>
+                        <a href="/tags/PE/" style="font-size: 10px;">PE</a> <a href="/tags/Pc%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" style="font-size: 20px;">Pc样本分析</a> <a href="/tags/RE/" style="font-size: 15px;">RE</a> <a href="/tags/c/" style="font-size: 10px;">c</a> <a href="/tags/linuxRE/" style="font-size: 10px;">linuxRE</a> <a href="/tags/%E5%8F%8D%E8%B0%83%E8%AF%95-%E9%80%86%E5%90%91/" style="font-size: 10px;">反调试 逆向</a> <a href="/tags/%E6%83%B3%E6%B3%95/" style="font-size: 10px;">想法</a>
                     </div>
                 </section>
                 
@@ -234,6 +234,233 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-PE/pe资源提取" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2021/07/01/PE/pe%E8%B5%84%E6%BA%90%E6%8F%90%E5%8F%96/" class="article-date">
+      <time datetime="2021-07-01T09:05:13.000Z" itemprop="datePublished">2021-07-01</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a  class="article-title" href="/2021/07/01/PE/pe%E8%B5%84%E6%BA%90%E6%8F%90%E5%8F%96/">pe资源提取</a>
+    </h1>
+  
+
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p> 最近分析的病毒样本  ，是释放器类型的，接触到的一类简单的释放器样本，数据不进行加密直接存在pe资源中，想办法把pe文件资源提取出来存在文件中，或者是弄个类似resource hacker 那种，提取资源文件。</p>
+<h2 id="pe文件资源提取出来存在文件中"><a href="#pe文件资源提取出来存在文件中" class="headerlink" title="pe文件资源提取出来存在文件中"></a>pe文件资源提取出来存在文件中</h2><p>1.调试器后拷贝文件</p>
+<p>释放器释放文件会用到writefile函数  ，可以在用调试器调试过程中，在wirtefile之后，直接拷贝文件，在对后续样本进行分析。</p>
+<p>2.利用ida脚本</p>
+<p>需要知道写入文件的地址，文件的大小</p>
+<p>利用方式：</p>
+<p>创建的文件和当前idb文件在同目录下，用IDA打开一个idb文件，file–&gt;script file –&gt;xxx.idc</p>
+<p>自行填写填入资源的文件名   数据地址   大小（file ，addstart，size）</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;idc.idc&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">         </span><br><span class="line">        <span class="keyword">auto</span> file =<span class="string">&quot;xxx.bin&quot;</span>;<span class="comment">//写入pe文件资源的文件</span></span><br><span class="line">         </span><br><span class="line">        <span class="keyword">auto</span> addstart=<span class="number">0</span>x。。。。。;<span class="comment">//数据的地址</span></span><br><span class="line">         </span><br><span class="line">        <span class="keyword">auto</span> size=<span class="number">0</span>x。。。;<span class="comment">//大小</span></span><br><span class="line">         </span><br><span class="line">         </span><br><span class="line">        <span class="keyword">auto</span> hfile=openfile(file);</span><br><span class="line">         </span><br><span class="line">         </span><br><span class="line">        writefile(hfile,addstart,size);</span><br><span class="line">         </span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">         </span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="title">openfile</span><span class="params">(file)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        <span class="keyword">auto</span> hfile=fopen(file,<span class="string">&quot;wb&quot;</span>);</span><br><span class="line">        <span class="keyword">if</span>(hfile==<span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">                Message(<span class="string">&quot;create file failed\n&quot;</span>);</span><br><span class="line">                <span class="keyword">return</span> hfile ;</span><br><span class="line">        &#125;</span><br><span class="line">         </span><br><span class="line">        <span class="keyword">return</span> hfile;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="title">writefile</span><span class="params">(hfile,addstart,size)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        <span class="keyword">auto</span> ret=savefile(hfile,<span class="number">0</span>,addstart,size);</span><br><span class="line">         </span><br><span class="line">        <span class="keyword">if</span>(ret==<span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">                Mesage(<span class="string">&quot;write file error\n&quot;</span>);</span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">         </span><br><span class="line">        Message(<span class="string">&quot;success!&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="类似resource-hacker-的资源提取工具"><a href="#类似resource-hacker-的资源提取工具" class="headerlink" title="类似resource hacker 的资源提取工具"></a>类似resource hacker 的资源提取工具</h2><h3 id="pe资源相关知识"><a href="#pe资源相关知识" class="headerlink" title="pe资源相关知识"></a>pe资源相关知识</h3><h3 id="资源提取器代码实现"><a href="#资源提取器代码实现" class="headerlink" title="资源提取器代码实现"></a>资源提取器代码实现</h3>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PE/" rel="tag">PE</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-HOOK" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2021/05/30/HOOK/" class="article-date">
+      <time datetime="2021-05-30T04:38:14.000Z" itemprop="datePublished">2021-05-30</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a  class="article-title" href="/2021/05/30/HOOK/">HOOK</a>
+    </h1>
+  
+
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h1 id="HOOK技术"><a href="#HOOK技术" class="headerlink" title="HOOK技术"></a>HOOK技术</h1><p>1.原理</p>
+<p>修改api函数</p>
+<p>unhook</p>
+<p>恢复修改</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/iiprogram/article/details/1585922?utm_medium=distribute.pc_relevant.none-task-blog-baidujs_baidulandingword-0&spm=1001.2101.3001.4242">必备绝技–Hook大法( 上 )_iiprogram的博客-CSDN博客</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_37552052/article/details/81453591">Windows Hook原理与实现_安全杂货铺-CSDN博客_hook</a></p>
+<p>1.用户模式Hook</p>
+<p>IAT-hooking</p>
+<p>先找到自己需要hook的函数，然后把目标函数的地址改成我们自己的hook函数，最后在恢复到目标函数的地址(unhook)</p>
+<p>如果是通过动态加载的就不行了<br>因为动态加载的dll的API不在iat中,而是动态生成的.</p>
+<p>（四）局限性：１当程序运用一种叫<code>late-demand binding</code>技术，函数被调用时才定位地址，这样以来就不能在IAT中定位目标函数地址了．２当目标程序用动态加载（LoadLibrary)时，这种方法也将失效．（如果是通过动态加载的就不行了<br>因为动态加载的dll的API不在iat中,而是动态生成的.）</p>
+<ol start="2">
+<li>hook——ZwQuerySystemInformation</li>
+</ol>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/freesec/p/6560935.html">hook技术–代码hook - freesec - 博客园 (cnblogs.com)</a></p>
+<p>3 .HotFix Hook</p>
+<p>从上节对Code Hook方法的讲解中，我们会发现Code Hook存在一个效率的问题，因为每次Code Hook都要进行“挂钩+脱钩”的操作，也就是要对API的前5字节修改两次，这样，当我们要进行全局Hook的时候，系统运行效率会受影响。而且，当一个线程尝试运行某段代码时，若另一个线程正在对该段代码进行“写”操作，这时就会程序冲突，最终引发一些错误。<br>有没有办法避免这种隐患呢？答案是有的，可以使用HotFix Hook（“热补丁”）方法。</p>
+<p>5.3.1 技术原理</p>
+<p>以上累出的API起始代码有如下两个明显的相似点：<br>[1]API代码以“MOV EDI,EDI”指令开始。<br>[2]API代码上方有5个NOP指令。</p>
+<p>MOV EDI,EDI用于将EDI的值再次复制给EDI，这没有什么实际意义。也就是说，API起始代码的MOV指令（2个字节）与其上方的5个NOP指令（5个字节）合起来共7个字节的指令没有任何意义。所以我们就可以通过修改这7个字节来实现Hook操作。这种方法因为可以在进程处于运行状态时临时更改进程内存中的库文件，所以微软也常用这种方法来打“热补丁”。</p>
+<ol start="4">
+<li>Inline Hook</li>
+</ol>
+<p>内联Hook相比于IAT Hook，显得更简单粗暴，它直接修改内存中任意函数的代码，将其劫持至Hook API。同时，它比IAT Hook的适用范围更广，因为只要是内存中有的函数它都能Hook，而后者只能Hook IAT表里存在的函数（有些程序会动态加载函数）。</p>
+<p>技术原理</p>
+<p>Inline Hook的目标是系统函数，如下，左图是Hook之前的状态，procexp.exe进程调用ZwQuerySystemInformation()函数时，ZwQuerySystemInformation()的代码是正常的代码。右图是Hook后的状态，注意红框中的代码，ZwQuerySystemInformation()函数开头5个字节已被修改，变成了jmp 0x10001120，也就是我们恶意代码的地址，之后便可以开始我们的自定义操作。0x1000116A我们先进行unhook操作（脱钩），目的是将ZwQuerySystemInformation()的代码恢复。大家可能有疑惑，为什么刚修改完又要恢复回来，原因很简单，Hook的目的是当调用某个函数时，我们能劫持进程的执行流。现在我们已经劫持了进程的执行流，便可以恢复ZwQuerySystemInformation()的代码，以便我们的恶意代码可以正常调用ZwQuerySystemInformation()。执行完恶意代码后，再次挂钩，监控该函数。</p>
+<p>5.通过消息钩子<br> 1．基本原理：微软自己定义了一个钩子函数，这个钩子可以钩住系统的任何一类消息，并产生相关的回调函数。比如我们设置的是键盘钩子，如果用户按下键盘的键，就可以触发一个我们自定义功能的回调函数。<br> 2．大体框架：<br> 文件1：产生特定功能的Dll，并设置钩子<br>    SetWindowsHookEx(WH_KEYBOARD, myKeyBrdFuncAd, myDllHandle, 0),</p>
+<p> 文件2：将Dll设置到特定目录，隐藏等<br>    安装钩子函数，只要另一个进程按下了键，则钩子启动，加载Dll<br>    卸载钩子</p>
+<p> 4．局限性：会产生Dll体，虽然没有进程，但可以通过其他工具轻易发现</p>
+<ol start="6">
+<li>通过创建远程线程<br> 1．一般思路：远程线程，顾名思义就是在其他进程中创建一个线程，如果这个进程是系统每次启动必须加载的，那么就能每次有注入目标。这主要通过CreateRemoteThread函数完成。<br> 2．大体框架：<br> 文件1：可以重定位的代码，或是DLL,这个代码当然是有特定目的的<br> 文件2：查找特定进程，如文件管理器，打开进程<pre><code> VirtualAllocEx函数在进程中申请分配空间
+ WriteProcessMemory函数将远程线程中的代码拷贝到申请到的空间
+ CreateRemoteThread函数创建远程线程
+</code></pre>
+</li>
+</ol>
+<p>4.局限性：有时会遇到申请内存失败。</p>
+<p> 总结：以上的几种方法，相互配合将发挥更为强大的力量。但由于都是动作在ring3，有着先天不足的缺点，都逃不过内核模块的监测。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RE/" rel="tag">RE</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-CVE-2017-11882漏洞复现" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2021/05/25/CVE-2017-11882%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" class="article-date">
+      <time datetime="2021-05-25T10:44:04.000Z" itemprop="datePublished">2021-05-25</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a  class="article-title" href="/2021/05/25/CVE-2017-11882%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">CVE-2017-11882漏洞复现</a>
+    </h1>
+  
+
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+
+  
     <article id="post-进程隐藏技术" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -268,6 +495,14 @@
 <p><a target="_blank" rel="noopener" href="https://www.write-bug.com/article/1960.html">技术分享 - 劫持ZwQuerySystemInformation函数实现进程隐藏 (write-bug.com)</a></p>
 <p>占坑 </p>
 <p>等hook系统了解后在来</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/xiaocaiju/article/details/7586795">hook zwQuerySysteminformation 隐藏进程_小驹的专栏-CSDN博客</a></p>
+<h4 id="实现原理："><a href="#实现原理：" class="headerlink" title="实现原理："></a>实现原理：</h4><p>　　由于遍历进程通常是通过调用WIN32 API函数 EnumProcesses 或是CreateToolhelp32Snapshot 等来实现的。</p>
+<p>　　通过跟踪逆向这些WIN32 API函数可知，它们内部最终是通过调用ZwQuerySystemInformation函数来检索系</p>
+<p>　　统进程信息的，从而实现进程遍历操作。所以，程序只需要HOOK ZwQuerySystemInformation这一个函数就</p>
+<p>　　足够了。在ZwQuerySystem Information函数的内部判断检索的信息是否是进程信息，若是，则对返回的进程</p>
+<p>　　信息进行修改，将隐藏的进程信息从中去掉再返回。因此只要是通过调用ZwQuerySystemInformation来检索</p>
+<p>　　系统进程的，获取到的数据均是被篡改的，自然获取不到隐藏进程的信息，这样，指定进程就被隐藏起来了。</p>
+<p><a target="_blank" rel="noopener" href="http://www.bubuko.com/infodetail-3532998.html">HOOK函数ZwQuerySystemInformation实现进程隐藏-布布扣-bubuko.com</a></p>
 <h1 id="进程内存替换"><a href="#进程内存替换" class="headerlink" title="进程内存替换"></a>进程内存替换</h1><p>==也是傀儡进程注入==</p>
 <p>之前分析的病毒 使用傀儡进程注入(进程内存替换)达到进程隐藏的目的 ，傀儡进程是将目标进程的映射文件替换为指定的映射文件,替换后的进程称之为傀儡进程;常常有恶意程序将隐藏在自己文件内的恶意代码加载进目标进程,而在加载进目标进程之前，会利用ZwUnmpViewOfSection或者NtUnmapViewOfSection进行相关设置</p>
 <blockquote>
@@ -368,80 +603,17 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-图" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a  href="/2021/05/22/%E5%9B%BE/" class="article-date">
-      <time datetime="2021-05-22T13:35:46.881Z" itemprop="datePublished">2021-05-22</time>
-</a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210522211123401.png" alt="image-20210522211123401"></p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210522211130589.png" alt="image-20210522211130589"></p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210522211541088.png" alt="image-20210522211541088"></p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210522211901376.png" alt="image-20210522211901376"></p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210522211938031.png" alt="image-20210522211938031"></p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210522212300621.png" alt="image-20210522212300621"></p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210522212519652.png" alt="image-20210522212519652"></p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210522212306741.png" alt="image-20210522212306741"></p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210522212840228.png" alt="image-20210522212840228"></p>
-<h2 id="图的遍历："><a href="#图的遍历：" class="headerlink" title="图的遍历："></a>图的遍历：</h2><p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210523122055870.png" alt="image-20210523122055870"></p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210523122328757.png" alt="image-20210523122328757"></p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210523122726100.png" alt="image-20210523122726100"></p>
-<p>所有顶点只被访问一次</p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210523123550860.png" alt="image-20210523123550860"></p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210523124101158.png" alt="image-20210523124101158"></p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210523130639596.png" alt="image-20210523130639596"></p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210523130833883.png" alt="image-20210523130833883"></p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210523130928823.png" alt="image-20210523130928823"></p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210523132512470.png" alt="image-20210523132512470"></p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210523132543460.png" alt="image-20210523132543460"></p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210523133037077.png" alt="image-20210523133037077"></p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210523133049127.png" alt="image-20210523133049127"></p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210523133342815.png" alt="image-20210523133342815"></p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210523133351685.png" alt="image-20210523133351685"></p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210523133455930.png" alt="image-20210523133455930"></p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210523133534492.png" alt="image-20210523133534492"></p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210523134441544.png" alt="image-20210523134441544"></p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210523134511754.png" alt="image-20210523134511754"></p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210523134712691.png" alt="image-20210523134712691"></p>
+        <p>环境：win10  offic2003 </p>
+<p>工具：ida  od windbg </p>
+<p><strong>MD5：</strong>e5c766ad580b5bc5f74acc8d2f5dd028c11495d2ce503de7c7a294f94583849d</p>
+<p>病毒触发样本是一个含有CVE-2017-11882 漏洞的word诱导文档文件，（下一篇为复现文章：栈溢出）</p>
+<p>用office2003 sp3  打开文档   </p>
+<p><img src="https://i.imgur.com/C6GWj7P.png"></p>
+<p>被defender拦截 ， 查看内容，在C:\Users\lenovo\AppData\Roaming\Microsoft-Windows-DiskDiagnosticResolver_2021325962 目录下 有三个文件 ，均是 文档释放的</p>
+<p><img src="https://i.imgur.com/qXfIs4z.png"></p>
+<p>病毒触发样本是一个含有CVE-2017-11882 漏洞的word诱导文档文件，在用符合该CVE漏洞版本的office打开该诱导文档后，诱导文件会触发该CVE漏洞执行一段shellcode从诱导文件的二进制资源段中释MicrosoftWindowsDiskDiagnosticResolver.exe、OUTLFLTR.DAT、rastls.dll 3个文件</p>
+<p>MicrosoftWindowsDiskDiagnosticResolver.exe 是 有微软签名的白文件</p>
+<p><img src="https://i.imgur.com/vnJ990b.png"></p>
 
       
     </div>
@@ -451,71 +623,10 @@
       
 
       
-      
-      <div class="clearfix"></div>
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Pc%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" rel="tag">Pc样本分析</a></li></ul>
     </div>
-    
-  </div>
-  
-</article>
 
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-baby题解" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a  href="/2021/05/16/baby%E9%A2%98%E8%A7%A3/" class="article-date">
-      <time datetime="2021-05-16T03:56:53.407Z" itemprop="datePublished">2021-05-16</time>
-</a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <p>clang转  ida直接分析</p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210516114942568.png" alt="image-20210516114942568"></p>
-<p>限制输入   长度25 1-5</p>
-<p>fill_number输入存进map  如果已经存在数字   输出0</p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210516115344609.png" alt="image-20210516115344609"></p>
-<p>docheck ：</p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210516115406360.png" alt="image-20210516115406360"></p>
-<p>判断行重复不重</p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210516115443415.png" alt="image-20210516115443415"></p>
-<p>判断列</p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210516115504099.png" alt="image-20210516115504099"></p>
-<p>row 和col 对   输入的相邻的  做限制 </p>
-<p>大小限制</p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210516115557856.png" alt="image-20210516115557856"></p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210516115614639.png" alt="image-20210516115614639"></p>
-<p>。。。。。。。</p>
-<p>写脚本  运行</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line">import hashlib</span><br><span class="line">from z3 import *</span><br><span class="line"></span><br><span class="line">row&#x3D;[0,0,0,1,1,0,0,0,2,0,0,1,0,0,0,0,1,0,1,0]</span><br><span class="line">col&#x3D;[0,0,2,0,2,0,0,0,0,0,0,0,0,1,0,0,1,0,0,1]</span><br><span class="line">sol &#x3D; Solver()</span><br><span class="line">map &#x3D; [BitVec(&#39;s%d&#39; % i, 4) for i in range(25)]</span><br><span class="line">sol.add(map[5*2+2] &#x3D;&#x3D; 4)</span><br><span class="line">sol.add(map[5*3+3] &#x3D;&#x3D; 3)</span><br><span class="line"></span><br><span class="line">for i in range(25):</span><br><span class="line">    sol.add(map[i]&gt;&#x3D;1)</span><br><span class="line">    sol.add(map[i]&lt;&#x3D;5)</span><br><span class="line"># for i in range(5):</span><br><span class="line">#     sol.add(</span><br><span class="line">#     And(map[5 * i] !&#x3D; map[5 * i+1],</span><br><span class="line">#     map[5 * i] !&#x3D; map[5 * i + 2],</span><br><span class="line">#     map[5 * i] !&#x3D; map[5 * i + 3],</span><br><span class="line">#     map[5 * i] !&#x3D; map[5 * i + 4],</span><br><span class="line">#     map[5 * i+1] !&#x3D; map[5 * i + 2],</span><br><span class="line">#     map[5 * i+1] !&#x3D; map[5 * i + 3],</span><br><span class="line">#     map[5 * i+1]!&#x3D; map[5 * i + 4],</span><br><span class="line">#     map[5 * i + 2] !&#x3D; map[5 * i + 3],</span><br><span class="line">#     map[5 * i + 2] !&#x3D; map[5 * i + 4],</span><br><span class="line">#     map[5 * i + 3] !&#x3D; map[5 * i + 4]))</span><br><span class="line"># for i in range(5):</span><br><span class="line">#     sol.add(</span><br><span class="line">#     And(map[5 * 0 +i] !&#x3D; map[5 * 1+i],</span><br><span class="line">#         map[5 * 0 + i] !&#x3D; map[5 * 2 + i],</span><br><span class="line">#         map[5 * 0 + i] !&#x3D; map[5 * 3 + i],</span><br><span class="line">#         map[5 * 0 + i] !&#x3D; map[5 * 4 + i],</span><br><span class="line">#         map[5 * 1 + i] !&#x3D; map[5 * 2 + i],</span><br><span class="line">#         map[5 * 1 + i] !&#x3D; map[5 * 3 + i],</span><br><span class="line">#         map[5 * 1 + i] !&#x3D; map[5 * 4 + i],</span><br><span class="line">#         map[5 * 2 + i] !&#x3D; map[5 * 3 + i],</span><br><span class="line">#         map[5 * 2 + i] !&#x3D; map[5 * 4 + i],</span><br><span class="line">#         map[5 * 3 + i] !&#x3D; map[5 * 4 + i]</span><br><span class="line">#     ))</span><br><span class="line"></span><br><span class="line">for i in range(5):</span><br><span class="line">    for j in range(5):</span><br><span class="line">        for k in range(j):</span><br><span class="line">            sol.add(map[5*i+j] !&#x3D; map[5*i+k])</span><br><span class="line"></span><br><span class="line">for i in range(5):</span><br><span class="line">    for j in range(5):</span><br><span class="line">        for k in range(j):</span><br><span class="line">            sol.add(map[5*j+i] !&#x3D; map[5*k+i])</span><br><span class="line"></span><br><span class="line">for i in range(4):</span><br><span class="line"> for j in range(5):</span><br><span class="line">        sol.add(map[5 * i+j] !&#x3D; map[5 * (i+1)+j])</span><br><span class="line">for i in range(5):</span><br><span class="line"> for j in range(4):</span><br><span class="line">    if row[4 * i+j]&#x3D;&#x3D;1:</span><br><span class="line">        sol.add(map[5 * i+j] &gt; map[5 * i+j+1])</span><br><span class="line">    elif row[4 * i+j] &#x3D;&#x3D; 2:</span><br><span class="line">        sol.add(map[5 * i+j] &lt; map[5 * i+j+ 1])</span><br><span class="line">for i in range(4):</span><br><span class="line"> for j in range(5):</span><br><span class="line">    if col[5 * i+j]&#x3D;&#x3D;1:</span><br><span class="line">        sol.add(map[5 * i+j] &lt; map[5 * (i+1)+j])</span><br><span class="line">    elif col[5 * i+j] &#x3D;&#x3D; 2 :</span><br><span class="line">        sol.add(map[5 * i+j] &gt; map[5 * (i+1)+j])</span><br><span class="line"></span><br><span class="line">while sol.check() &#x3D;&#x3D; sat:</span><br><span class="line">    answer &#x3D; sol.model()</span><br><span class="line">    condition &#x3D; []</span><br><span class="line">    p &#x3D; []</span><br><span class="line">    for i in map:</span><br><span class="line">        p +&#x3D; [answer[i]]</span><br><span class="line">        condition.append(i !&#x3D; answer[i])</span><br><span class="line">    p[5 * 2 + 2] &#x3D; 0</span><br><span class="line">    p[5 * 3 + 3] &#x3D; 0</span><br><span class="line">    print(p)</span><br><span class="line">    sol.add(Or(condition))</span><br><span class="line">#[1, 4, 2, 5, 3, 5, 3, 1, 4, 2, 3, 5, 0, 2, 1, 2, 1, 5, 0, 4, 4, 2, 3, 1, 5]</span><br><span class="line">p&#x3D;[1, 4, 2, 5, 3, 5, 3, 1, 4, 2, 3, 5, 0, 2, 1, 2, 1, 5, 0, 4, 4, 2, 3, 1, 5]</span><br><span class="line">l&#x3D;&#39;&#39;</span><br><span class="line">for i in p:</span><br><span class="line">    l+&#x3D;str(i)</span><br><span class="line">md &#x3D; hashlib.md5()</span><br><span class="line">md.update(l.encode())</span><br><span class="line">print(&#39;CISCN&#123;&#39;+md.hexdigest()+&#39;&#125;&#39;)</span><br></pre></td></tr></table></figure>
-
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210516120830689.png" alt="image-20210516120830689"></p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
       
       <div class="clearfix"></div>
     </div>
@@ -800,12 +911,12 @@
 <p>第一次调用：</p>
 <p>还看到下面有关于逗号的操作，不重要，不重点分析</p>
 <p>动调： 跟到解密出的数据  是一些文件名</p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210506205216451.png"></p>
+<p><img src="https://i.imgur.com/4SO3hG2.png"></p>
 <p>图：</p>
 <p>第二次调用：同理  是利用AES解密</p>
 <p>动调观看解密出的内容：</p>
 <p>图：是一些目录名</p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210506205229003.png"></p>
+<p><img src="https://i.imgur.com/QK6yz1c.png"></p>
 <h3 id="接着分析"><a href="#接着分析" class="headerlink" title="接着分析"></a>接着分析</h3><p>发现调用GetEnvironmentVariableW函数</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">从调用该函数的进程的环境变量中,返回指定的变量名的值 参数：lpName:要获取值的变量名字符串指针.lpBuffer:接收变量值的字符串指针nSize:接收变量值的内存大小. 函数成功执行返回字符数量</span><br></pre></td></tr></table></figure>
 
@@ -897,7 +1008,7 @@
 <p>《看不懂，看的别人的》  作用：Bat会删除远程桌面连接信息文件 default.rdp，并通过wevtutil.execl命令删除日志信息</p>
 <p><img src="https://i.imgur.com/U1pgMGi.png"></p>
 <h3 id="sub-409509函数："><a href="#sub-409509函数：" class="headerlink" title="sub_409509函数："></a>sub_409509函数：</h3><p>结论：执行当前运行的程序的自我删除</p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210506205730635.png"></p>
+<p><img src="https://i.imgur.com/9i5QrcL.png"></p>
 <h2 id="0x0x总结流程"><a href="#0x0x总结流程" class="headerlink" title="0x0x总结流程"></a>0x0x总结流程</h2><p>1.解密一些东西 为之后加密文件做准备</p>
 <p>2.把自己复制到localappdata路径</p>
 <p>3.设置自启动</p>
@@ -1180,7 +1291,7 @@
 <p>检测：</p>
 <p><img src="https://i.imgur.com/1Tr0iue.png"></p>
 <p>使用webshells类检测样本</p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210512162404728.png" alt="image-20210512162404728"></p>
+<p><img src="https://i.imgur.com/hKrc7by.png"></p>
 <p>使用官方给的yara规则进行 加密类的检测</p>
 <p><img src="https://i.imgur.com/x3mPASB.png"></p>
 
@@ -1193,69 +1304,7 @@
 
       
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%88%86%E6%9E%90/" rel="tag">分析</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-想法" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a  href="/2021/05/04/%E6%83%B3%E6%B3%95/" class="article-date">
-      <time datetime="2021-05-04T09:24:09.000Z" itemprop="datePublished">2021-05-04</time>
-</a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a  class="article-title" href="/2021/05/04/%E6%83%B3%E6%B3%95/">想法</a>
-    </h1>
-  
-
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <p>从2020年一月份开始接触学习RE，已经学了四个月，从汇编到PE，逐渐上手分析样本，补充技能点，对于大体方向有了初步的了解，现在的任务就是，完善知识体系，多动手实践，多积累经验，打算把这四个月学的知识，做个整合，陆续发到这个。加油！！！！</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%83%B3%E6%B3%95/" rel="tag">想法</a></li></ul>
+        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RE/" rel="tag">RE</a></li></ul>
     </div>
 
       

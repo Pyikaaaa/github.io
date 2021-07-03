@@ -7,22 +7,20 @@
   
   
   
-  <title>学习数据结构 | Pyikaaaa</title>
+  <title>HOOK | Pyikaaaa</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="数据结构0x00 预备知识0x01 顺序存储1    0x02 链式存储1  0x03 栈1    0x04 队列1  0x06 树与二叉树 学习视频：【郝斌】-数据结构入门_哔哩哔哩 (゜-゜)つロ 干杯~-bilibili 复习链接：https:&#x2F;&#x2F;www.cnblogs.com&#x2F;flmei&#x2F;p&#x2F;10768617.html">
+  <meta name="description" content="HOOK技术1.原理 修改api函数 unhook 恢复修改 必备绝技–Hook大法( 上 )_iiprogram的博客-CSDN博客 Windows Hook原理与实现_安全杂货铺-CSDN博客_hook 1.用户模式Hook IAT-hooking 先找到自己需要hook的函数，然后把目标函数的地址改成我们自己的hook函数，最后在恢复到目标函数的地址(unhook) 如果是通过动态加载的就不">
 <meta property="og:type" content="article">
-<meta property="og:title" content="学习数据结构">
-<meta property="og:url" content="http://example.com/2021/04/10/%E5%AD%A6%E4%B9%A0%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/index.html">
+<meta property="og:title" content="HOOK">
+<meta property="og:url" content="http://example.com/2021/05/30/HOOK/index.html">
 <meta property="og:site_name" content="Pyikaaaa">
-<meta property="og:description" content="数据结构0x00 预备知识0x01 顺序存储1    0x02 链式存储1  0x03 栈1    0x04 队列1  0x06 树与二叉树 学习视频：【郝斌】-数据结构入门_哔哩哔哩 (゜-゜)つロ 干杯~-bilibili 复习链接：https:&#x2F;&#x2F;www.cnblogs.com&#x2F;flmei&#x2F;p&#x2F;10768617.html">
+<meta property="og:description" content="HOOK技术1.原理 修改api函数 unhook 恢复修改 必备绝技–Hook大法( 上 )_iiprogram的博客-CSDN博客 Windows Hook原理与实现_安全杂货铺-CSDN博客_hook 1.用户模式Hook IAT-hooking 先找到自己需要hook的函数，然后把目标函数的地址改成我们自己的hook函数，最后在恢复到目标函数的地址(unhook) 如果是通过动态加载的就不">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="c:/Users/lenovo/AppData/Roaming/Typora/typora-user-images/image-20210504193520455.png">
-<meta property="article:published_time" content="2021-04-10T13:21:44.000Z">
-<meta property="article:modified_time" content="2021-05-04T13:38:36.444Z">
+<meta property="article:published_time" content="2021-05-30T04:38:14.000Z">
+<meta property="article:modified_time" content="2021-05-30T13:23:43.347Z">
 <meta property="article:author" content="Pyikaaaa">
-<meta property="article:tag" content="数据结构">
+<meta property="article:tag" content="RE">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="c:/Users/lenovo/AppData/Roaming/Typora/typora-user-images/image-20210504193520455.png">
   
     <link rel="alternative" href="/atom.xml" title="Pyikaaaa" type="application/atom+xml">
   
@@ -183,7 +181,7 @@
                 
                 <section class="switch-part switch-part2">
                     <div class="widget tagcloud" id="js-tagcloud">
-                        <a href="/tags/Pc%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" style="font-size: 20px;">Pc样本分析</a> <a href="/tags/RE/" style="font-size: 10px;">RE</a> <a href="/tags/c/" style="font-size: 10px;">c</a> <a href="/tags/linuxRE/" style="font-size: 10px;">linuxRE</a> <a href="/tags/%E5%88%86%E6%9E%90/" style="font-size: 15px;">分析</a> <a href="/tags/%E5%8F%8D%E8%B0%83%E8%AF%95-%E9%80%86%E5%90%91/" style="font-size: 10px;">反调试 逆向</a> <a href="/tags/%E6%83%B3%E6%B3%95/" style="font-size: 10px;">想法</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 10px;">数据结构</a> <a href="/tags/%E7%A0%B4%E8%A7%A3/" style="font-size: 10px;">破解</a>
+                        <a href="/tags/PE/" style="font-size: 10px;">PE</a> <a href="/tags/Pc%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" style="font-size: 20px;">Pc样本分析</a> <a href="/tags/RE/" style="font-size: 15px;">RE</a> <a href="/tags/c/" style="font-size: 10px;">c</a> <a href="/tags/linuxRE/" style="font-size: 10px;">linuxRE</a> <a href="/tags/%E5%8F%8D%E8%B0%83%E8%AF%95-%E9%80%86%E5%90%91/" style="font-size: 10px;">反调试 逆向</a> <a href="/tags/%E6%83%B3%E6%B3%95/" style="font-size: 10px;">想法</a>
                     </div>
                 </section>
                 
@@ -236,11 +234,11 @@
         </header>
     </div>
 </nav>
-      <div class="body-wrap"><article id="post-学习数据结构" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-HOOK" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a  href="/2021/04/10/%E5%AD%A6%E4%B9%A0%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="article-date">
-      <time datetime="2021-04-10T13:21:44.000Z" itemprop="datePublished">2021-04-10</time>
+      <a  href="/2021/05/30/HOOK/" class="article-date">
+      <time datetime="2021-05-30T04:38:14.000Z" itemprop="datePublished">2021-05-30</time>
 </a>
 
     </div>
@@ -254,7 +252,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      学习数据结构
+      HOOK
     </h1>
   
 
@@ -266,7 +264,7 @@
 
         
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a></li></ul>
+        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RE/" rel="tag">RE</a></li></ul>
     </div>
 
         <div class="clearfix"></div>
@@ -276,21 +274,44 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h1 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h1><h2 id="0x00-预备知识"><a href="#0x00-预备知识" class="headerlink" title="0x00 预备知识"></a>0x00 预备知识</h2><h2 id="0x01-顺序存储"><a href="#0x01-顺序存储" class="headerlink" title="0x01 顺序存储"></a>0x01 顺序存储</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="0x02-链式存储"><a href="#0x02-链式存储" class="headerlink" title="0x02 链式存储"></a>0x02 链式存储</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h2 id="0x03-栈"><a href="#0x03-栈" class="headerlink" title="0x03 栈"></a>0x03 栈</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="0x04-队列"><a href="#0x04-队列" class="headerlink" title="0x04 队列"></a>0x04 队列</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h2 id="0x06-树与二叉树"><a href="#0x06-树与二叉树" class="headerlink" title="0x06 树与二叉树"></a>0x06 树与二叉树</h2><p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210504193520455.png"></p>
-<p>学习视频：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV11s41167h6?p=1">【郝斌】-数据结构入门_哔哩哔哩 (゜-゜)つロ 干杯~-bilibili</a></p>
-<p>复习链接：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/flmei/p/10768617.html">https://www.cnblogs.com/flmei/p/10768617.html</a></p>
+        <h1 id="HOOK技术"><a href="#HOOK技术" class="headerlink" title="HOOK技术"></a>HOOK技术</h1><p>1.原理</p>
+<p>修改api函数</p>
+<p>unhook</p>
+<p>恢复修改</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/iiprogram/article/details/1585922?utm_medium=distribute.pc_relevant.none-task-blog-baidujs_baidulandingword-0&spm=1001.2101.3001.4242">必备绝技–Hook大法( 上 )_iiprogram的博客-CSDN博客</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_37552052/article/details/81453591">Windows Hook原理与实现_安全杂货铺-CSDN博客_hook</a></p>
+<p>1.用户模式Hook</p>
+<p>IAT-hooking</p>
+<p>先找到自己需要hook的函数，然后把目标函数的地址改成我们自己的hook函数，最后在恢复到目标函数的地址(unhook)</p>
+<p>如果是通过动态加载的就不行了<br>因为动态加载的dll的API不在iat中,而是动态生成的.</p>
+<p>（四）局限性：１当程序运用一种叫<code>late-demand binding</code>技术，函数被调用时才定位地址，这样以来就不能在IAT中定位目标函数地址了．２当目标程序用动态加载（LoadLibrary)时，这种方法也将失效．（如果是通过动态加载的就不行了<br>因为动态加载的dll的API不在iat中,而是动态生成的.）</p>
+<ol start="2">
+<li>hook——ZwQuerySystemInformation</li>
+</ol>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/freesec/p/6560935.html">hook技术–代码hook - freesec - 博客园 (cnblogs.com)</a></p>
+<p>3 .HotFix Hook</p>
+<p>从上节对Code Hook方法的讲解中，我们会发现Code Hook存在一个效率的问题，因为每次Code Hook都要进行“挂钩+脱钩”的操作，也就是要对API的前5字节修改两次，这样，当我们要进行全局Hook的时候，系统运行效率会受影响。而且，当一个线程尝试运行某段代码时，若另一个线程正在对该段代码进行“写”操作，这时就会程序冲突，最终引发一些错误。<br>有没有办法避免这种隐患呢？答案是有的，可以使用HotFix Hook（“热补丁”）方法。</p>
+<p>5.3.1 技术原理</p>
+<p>以上累出的API起始代码有如下两个明显的相似点：<br>[1]API代码以“MOV EDI,EDI”指令开始。<br>[2]API代码上方有5个NOP指令。</p>
+<p>MOV EDI,EDI用于将EDI的值再次复制给EDI，这没有什么实际意义。也就是说，API起始代码的MOV指令（2个字节）与其上方的5个NOP指令（5个字节）合起来共7个字节的指令没有任何意义。所以我们就可以通过修改这7个字节来实现Hook操作。这种方法因为可以在进程处于运行状态时临时更改进程内存中的库文件，所以微软也常用这种方法来打“热补丁”。</p>
+<ol start="4">
+<li>Inline Hook</li>
+</ol>
+<p>内联Hook相比于IAT Hook，显得更简单粗暴，它直接修改内存中任意函数的代码，将其劫持至Hook API。同时，它比IAT Hook的适用范围更广，因为只要是内存中有的函数它都能Hook，而后者只能Hook IAT表里存在的函数（有些程序会动态加载函数）。</p>
+<p>技术原理</p>
+<p>Inline Hook的目标是系统函数，如下，左图是Hook之前的状态，procexp.exe进程调用ZwQuerySystemInformation()函数时，ZwQuerySystemInformation()的代码是正常的代码。右图是Hook后的状态，注意红框中的代码，ZwQuerySystemInformation()函数开头5个字节已被修改，变成了jmp 0x10001120，也就是我们恶意代码的地址，之后便可以开始我们的自定义操作。0x1000116A我们先进行unhook操作（脱钩），目的是将ZwQuerySystemInformation()的代码恢复。大家可能有疑惑，为什么刚修改完又要恢复回来，原因很简单，Hook的目的是当调用某个函数时，我们能劫持进程的执行流。现在我们已经劫持了进程的执行流，便可以恢复ZwQuerySystemInformation()的代码，以便我们的恶意代码可以正常调用ZwQuerySystemInformation()。执行完恶意代码后，再次挂钩，监控该函数。</p>
+<p>5.通过消息钩子<br> 1．基本原理：微软自己定义了一个钩子函数，这个钩子可以钩住系统的任何一类消息，并产生相关的回调函数。比如我们设置的是键盘钩子，如果用户按下键盘的键，就可以触发一个我们自定义功能的回调函数。<br> 2．大体框架：<br> 文件1：产生特定功能的Dll，并设置钩子<br>    SetWindowsHookEx(WH_KEYBOARD, myKeyBrdFuncAd, myDllHandle, 0),</p>
+<p> 文件2：将Dll设置到特定目录，隐藏等<br>    安装钩子函数，只要另一个进程按下了键，则钩子启动，加载Dll<br>    卸载钩子</p>
+<p> 4．局限性：会产生Dll体，虽然没有进程，但可以通过其他工具轻易发现</p>
+<ol start="6">
+<li>通过创建远程线程<br> 1．一般思路：远程线程，顾名思义就是在其他进程中创建一个线程，如果这个进程是系统每次启动必须加载的，那么就能每次有注入目标。这主要通过CreateRemoteThread函数完成。<br> 2．大体框架：<br> 文件1：可以重定位的代码，或是DLL,这个代码当然是有特定目的的<br> 文件2：查找特定进程，如文件管理器，打开进程<pre><code> VirtualAllocEx函数在进程中申请分配空间
+ WriteProcessMemory函数将远程线程中的代码拷贝到申请到的空间
+ CreateRemoteThread函数创建远程线程
+</code></pre>
+</li>
+</ol>
+<p>4.局限性：有时会遇到申请内存失败。</p>
+<p> 总结：以上的几种方法，相互配合将发挥更为强大的力量。但由于都是动作在ring3，有着先天不足的缺点，都逃不过内核模块的监测。</p>
 
       
     </div>
@@ -299,13 +320,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a  href="/2021/04/10/%E5%AD%A6%E4%B9%A0%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">学习数据结构</a></p>
+        <p><span>本文标题:</span><a  href="/2021/05/30/HOOK/">HOOK</a></p>
         <p><span>文章作者:</span><a  href="/" title="访问  的个人博客"></a></p>
-        <p><span>发布时间:</span>2021年04月10日 - 21时21分</p>
-        <p><span>最后更新:</span>2021年05月04日 - 21时38分</p>
+        <p><span>发布时间:</span>2021年05月30日 - 12时38分</p>
+        <p><span>最后更新:</span>2021年05月30日 - 21时23分</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2021/04/10/%E5%AD%A6%E4%B9%A0%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" title="学习数据结构">http://example.com/2021/04/10/%E5%AD%A6%E4%B9%A0%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://example.com/2021/04/10/%E5%AD%A6%E4%B9%A0%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/　　作者: " title=""></span>
+            <span>原始链接:</span><a class="post-url" href="/2021/05/30/HOOK/" title="HOOK">http://example.com/2021/05/30/HOOK/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://example.com/2021/05/30/HOOK/　　作者: " title=""></span>
         </p>
         <p>
             <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" title="中国大陆 (CC BY-NC-SA 3.0 CN)" target = "_blank">"署名-非商用-相同方式共享 3.0"</a> 转载请保留原文链接及作者。
@@ -316,18 +337,18 @@
 
 <nav id="article-nav">
   
-    <a  href="/2021/04/10/%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%E5%AE%9E%E6%88%98Lab/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a  href="/2021/07/01/PE/pe%E8%B5%84%E6%BA%90%E6%8F%90%E5%8F%96/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption"><</strong>
       <div class="article-nav-title">
         
-          恶意代码分析实战Lab
+          pe资源提取
         
       </div>
     </a>
   
   
-    <a  href="/2021/04/09/%E7%AE%80%E5%8D%95%E6%80%BB%E7%BB%93%E6%8C%87%E9%92%88/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">简单总结指针</div>
+    <a  href="/2021/05/25/CVE-2017-11882%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">CVE-2017-11882漏洞复现</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -339,7 +360,7 @@
 
     <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-number">1.</span> <span class="toc-text">数据结构</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x00-%E9%A2%84%E5%A4%87%E7%9F%A5%E8%AF%86"><span class="toc-number">1.1.</span> <span class="toc-text">0x00 预备知识</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-%E9%A1%BA%E5%BA%8F%E5%AD%98%E5%82%A8"><span class="toc-number">1.2.</span> <span class="toc-text">0x01 顺序存储</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-%E9%93%BE%E5%BC%8F%E5%AD%98%E5%82%A8"><span class="toc-number">1.3.</span> <span class="toc-text">0x02 链式存储</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-%E6%A0%88"><span class="toc-number">1.4.</span> <span class="toc-text">0x03 栈</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x04-%E9%98%9F%E5%88%97"><span class="toc-number">1.5.</span> <span class="toc-text">0x04 队列</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x06-%E6%A0%91%E4%B8%8E%E4%BA%8C%E5%8F%89%E6%A0%91"><span class="toc-number">1.6.</span> <span class="toc-text">0x06 树与二叉树</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#HOOK%E6%8A%80%E6%9C%AF"><span class="toc-number">1.</span> <span class="toc-text">HOOK技术</span></a></li></ol>
 </div>
 <style>
     .left-col .switch-btn {
@@ -388,18 +409,18 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a  href="/2021/04/10/%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%E5%AE%9E%E6%88%98Lab/" title="上一篇: 恶意代码分析实战Lab">
+            <a  href="/2021/07/01/PE/pe%E8%B5%84%E6%BA%90%E6%8F%90%E5%8F%96/" title="上一篇: pe资源提取">
                 <i class="fa fa-angle-left"></i>
             </a>
         
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
         
-            <a  href="/2021/04/09/%E7%AE%80%E5%8D%95%E6%80%BB%E7%BB%93%E6%8C%87%E9%92%88/" title="下一篇: 简单总结指针">
+            <a  href="/2021/05/25/CVE-2017-11882%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" title="下一篇: CVE-2017-11882漏洞复现">
                 <i class="fa fa-angle-right"></i>
             </a>
         
     </div>
-    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2021/05/25/%E8%BF%9B%E7%A8%8B%E9%9A%90%E8%97%8F%E6%8A%80%E6%9C%AF/">进程隐藏技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/23/%E6%B5%B7%E8%8E%B2%E8%8A%B1%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/">海莲花样本分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/22/%E5%9B%BE/">图</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/16/baby%E9%A2%98%E8%A7%A3/">baby题解</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/11/Thallium%E7%97%85%E6%AF%92%E5%88%86%E6%9E%90/">Thallium病毒分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/06/Globelmposter/">Globelmposter</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/06/%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0linux%E4%B8%8B%E7%9A%84RE/">初步学习linux下的RE</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/06/linux/">linux</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/05/yara%E4%BD%BF%E7%94%A8/">yara使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/04/%E6%83%B3%E6%B3%95/">想法</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/04/%E6%B3%A8%E5%85%A5%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/">注入技术学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/17/MEMZ%E5%88%86%E6%9E%90/">MEMZ分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/13/%E5%8F%8D%E8%B0%83%E8%AF%95/">反调试</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/10/creakeme160/">creakeme160</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/10/%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90%E5%AE%9E%E6%88%98Lab/">恶意代码分析实战Lab</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/10/%E5%AD%A6%E4%B9%A0%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">学习数据结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/09/%E7%AE%80%E5%8D%95%E6%80%BB%E7%BB%93%E6%8C%87%E9%92%88/">简单总结指针</a></li></ul>
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2021/07/01/PE/pe%E8%B5%84%E6%BA%90%E6%8F%90%E5%8F%96/">pe资源提取</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/30/HOOK/">HOOK</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/25/CVE-2017-11882%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">CVE-2017-11882漏洞复现</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/25/%E8%BF%9B%E7%A8%8B%E9%9A%90%E8%97%8F%E6%8A%80%E6%9C%AF/">进程隐藏技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/23/%E6%B5%B7%E8%8E%B2%E8%8A%B1%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/">海莲花样本分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/11/Thallium%E7%97%85%E6%AF%92%E5%88%86%E6%9E%90/">Thallium病毒分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/06/Globelmposter/">Globelmposter</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/06/%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0linux%E4%B8%8B%E7%9A%84RE/">初步学习linux下的RE</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/06/linux/">linux</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/05/yara%E4%BD%BF%E7%94%A8/">yara使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/04/%E6%83%B3%E6%B3%95/">想法</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/04/%E6%B3%A8%E5%85%A5%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/">注入技术学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/17/MEMZ%E5%88%86%E6%9E%90/">MEMZ分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/13/%E5%8F%8D%E8%B0%83%E8%AF%95/">反调试</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/09/%E7%AE%80%E5%8D%95%E6%80%BB%E7%BB%93%E6%8C%87%E9%92%88/">简单总结指针</a></li></ul>
     
 <script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
 
