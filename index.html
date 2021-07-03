@@ -234,6 +234,102 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-释放器分析" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2021/07/03/%E9%87%8A%E6%94%BE%E5%99%A8%E5%88%86%E6%9E%90/" class="article-date">
+      <time datetime="2021-07-03T03:20:48.000Z" itemprop="datePublished">2021-07-03</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a  class="article-title" href="/2021/07/03/%E9%87%8A%E6%94%BE%E5%99%A8%E5%88%86%E6%9E%90/">释放器分析</a>
+    </h1>
+  
+
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h1 id="Trojan-Dropper-Win32-Delf-eimp-分析报告"><a href="#Trojan-Dropper-Win32-Delf-eimp-分析报告" class="headerlink" title="Trojan-Dropper.Win32.Delf.eimp 分析报告"></a>Trojan-Dropper.Win32.Delf.eimp 分析报告</h1><p>Trojan-Dropper.Win32.Delf.eimp类总结：释放器释放的文件没有进行加密等操作直接存在原始文件的pe数据段中，编写代码对这类样本释放的文件直接提取</p>
+<h3 id="822f943bfb27abc5f1acd66bd76ea46b分析过程："><a href="#822f943bfb27abc5f1acd66bd76ea46b分析过程：" class="headerlink" title="822f943bfb27abc5f1acd66bd76ea46b分析过程："></a>822f943bfb27abc5f1acd66bd76ea46b分析过程：</h3><p>vt分析：</p>
+<p><img src="https://i.imgur.com/okQTi3r.png"></p>
+<p><img src="https://i.imgur.com/eX3dwZ7.png"></p>
+<p>释放文件</p>
+<p><img src="https://i.imgur.com/txZVVzR.png"></p>
+<p>执行释放文件， 大多是注册表操作</p>
+<p>释放文件</p>
+<p><img src="https://i.imgur.com/AxVorVd.png"></p>
+<h5 id="ida分析病毒样本"><a href="#ida分析病毒样本" class="headerlink" title="ida分析病毒样本"></a>ida分析病毒样本</h5><p>start函数直接发现关键位置</p>
+<p><img src="https://i.imgur.com/Ky79BJF.png"></p>
+<p>三个关键API，CreateFileA先创建⽂件，WriteFile写⼊⽂件，最后ShellExecuteA执⾏⽂件。</p>
+<p>静调没发现什么文件信息.</p>
+<h5 id="动调过程："><a href="#动调过程：" class="headerlink" title="动调过程："></a>动调过程：</h5><p>单步调，发现MZ，转到内存窗口查看，是pe文件</p>
+<p><img src="https://i.imgur.com/Rf4v5CF.png"></p>
+<p>接着调可以发现字符串，推测是上述pe的文件名</p>
+<p><img src="https://i.imgur.com/9NYIERf.png"></p>
+<p>发现释放文件的路径</p>
+<p><img src="https://i.imgur.com/U6aB9Vu.png"></p>
+<p><img src="https://i.imgur.com/Rs7lOxO.png"></p>
+<p>在该目录中发现rename-me.exe，此时数据还没写入，文件大小0kb</p>
+<p><img src="https://i.imgur.com/qIYc8Q9.png"></p>
+<p>调到writefile函数执行，push eax，跟到内存窗口中，是写入文件的数据，比对两次发现的数据得到释放的文件没有经过任何加密操作。</p>
+<p><img src="https://i.imgur.com/wZoBzLE.png"></p>
+<p>ShellExecuteA执行rename-me.exe </p>
+<p><img src="https://i.imgur.com/H9Vc3no.png"></p>
+<p>跳转到40211B  向下跳发现另一个字符串，释放又一个可执行文件1205432525.exe</p>
+<p><img src="https://i.imgur.com/5r5aVGB.png"></p>
+<p>与rename-me.exe在同一目录下</p>
+<p><img src="https://i.imgur.com/lBhHCvt.png"></p>
+<p><img src="https://i.imgur.com/hMQIwEp.png"></p>
+<p><img src="https://i.imgur.com/DLIXWgB.png"></p>
+<p>最终写进可执行文件中的数据，与前面看到的进行对比，发现数据也没有进行加密</p>
+<h5 id="提取过程："><a href="#提取过程：" class="headerlink" title="提取过程："></a>提取过程：</h5><p>既然释放的文件直接存储在pe的数据段中，分析pe格式，直接提取文件</p>
+<p>参考这个</p>
+<p><img src="file:///C:\Users\lenovo\AppData\Roaming\Tencent\QQ\Temp[5UQ[BL(6~BS2JV6W}N6[%S.png" alt="img"><a target="_blank" rel="noopener" href="https://bbs.pediy.com/thread-125674.htm">https://bbs.pediy.com/thread-125674.htm</a></p>
+<p>提取结果：</p>
+<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210703112852985.png" alt="image-20210703112852985"></p>
+<p>把提取的文件与代码运行释放的文件和动调过程中在内存窗口观察到的内容进行对比，一致，提取成功。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+
+  
     <article id="post-PE/pe资源提取" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -681,14 +777,14 @@
 <p>原始病毒样本是通过 宏代码 利用  然后远程连接c2服务器  进行下载.so文件  </p>
 <p>把通过c2 服务器下载的 payload 后缀名改为.exe</p>
 <p>直接分析.exe 文件  后续的payload文件</p>
-<p>下载的TEMP.so为exe文件，md5为：                               f160c057fded2c01bfdb65bb7aa9dfcc    </p>
+<p>下载的TEMP.so为exe文件，md5为： f160c057fded2c01bfdb65bb7aa9dfcc    </p>
 <p>行为分析：用process monitor 监测 payload的行为 ，设置过滤器  重命名为 tt.exe </p>
 <p>可以看到一些对文件的操作 ， 还有注册表之类的</p>
 <p>主要行为：</p>
 <p>在c：programdata \a7963 下  拷贝自身过去</p>
 <p><img src="https://i.imgur.com/NUzQiPo.png"></p>
 <p><img src="https://i.imgur.com/vysRksB.png"></p>
-<p>查壳  无壳 </p>
+<p>无壳 </p>
 <p>分析过程：</p>
 <p>1.查了资料后  知道这是 MFC的程序 ，看代码的特征，确实是MFC独有的</p>
 <p>2.行为分析的时候（检测行为时）也可以感受到 在运行之后  有个明显的时间差  才有弹窗</p>
@@ -696,7 +792,6 @@
 <p>大循环   造成延迟的主要原因</p>
 <p>0x0BAADBEEF —-&gt;   3131948783 </p>
 <p>VirtualProtect：</p>
-<p>当做对应之 Win32 函数的逻辑包装函数。VirtualProtect 的 Win32 实作会在呼叫处理序的虚拟位址空间里，变更认可页面区域上的保护。</p>
 <p><img src="https://i.imgur.com/88Oz8Cu.png"></p>
 <p>0x40 : 启用对已提交页区域的执行、读和写访问  </p>
 <p><strong>循环结束之后，先用VirtualProtect函数更改0x422548到0x42A548的内存属性为0x40，也就是可读可写可执行，</strong></p>
@@ -707,14 +802,13 @@
 <p><img src="https://i.imgur.com/gHrciG0.png"></p>
 <p>加载有效地址（load effective address）指令就是lea,他的指令形式就是从内存读取数据到寄存器，但是实际上他没有引用内存，而是将有效地址写入到目的的操作数</p>
 <p><img src="https://i.imgur.com/eunlYQg.png"></p>
-<p>直接在427068 处下断点  就是下不下来 ，在4012A2 处下断点，之后f8   查看407068处的汇编  发现内容已经改变</p>
+<p>在4012A2 处下断点，之后f8   查看407068处的汇编  发现内容已经改变</p>
 <p><img src="https://i.imgur.com/tvwUVHd.png"></p>
 <p><img src="https://i.imgur.com/4bg5fS3.png"></p>
 <p>前：</p>
 <p><img src="https://i.imgur.com/G6wIcJg.png"></p>
 <p>后：</p>
 <p><img src="https://i.imgur.com/8t69XTI.png"></p>
-<p>对 00427068下断点   断下来了！！！！！！！！</p>
 <p>一步步跟一下 看看解密后的内容都干了什么</p>
 <p><img src="https://i.imgur.com/cKFZ6FZ.png"></p>
 <p>当执行 00427115 的指令时  发现很大的延迟 。回车跟进 004255c8 函数  看一下内容：</p>
@@ -728,78 +822,64 @@
 <p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210513201316844.png" alt="image-20210513201316844"></p>
 <p>运行到这的时候  弹出cmd窗口，速度太快 截不到图</p>
 <p>跟进函数 004236A8内部 ： 一步步简单跟一下 </p>
-<p><img src="https://i.imgur.com/jIB0CqP.png"></p>
 <p>00423827处    重新创建自身进程</p>
-<p>0042384e zwqueryinformationprocess</p>
-<p><img src="https://i.imgur.com/C3AShnC.png"></p>
-<p><img src="https://i.imgur.com/dc2Qkrr.png"></p>
-<p><img src="https://i.imgur.com/xmm4m3U.png"></p>
+<p><img src="https://i.imgur.com/jIB0CqP.png"></p>
 <p>0042442A处 创建傀儡进程</p>
 <p><img src="https://i.imgur.com/HHWluCv.png"></p>
-<p>后面的内存操作与shellcode无关啊</p>
-<p>424488 内存操作  干什么的  </p>
 <p>424475</p>
 <p><img src="https://i.imgur.com/iIdBhdd.png"></p>
+<p>通过ZwResumeThread恢复目标进程执行</p>
 <p><img src="https://i.imgur.com/pkTklUH.png"></p>
-<p>找解密的文件存在哪了：</p>
-<p><img src="https://i.imgur.com/SA7CdiB.png"></p>
-<p>参数：注意   参数压栈要倒着看</p>
-<p>409cb0</p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210514174536373.png"></p>
-<h1 id="总结断点："><a href="#总结断点：" class="headerlink" title="总结断点："></a>总结断点：</h1><p>004012a2  内存解密前</p>
-<p>00427068  解密后的 enum。。。回调函数 </p>
-<p>00427115   大循环</p>
-<p>004245c0</p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210515145250754.png" alt="image-20210515145250754"></p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210515145610210.png" alt="image-20210515145610210"></p>
-<p><img src="https://i.imgur.com/JpOFFSt.png"></p>
-<p>看下virtualallocex的 返回值  lpmen</p>
-<p>这也是 eip指向的地址</p>
-<p>先写进内存  在 改eip  为啥是  先set  改eip在写进内存     不可能的  肯定先  写进内存 在设置eip啊</p>
-<h1 id="线程context"><a href="#线程context" class="headerlink" title="线程context"></a><a target="_blank" rel="noopener" href="https://www.cnblogs.com/a-s-m/p/12349816.html">线程context</a></h1><p>线程切换的时候，要保存当前运行状态，以便后续切换回来</p>
-<p>CONTEXT结构体保存的是一堆寄存器</p>
-<p>两个函数</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">BOOL SetThreadContext(HANDLE hThread,const CONTEXT *lpContext);</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">BOOL GetThreadContext(HANDLE hThread,LPCONTEXT lpContext);</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<p>找解密出的shellcode的位置</p>
-<p>dump下来  分析：</p>
-<p>为啥 resumethread后   dump不出  shellcode  </p>
-<p>shelcode  的   内存地址  是动态分配的么 </p>
-<p>肯定要在 释放内存后 dump啊</p>
-<p>1.从解密部分跟</p>
-<p><img src="https://i.imgur.com/yycXchp.png"></p>
-<p>4243c5 getcontexthread</p>
-<p>41442a setcontextthread </p>
-<p>跟下中间的call  被跳过</p>
-<p><img src="https://i.imgur.com/psZ9IZS.png"></p>
-<p><img src="https://i.imgur.com/ZxD1iMd.png"></p>
-<p><img src="https://i.imgur.com/UwrJLH8.png"></p>
-<p><img src="https://i.imgur.com/e8buhMT.png"><a target="_blank" rel="noopener" href="https://i.imgur.com/e8buhMT.png">https://i.imgur.com/e8buhMT.png</a></p>
-<p>!!!!!!!</p>
-<p>setthreadcontext()  resumethread()</p>
-<p>将新的指令指针指向添加的代码并恢复线程执行：</p>
-<p>之后执行注入的部分</p>
-<p>解密之后的位置：</p>
+<h1 id="找解密的文件存在哪了："><a href="#找解密的文件存在哪了：" class="headerlink" title="找解密的文件存在哪了："></a>找解密的文件存在哪了：</h1><p>出现字符串  之后单步跟 ，找到解密的文件</p>
 <p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210522124544312.png" alt="image-20210522124544312"></p>
-<p>dump下来分析 </p>
-<p>42442a </p>
 <p>另一种找 解密的  注入的傀儡进程pe   的方法</p>
+<p>调用ZwResumeThread、ZwSetContexThread这一系列的函数进行傀儡进程注入的时候，注意观察参数和右边的寄存器窗口，会有注入的目标PE的内存地址</p>
 <p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210522132401605.png" alt="image-20210522132401605"></p>
+<p>（ resumethread()将新的指令指针指向添加的代码并恢复线程执行：之后执行注入的部分）</p>
 <p>从resumethread  中  一步步  单步跟   之后rent到  4271f3  处   看eax处  跟随到数据窗口  就是 注入的pe</p>
 <p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210522132650820.png" alt="image-20210522132650820"></p>
 <p>压栈 eax值   pe的首地址</p>
 <p><strong>重新调试 先看解密后的地址  再跟resumethread后 的地址   发现pe存的地址相同</strong></p>
-<p>傀儡进程：</p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/cssxn/article/details/97642863?utm_medium=distribute.pc_relevant_bbs_down.none-task-blog-baidujs-2.nonecase&depth_1-utm_source=distribute.pc_relevant_bbs_down.none-task-blog-baidujs-2.nonecase">获取进程基址小技巧（傀儡进程）_Sven的忘却日记-CSDN博客</a></p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Reversess/article/details/26701553">傀儡进程内存Dump_Reverser的专栏-CSDN博客</a></p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_30394251/article/details/96275012?utm_medium=distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromMachineLearnPai2~default-4.control&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromMachineLearnPai2~default-4.control">傀儡进程脱壳三步曲_badiu_30394251的博客-CSDN博客</a></p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210523215353067.png" alt="image-20210523215353067"></p>
+<h1 id="dump解密文件，分析："><a href="#dump解密文件，分析：" class="headerlink" title="dump解密文件，分析："></a>dump解密文件，分析：</h1><p>使用od  dump下来的格式不是pe文件格式使</p>
+<p>使用x32dbg dump   pe文件</p>
+<p>选中pe文件，右键二进制编辑，复制</p>
+<p><img src="https://i.imgur.com/KuPAdii.png"></p>
+<p>使用winhex保存文件 okokook.exe  （编辑，剪贴板数据，写入，ascii-hex）</p>
+<p><img src="https://i.imgur.com/dyh65kA.png"></p>
+<h1 id="IDA对后续okokook-exe进行分析"><a href="#IDA对后续okokook-exe进行分析" class="headerlink" title="IDA对后续okokook.exe进行分析"></a>IDA对后续okokook.exe进行分析</h1><p>程序中的字符串均已加密，程序定义了一个字符串a7963b909152f8ebc3ec69b1dee2b255a9678a5用于动态解密其他字符串</p>
+<p><img src="https://i.imgur.com/rKZOo7C.png"></p>
+<p><img src="https://i.imgur.com/buhrJWJ.png"></p>
+<p><img src="https://i.imgur.com/r3GH5iK.png"></p>
+<p>分析401040函数</p>
+<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210703174403466.png" alt="image-20210703174403466"></p>
+<p>4014D0函数大量使用解密函数，动调看解密出什么</p>
+<p><img src="https://i.imgur.com/AWTZXlx.png"></p>
+<p><img src="https://i.imgur.com/CocrIaE.png"></p>
+<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210703165034256.png" alt="image-20210703165034256"></p>
+<p>程序会调用这个解密函数解密出一系列杀软文件名并判断是否存在这些杀软文件名。。。。。同理  动调出剩下的杀软名</p>
+<p><img src="https://i.imgur.com/Y1TdMPP.png"></p>
+<p>接着动调该函数401040</p>
+<p>得到创建的文件目录</p>
+<p><img src="https://i.imgur.com/SmXTjF0.png"></p>
+<p>接下来 ，创建进程</p>
+<p><img src="https://i.imgur.com/DvuAwh6.png">ht</p>
+<p><img src="https://i.imgur.com/3SJTTck.png"></p>
+<p>cmd指令执行注册表行为，添加自启动项</p>
+<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210703175852824.png" alt="image-20210703175852824"></p>
+<p>发现ip地址，访问不了。</p>
+<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210703173824489.png" alt="image-20210703173824489"></p>
+<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210703174137500.png" alt="image-20210703174137500"></p>
+<p>后面是解密id  版本号 等信息</p>
+<p>最终获得的请求信息</p>
+<p><img src="https://i.imgur.com/J0TqD3K.png"></p>
+<p>gethostbyname  获取目标主机地址</p>
+<p><img src="https://i.imgur.com/hm2zUN8.png"></p>
+<p><img src="https://i.imgur.com/o15Mfn7.png"></p>
+<p><img src="https://i.imgur.com/7ELhilY.png"></p>
+<p>通过post的方式将数据send到目标ip</p>
+<p>之后就是永真循环</p>
+<p><img src="https://i.imgur.com/9XewwaF.png"></p>
+<p>应该是等待服务器返回后续操作命令，但是服务器连接不上，后续行为无法继续分析。</p>
 
       
     </div>
@@ -1184,129 +1264,6 @@
       
 
       
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-yara使用" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a  href="/2021/05/05/yara%E4%BD%BF%E7%94%A8/" class="article-date">
-      <time datetime="2021-05-05T13:21:38.000Z" itemprop="datePublished">2021-05-05</time>
-</a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a  class="article-title" href="/2021/05/05/yara%E4%BD%BF%E7%94%A8/">yara使用</a>
-    </h1>
-  
-
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h1 id="yara使用"><a href="#yara使用" class="headerlink" title="yara使用"></a>yara使用</h1><h2 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h2><p>Yara是一款用于识别恶意软件及对其行为进行分类的安全利器。Yara会根据我们自己编写的yara规则，来对可疑软件进行一个模式匹配，若可疑软件中的一些特征与我们的yara规则匹配上了，则可以初步认定可疑软件为恶意软件。</p>
-<p>官方的github库地址：<a target="_blank" rel="noopener" href="https://github.com/VirusTotal/yara/releases">https://github.com/VirusTotal/yara/releases</a></p>
-<p>官方文档说明： Getting started — yara 4.1.0 documentation](<a target="_blank" rel="noopener" href="https://yara.readthedocs.io/en/v4.1.0/gettingstarted.html">https://yara.readthedocs.io/en/v4.1.0/gettingstarted.html</a>)</p>
-<h2 id="安装与使用："><a href="#安装与使用：" class="headerlink" title="安装与使用："></a>安装与使用：</h2><p>安装yara：最新版本 </p>
-<p><img src="https://i.imgur.com/Zo7ktcS.png"></p>
-<p>下载yara-v4.1.0-1612-win64.zip  ，将压缩包中的yarac64和yara64解压到C:\Windows目录下并分别重命名为yarac.exe和yara.exe</p>
-<p>启动cmd 输入yara –help查看yara的参数</p>
-<p><img src="https://i.imgur.com/jkDRvX7.png"></p>
-<p>参数简单翻译：</p>
-<p>yara给我们提供了一个现成的yara规则库</p>
-<p><a target="_blank" rel="noopener" href="https://github.com/Yara-Rules/rules">https://github.com/Yara-Rules/rules</a></p>
-<p><strong>规则分11大类：</strong></p>
-<blockquote>
-<p>Antidebug_AntiVM：反调试/反沙箱类yara规则<br>Crypto：加密类yara规则<br>CVE_Rules：CVE漏洞利用类yara规则<br>email：恶意邮件类yara规则<br>Exploit-Kits：EK类yara规则<br>Malicious_Documents：恶意文档类yara规则<br>malware：恶意软件类yara规则<br>Mobile_Malware：移动恶意软件类yara规则<br>Packers：加壳类yara规则<br>utils：通用类yara规则<br>Webshells：Webshell类yara规则</p>
-</blockquote>
-<p>使用yara开始检测 ：</p>
-<p>yara  yara规则 被检测的文件的路径  </p>
-<p>使用加密类的规则对其进行扫描：</p>
-<p><img src="https://i.imgur.com/1dqzLfk.png"></p>
-<p>检测结果：</p>
-<p>Yara的结果输出大致就是这种格式（特征+样本路径）</p>
-<p>警告的原因：</p>
-<p>原来是因为$c0使用了{ 0-9，a-f，A-F }的大范围匹配，导致Yara运行时间大大增长，故而输出了警告。扫描单个样本的时候差别不大，但扫描大量样本的时候就会消耗大量时间，所以我们编写yara规则的时候要多加谨慎。</p>
-<p><img src="https://i.imgur.com/0nXccmb.png"></p>
-<h2 id="yara规则编写："><a href="#yara规则编写：" class="headerlink" title="yara规则编写："></a>yara规则编写：</h2><p><a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/system/26373.html">恶意软件模式匹配利器 - YARA - FreeBuf网络安全行业门户</a></p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_37552052/article/details/78986097">静态扫描之Yara第二话–编写yara规则（1）_安全杂货铺-CSDN博客</a></p>
-<p>yarGen :yara规则生成器  </p>
-<p><a target="_blank" rel="noopener" href="https://github.com/Neo23x0/yarGen">GitHub - Neo23x0/yarGen: yarGen is a generator for YARA rules</a></p>
-<p>yarGen从恶意样本中提取所有ASCII和UNICODE字符串，并删除所有也出现在良性字符串数据库中的字符串。 然后使用模糊正则表达式和“Gibberish Detector”来评估和评分每个字符串，这使得yarGen能够选出最优的特征字符串。 这些字符串的前20位将被整合到最终的规则中。</p>
-<p>如果不想使用或下载yarGen，也可以使用由Joe Security提供的在线工具<a target="_blank" rel="noopener" href="https://www.joesandbox.com/">Yara Rule Generator</a>，它也是基于yarGen的。</p>
-<h3 id="生成高效通用的yara规则"><a href="#生成高效通用的yara规则" class="headerlink" title="生成高效通用的yara规则"></a>生成高效通用的yara规则</h3><p>如果你的规则可以检测出恶意样本，且不会匹配到合法软件，那么你的yara规则就可以算是合格了</p>
-<p>yarAnalyzer:</p>
-<p>yarAnalyzer是我推出的又一个强大的工具，专注于分析规则的通用性。 在创建了一个大的规则集或一个通用型的规则后，你想检查这些规则的通用性如何，便可以使用这款工具，yarAnalyzer则会输出以下结果：</p>
-<ol>
-<li>检测到一个以上样本的规则</li>
-<li>被多条规则检测到的样本</li>
-<li>没有检测到样本的规则</li>
-<li>没有被检测到的样本</li>
-</ol>
-<p><a target="_blank" rel="noopener" href="https://github.com/Neo23x0/yarAnalyzer">https://github.com/Neo23x0/yarAnalyzer</a></p>
-<h2 id="yara使用实例"><a href="#yara使用实例" class="headerlink" title="yara使用实例"></a>yara使用实例</h2><p>准备一些恶意样本 </p>
-<p>进行检测</p>
-<p><img src="https://i.imgur.com/Cdi64H5.png"></p>
-<p>规则1 检测pe文件结构</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">rule Mzzz</span><br><span class="line">&#123;</span><br><span class="line">	meta:</span><br><span class="line">		author &#x3D;&quot;pyikaaaa&quot;</span><br><span class="line">		description &#x3D; &quot;Look&quot;</span><br><span class="line">		date &#x3D; &quot;2020-5&quot;</span><br><span class="line">	strings:</span><br><span class="line">		$c0 &#x3D;&#123;4D 5A&#125;</span><br><span class="line">	condition:</span><br><span class="line">		$c0</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<p><img src="https://i.imgur.com/gjuF6Js.png"></p>
-<h3 id="规则2-ps-yar"><a href="#规则2-ps-yar" class="headerlink" title="规则2 ps.yar"></a>规则2 ps.yar</h3><p>用来检测cs生成的powershell马</p>
-<p>提取cs生成的powershell马的特征：</p>
-<p>对比32位和64位可以发现，。。。。。。。。。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">rule ps</span><br><span class="line">&#123;</span><br><span class="line">meta:</span><br><span class="line">        description&#x3D;&quot;description&quot;</span><br><span class="line">        author&#x3D;&quot;author&quot;</span><br><span class="line">        date&#x3D;&quot;2021-05&quot;</span><br><span class="line">        reference&#x3D;&quot;reference&quot;</span><br><span class="line">        hash&#x3D;&quot;hash&quot;</span><br><span class="line"></span><br><span class="line">strings:</span><br><span class="line">        $str1&#x3D;&quot;$var_va.Invoke([IntPtr]::Zero, $var_code.Length, 0x3000, 0x40)&quot;</span><br><span class="line">        $str2&#x3D;&quot;[System.Runtime.InteropServices.Marshal]::Copy($var_code, 0, $var_buffer, $var_code.length)&quot;</span><br><span class="line"></span><br><span class="line">condition:</span><br><span class="line">        $str1 and $str2</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>检测：</p>
-<p><img src="https://i.imgur.com/1Tr0iue.png"></p>
-<p>使用webshells类检测样本</p>
-<p><img src="https://i.imgur.com/hKrc7by.png"></p>
-<p>使用官方给的yara规则进行 加密类的检测</p>
-<p><img src="https://i.imgur.com/x3mPASB.png"></p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RE/" rel="tag">RE</a></li></ul>
-    </div>
-
       
       <div class="clearfix"></div>
     </div>

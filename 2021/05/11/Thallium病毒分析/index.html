@@ -9,12 +9,12 @@
   
   <title>Thallium病毒分析 | Pyikaaaa</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="分析过程样本类型：doc 样本利用方式：宏代码利用  原始病毒样本是通过 宏代码 利用  然后远程连接c2服务器  进行下载.so文件   把通过c2 服务器下载的 payload 后缀名改为.exe 直接分析.exe 文件  后续的payload文件 下载的TEMP.so为exe文件，md5为：                               f160c057fded2c01bfdb">
+  <meta name="description" content="分析过程样本类型：doc 样本利用方式：宏代码利用  原始病毒样本是通过 宏代码 利用  然后远程连接c2服务器  进行下载.so文件   把通过c2 服务器下载的 payload 后缀名改为.exe 直接分析.exe 文件  后续的payload文件 下载的TEMP.so为exe文件，md5为： f160c057fded2c01bfdb65bb7aa9dfcc     行为分析：用process">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Thallium病毒分析">
 <meta property="og:url" content="http://example.com/2021/05/11/Thallium%E7%97%85%E6%AF%92%E5%88%86%E6%9E%90/index.html">
 <meta property="og:site_name" content="Pyikaaaa">
-<meta property="og:description" content="分析过程样本类型：doc 样本利用方式：宏代码利用  原始病毒样本是通过 宏代码 利用  然后远程连接c2服务器  进行下载.so文件   把通过c2 服务器下载的 payload 后缀名改为.exe 直接分析.exe 文件  后续的payload文件 下载的TEMP.so为exe文件，md5为：                               f160c057fded2c01bfdb">
+<meta property="og:description" content="分析过程样本类型：doc 样本利用方式：宏代码利用  原始病毒样本是通过 宏代码 利用  然后远程连接c2服务器  进行下载.so文件   把通过c2 服务器下载的 payload 后缀名改为.exe 直接分析.exe 文件  后续的payload文件 下载的TEMP.so为exe文件，md5为： f160c057fded2c01bfdb65bb7aa9dfcc     行为分析：用process">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://i.imgur.com/ghxLpqB.png">
 <meta property="og:image" content="https://i.imgur.com/NUzQiPo.png">
@@ -36,28 +36,35 @@
 <meta property="og:image" content="https://i.imgur.com/kRS26EG.png">
 <meta property="og:image" content="c:/Users/lenovo/AppData/Roaming/Typora/typora-user-images/image-20210513201316844.png">
 <meta property="og:image" content="https://i.imgur.com/jIB0CqP.png">
-<meta property="og:image" content="https://i.imgur.com/C3AShnC.png">
-<meta property="og:image" content="https://i.imgur.com/dc2Qkrr.png">
-<meta property="og:image" content="https://i.imgur.com/xmm4m3U.png">
 <meta property="og:image" content="https://i.imgur.com/HHWluCv.png">
 <meta property="og:image" content="https://i.imgur.com/iIdBhdd.png">
 <meta property="og:image" content="https://i.imgur.com/pkTklUH.png">
-<meta property="og:image" content="https://i.imgur.com/SA7CdiB.png">
-<meta property="og:image" content="c:/Users/lenovo/AppData/Roaming/Typora/typora-user-images/image-20210514174536373.png">
-<meta property="og:image" content="c:/Users/lenovo/AppData/Roaming/Typora/typora-user-images/image-20210515145250754.png">
-<meta property="og:image" content="c:/Users/lenovo/AppData/Roaming/Typora/typora-user-images/image-20210515145610210.png">
-<meta property="og:image" content="https://i.imgur.com/JpOFFSt.png">
-<meta property="og:image" content="https://i.imgur.com/yycXchp.png">
-<meta property="og:image" content="https://i.imgur.com/psZ9IZS.png">
-<meta property="og:image" content="https://i.imgur.com/ZxD1iMd.png">
-<meta property="og:image" content="https://i.imgur.com/UwrJLH8.png">
-<meta property="og:image" content="https://i.imgur.com/e8buhMT.png">
 <meta property="og:image" content="c:/Users/lenovo/AppData/Roaming/Typora/typora-user-images/image-20210522124544312.png">
 <meta property="og:image" content="c:/Users/lenovo/AppData/Roaming/Typora/typora-user-images/image-20210522132401605.png">
 <meta property="og:image" content="c:/Users/lenovo/AppData/Roaming/Typora/typora-user-images/image-20210522132650820.png">
-<meta property="og:image" content="c:/Users/lenovo/AppData/Roaming/Typora/typora-user-images/image-20210523215353067.png">
+<meta property="og:image" content="https://i.imgur.com/KuPAdii.png">
+<meta property="og:image" content="https://i.imgur.com/dyh65kA.png">
+<meta property="og:image" content="https://i.imgur.com/rKZOo7C.png">
+<meta property="og:image" content="https://i.imgur.com/buhrJWJ.png">
+<meta property="og:image" content="https://i.imgur.com/r3GH5iK.png">
+<meta property="og:image" content="c:/Users/lenovo/AppData/Roaming/Typora/typora-user-images/image-20210703174403466.png">
+<meta property="og:image" content="https://i.imgur.com/AWTZXlx.png">
+<meta property="og:image" content="https://i.imgur.com/CocrIaE.png">
+<meta property="og:image" content="c:/Users/lenovo/AppData/Roaming/Typora/typora-user-images/image-20210703165034256.png">
+<meta property="og:image" content="https://i.imgur.com/Y1TdMPP.png">
+<meta property="og:image" content="https://i.imgur.com/SmXTjF0.png">
+<meta property="og:image" content="https://i.imgur.com/DvuAwh6.png">
+<meta property="og:image" content="https://i.imgur.com/3SJTTck.png">
+<meta property="og:image" content="c:/Users/lenovo/AppData/Roaming/Typora/typora-user-images/image-20210703175852824.png">
+<meta property="og:image" content="c:/Users/lenovo/AppData/Roaming/Typora/typora-user-images/image-20210703173824489.png">
+<meta property="og:image" content="c:/Users/lenovo/AppData/Roaming/Typora/typora-user-images/image-20210703174137500.png">
+<meta property="og:image" content="https://i.imgur.com/J0TqD3K.png">
+<meta property="og:image" content="https://i.imgur.com/hm2zUN8.png">
+<meta property="og:image" content="https://i.imgur.com/o15Mfn7.png">
+<meta property="og:image" content="https://i.imgur.com/7ELhilY.png">
+<meta property="og:image" content="https://i.imgur.com/9XewwaF.png">
 <meta property="article:published_time" content="2021-05-11T07:13:56.000Z">
-<meta property="article:modified_time" content="2021-05-25T08:24:56.712Z">
+<meta property="article:modified_time" content="2021-07-03T10:12:01.811Z">
 <meta property="article:author" content="Pyikaaaa">
 <meta property="article:tag" content="Pc样本分析">
 <meta name="twitter:card" content="summary">
@@ -321,14 +328,14 @@
 <p>原始病毒样本是通过 宏代码 利用  然后远程连接c2服务器  进行下载.so文件  </p>
 <p>把通过c2 服务器下载的 payload 后缀名改为.exe</p>
 <p>直接分析.exe 文件  后续的payload文件</p>
-<p>下载的TEMP.so为exe文件，md5为：                               f160c057fded2c01bfdb65bb7aa9dfcc    </p>
+<p>下载的TEMP.so为exe文件，md5为： f160c057fded2c01bfdb65bb7aa9dfcc    </p>
 <p>行为分析：用process monitor 监测 payload的行为 ，设置过滤器  重命名为 tt.exe </p>
 <p>可以看到一些对文件的操作 ， 还有注册表之类的</p>
 <p>主要行为：</p>
 <p>在c：programdata \a7963 下  拷贝自身过去</p>
 <p><img src="https://i.imgur.com/NUzQiPo.png"></p>
 <p><img src="https://i.imgur.com/vysRksB.png"></p>
-<p>查壳  无壳 </p>
+<p>无壳 </p>
 <p>分析过程：</p>
 <p>1.查了资料后  知道这是 MFC的程序 ，看代码的特征，确实是MFC独有的</p>
 <p>2.行为分析的时候（检测行为时）也可以感受到 在运行之后  有个明显的时间差  才有弹窗</p>
@@ -336,7 +343,6 @@
 <p>大循环   造成延迟的主要原因</p>
 <p>0x0BAADBEEF —-&gt;   3131948783 </p>
 <p>VirtualProtect：</p>
-<p>当做对应之 Win32 函数的逻辑包装函数。VirtualProtect 的 Win32 实作会在呼叫处理序的虚拟位址空间里，变更认可页面区域上的保护。</p>
 <p><img src="https://i.imgur.com/88Oz8Cu.png"></p>
 <p>0x40 : 启用对已提交页区域的执行、读和写访问  </p>
 <p><strong>循环结束之后，先用VirtualProtect函数更改0x422548到0x42A548的内存属性为0x40，也就是可读可写可执行，</strong></p>
@@ -347,14 +353,13 @@
 <p><img src="https://i.imgur.com/gHrciG0.png"></p>
 <p>加载有效地址（load effective address）指令就是lea,他的指令形式就是从内存读取数据到寄存器，但是实际上他没有引用内存，而是将有效地址写入到目的的操作数</p>
 <p><img src="https://i.imgur.com/eunlYQg.png"></p>
-<p>直接在427068 处下断点  就是下不下来 ，在4012A2 处下断点，之后f8   查看407068处的汇编  发现内容已经改变</p>
+<p>在4012A2 处下断点，之后f8   查看407068处的汇编  发现内容已经改变</p>
 <p><img src="https://i.imgur.com/tvwUVHd.png"></p>
 <p><img src="https://i.imgur.com/4bg5fS3.png"></p>
 <p>前：</p>
 <p><img src="https://i.imgur.com/G6wIcJg.png"></p>
 <p>后：</p>
 <p><img src="https://i.imgur.com/8t69XTI.png"></p>
-<p>对 00427068下断点   断下来了！！！！！！！！</p>
 <p>一步步跟一下 看看解密后的内容都干了什么</p>
 <p><img src="https://i.imgur.com/cKFZ6FZ.png"></p>
 <p>当执行 00427115 的指令时  发现很大的延迟 。回车跟进 004255c8 函数  看一下内容：</p>
@@ -368,78 +373,64 @@
 <p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210513201316844.png" alt="image-20210513201316844"></p>
 <p>运行到这的时候  弹出cmd窗口，速度太快 截不到图</p>
 <p>跟进函数 004236A8内部 ： 一步步简单跟一下 </p>
-<p><img src="https://i.imgur.com/jIB0CqP.png"></p>
 <p>00423827处    重新创建自身进程</p>
-<p>0042384e zwqueryinformationprocess</p>
-<p><img src="https://i.imgur.com/C3AShnC.png"></p>
-<p><img src="https://i.imgur.com/dc2Qkrr.png"></p>
-<p><img src="https://i.imgur.com/xmm4m3U.png"></p>
+<p><img src="https://i.imgur.com/jIB0CqP.png"></p>
 <p>0042442A处 创建傀儡进程</p>
 <p><img src="https://i.imgur.com/HHWluCv.png"></p>
-<p>后面的内存操作与shellcode无关啊</p>
-<p>424488 内存操作  干什么的  </p>
 <p>424475</p>
 <p><img src="https://i.imgur.com/iIdBhdd.png"></p>
+<p>通过ZwResumeThread恢复目标进程执行</p>
 <p><img src="https://i.imgur.com/pkTklUH.png"></p>
-<p>找解密的文件存在哪了：</p>
-<p><img src="https://i.imgur.com/SA7CdiB.png"></p>
-<p>参数：注意   参数压栈要倒着看</p>
-<p>409cb0</p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210514174536373.png"></p>
-<h1 id="总结断点："><a href="#总结断点：" class="headerlink" title="总结断点："></a>总结断点：</h1><p>004012a2  内存解密前</p>
-<p>00427068  解密后的 enum。。。回调函数 </p>
-<p>00427115   大循环</p>
-<p>004245c0</p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210515145250754.png" alt="image-20210515145250754"></p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210515145610210.png" alt="image-20210515145610210"></p>
-<p><img src="https://i.imgur.com/JpOFFSt.png"></p>
-<p>看下virtualallocex的 返回值  lpmen</p>
-<p>这也是 eip指向的地址</p>
-<p>先写进内存  在 改eip  为啥是  先set  改eip在写进内存     不可能的  肯定先  写进内存 在设置eip啊</p>
-<h1 id="线程context"><a href="#线程context" class="headerlink" title="线程context"></a><a target="_blank" rel="noopener" href="https://www.cnblogs.com/a-s-m/p/12349816.html">线程context</a></h1><p>线程切换的时候，要保存当前运行状态，以便后续切换回来</p>
-<p>CONTEXT结构体保存的是一堆寄存器</p>
-<p>两个函数</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">BOOL SetThreadContext(HANDLE hThread,const CONTEXT *lpContext);</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">BOOL GetThreadContext(HANDLE hThread,LPCONTEXT lpContext);</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<p>找解密出的shellcode的位置</p>
-<p>dump下来  分析：</p>
-<p>为啥 resumethread后   dump不出  shellcode  </p>
-<p>shelcode  的   内存地址  是动态分配的么 </p>
-<p>肯定要在 释放内存后 dump啊</p>
-<p>1.从解密部分跟</p>
-<p><img src="https://i.imgur.com/yycXchp.png"></p>
-<p>4243c5 getcontexthread</p>
-<p>41442a setcontextthread </p>
-<p>跟下中间的call  被跳过</p>
-<p><img src="https://i.imgur.com/psZ9IZS.png"></p>
-<p><img src="https://i.imgur.com/ZxD1iMd.png"></p>
-<p><img src="https://i.imgur.com/UwrJLH8.png"></p>
-<p><img src="https://i.imgur.com/e8buhMT.png"><a target="_blank" rel="noopener" href="https://i.imgur.com/e8buhMT.png">https://i.imgur.com/e8buhMT.png</a></p>
-<p>!!!!!!!</p>
-<p>setthreadcontext()  resumethread()</p>
-<p>将新的指令指针指向添加的代码并恢复线程执行：</p>
-<p>之后执行注入的部分</p>
-<p>解密之后的位置：</p>
+<h1 id="找解密的文件存在哪了："><a href="#找解密的文件存在哪了：" class="headerlink" title="找解密的文件存在哪了："></a>找解密的文件存在哪了：</h1><p>出现字符串  之后单步跟 ，找到解密的文件</p>
 <p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210522124544312.png" alt="image-20210522124544312"></p>
-<p>dump下来分析 </p>
-<p>42442a </p>
 <p>另一种找 解密的  注入的傀儡进程pe   的方法</p>
+<p>调用ZwResumeThread、ZwSetContexThread这一系列的函数进行傀儡进程注入的时候，注意观察参数和右边的寄存器窗口，会有注入的目标PE的内存地址</p>
 <p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210522132401605.png" alt="image-20210522132401605"></p>
+<p>（ resumethread()将新的指令指针指向添加的代码并恢复线程执行：之后执行注入的部分）</p>
 <p>从resumethread  中  一步步  单步跟   之后rent到  4271f3  处   看eax处  跟随到数据窗口  就是 注入的pe</p>
 <p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210522132650820.png" alt="image-20210522132650820"></p>
 <p>压栈 eax值   pe的首地址</p>
 <p><strong>重新调试 先看解密后的地址  再跟resumethread后 的地址   发现pe存的地址相同</strong></p>
-<p>傀儡进程：</p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/cssxn/article/details/97642863?utm_medium=distribute.pc_relevant_bbs_down.none-task-blog-baidujs-2.nonecase&depth_1-utm_source=distribute.pc_relevant_bbs_down.none-task-blog-baidujs-2.nonecase">获取进程基址小技巧（傀儡进程）_Sven的忘却日记-CSDN博客</a></p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Reversess/article/details/26701553">傀儡进程内存Dump_Reverser的专栏-CSDN博客</a></p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_30394251/article/details/96275012?utm_medium=distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromMachineLearnPai2~default-4.control&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromMachineLearnPai2~default-4.control">傀儡进程脱壳三步曲_badiu_30394251的博客-CSDN博客</a></p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210523215353067.png" alt="image-20210523215353067"></p>
+<h1 id="dump解密文件，分析："><a href="#dump解密文件，分析：" class="headerlink" title="dump解密文件，分析："></a>dump解密文件，分析：</h1><p>使用od  dump下来的格式不是pe文件格式使</p>
+<p>使用x32dbg dump   pe文件</p>
+<p>选中pe文件，右键二进制编辑，复制</p>
+<p><img src="https://i.imgur.com/KuPAdii.png"></p>
+<p>使用winhex保存文件 okokook.exe  （编辑，剪贴板数据，写入，ascii-hex）</p>
+<p><img src="https://i.imgur.com/dyh65kA.png"></p>
+<h1 id="IDA对后续okokook-exe进行分析"><a href="#IDA对后续okokook-exe进行分析" class="headerlink" title="IDA对后续okokook.exe进行分析"></a>IDA对后续okokook.exe进行分析</h1><p>程序中的字符串均已加密，程序定义了一个字符串a7963b909152f8ebc3ec69b1dee2b255a9678a5用于动态解密其他字符串</p>
+<p><img src="https://i.imgur.com/rKZOo7C.png"></p>
+<p><img src="https://i.imgur.com/buhrJWJ.png"></p>
+<p><img src="https://i.imgur.com/r3GH5iK.png"></p>
+<p>分析401040函数</p>
+<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210703174403466.png" alt="image-20210703174403466"></p>
+<p>4014D0函数大量使用解密函数，动调看解密出什么</p>
+<p><img src="https://i.imgur.com/AWTZXlx.png"></p>
+<p><img src="https://i.imgur.com/CocrIaE.png"></p>
+<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210703165034256.png" alt="image-20210703165034256"></p>
+<p>程序会调用这个解密函数解密出一系列杀软文件名并判断是否存在这些杀软文件名。。。。。同理  动调出剩下的杀软名</p>
+<p><img src="https://i.imgur.com/Y1TdMPP.png"></p>
+<p>接着动调该函数401040</p>
+<p>得到创建的文件目录</p>
+<p><img src="https://i.imgur.com/SmXTjF0.png"></p>
+<p>接下来 ，创建进程</p>
+<p><img src="https://i.imgur.com/DvuAwh6.png">ht</p>
+<p><img src="https://i.imgur.com/3SJTTck.png"></p>
+<p>cmd指令执行注册表行为，添加自启动项</p>
+<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210703175852824.png" alt="image-20210703175852824"></p>
+<p>发现ip地址，访问不了。</p>
+<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210703173824489.png" alt="image-20210703173824489"></p>
+<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210703174137500.png" alt="image-20210703174137500"></p>
+<p>后面是解密id  版本号 等信息</p>
+<p>最终获得的请求信息</p>
+<p><img src="https://i.imgur.com/J0TqD3K.png"></p>
+<p>gethostbyname  获取目标主机地址</p>
+<p><img src="https://i.imgur.com/hm2zUN8.png"></p>
+<p><img src="https://i.imgur.com/o15Mfn7.png"></p>
+<p><img src="https://i.imgur.com/7ELhilY.png"></p>
+<p>通过post的方式将数据send到目标ip</p>
+<p>之后就是永真循环</p>
+<p><img src="https://i.imgur.com/9XewwaF.png"></p>
+<p>应该是等待服务器返回后续操作命令，但是服务器连接不上，后续行为无法继续分析。</p>
 
       
     </div>
@@ -451,7 +442,7 @@
         <p><span>本文标题:</span><a  href="/2021/05/11/Thallium%E7%97%85%E6%AF%92%E5%88%86%E6%9E%90/">Thallium病毒分析</a></p>
         <p><span>文章作者:</span><a  href="/" title="访问  的个人博客"></a></p>
         <p><span>发布时间:</span>2021年05月11日 - 15时13分</p>
-        <p><span>最后更新:</span>2021年05月25日 - 16时24分</p>
+        <p><span>最后更新:</span>2021年07月03日 - 18时12分</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/2021/05/11/Thallium%E7%97%85%E6%AF%92%E5%88%86%E6%9E%90/" title="Thallium病毒分析">http://example.com/2021/05/11/Thallium%E7%97%85%E6%AF%92%E5%88%86%E6%9E%90/</a>
             <span class="copy-path" data-clipboard-text="原文: http://example.com/2021/05/11/Thallium%E7%97%85%E6%AF%92%E5%88%86%E6%9E%90/　　作者: " title=""></span>
@@ -488,7 +479,7 @@
 
     <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%86%E6%9E%90%E8%BF%87%E7%A8%8B"><span class="toc-number">1.</span> <span class="toc-text">分析过程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93%E6%96%AD%E7%82%B9%EF%BC%9A"><span class="toc-number">2.</span> <span class="toc-text">总结断点：</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8Bcontext"><span class="toc-number">3.</span> <span class="toc-text">线程context</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%86%E6%9E%90%E8%BF%87%E7%A8%8B"><span class="toc-number">1.</span> <span class="toc-text">分析过程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%89%BE%E8%A7%A3%E5%AF%86%E7%9A%84%E6%96%87%E4%BB%B6%E5%AD%98%E5%9C%A8%E5%93%AA%E4%BA%86%EF%BC%9A"><span class="toc-number">2.</span> <span class="toc-text">找解密的文件存在哪了：</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#dump%E8%A7%A3%E5%AF%86%E6%96%87%E4%BB%B6%EF%BC%8C%E5%88%86%E6%9E%90%EF%BC%9A"><span class="toc-number">3.</span> <span class="toc-text">dump解密文件，分析：</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#IDA%E5%AF%B9%E5%90%8E%E7%BB%ADokokook-exe%E8%BF%9B%E8%A1%8C%E5%88%86%E6%9E%90"><span class="toc-number">4.</span> <span class="toc-text">IDA对后续okokook.exe进行分析</span></a></li></ol>
 </div>
 <style>
     .left-col .switch-btn {
@@ -548,7 +539,7 @@
             </a>
         
     </div>
-    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2021/07/01/PE/pe%E8%B5%84%E6%BA%90%E6%8F%90%E5%8F%96/">pe资源提取</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/30/HOOK/">HOOK</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/25/CVE-2017-11882%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">CVE-2017-11882漏洞复现</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/25/%E8%BF%9B%E7%A8%8B%E9%9A%90%E8%97%8F%E6%8A%80%E6%9C%AF/">进程隐藏技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/23/%E6%B5%B7%E8%8E%B2%E8%8A%B1%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/">海莲花样本分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/11/Thallium%E7%97%85%E6%AF%92%E5%88%86%E6%9E%90/">Thallium病毒分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/06/Globelmposter/">Globelmposter</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/06/%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0linux%E4%B8%8B%E7%9A%84RE/">初步学习linux下的RE</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/06/linux/">linux</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/05/yara%E4%BD%BF%E7%94%A8/">yara使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/04/%E6%83%B3%E6%B3%95/">想法</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/04/%E6%B3%A8%E5%85%A5%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/">注入技术学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/17/MEMZ%E5%88%86%E6%9E%90/">MEMZ分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/13/%E5%8F%8D%E8%B0%83%E8%AF%95/">反调试</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/09/%E7%AE%80%E5%8D%95%E6%80%BB%E7%BB%93%E6%8C%87%E9%92%88/">简单总结指针</a></li></ul>
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2021/07/03/%E9%87%8A%E6%94%BE%E5%99%A8%E5%88%86%E6%9E%90/">释放器分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/07/01/PE/pe%E8%B5%84%E6%BA%90%E6%8F%90%E5%8F%96/">pe资源提取</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/30/HOOK/">HOOK</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/25/CVE-2017-11882%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">CVE-2017-11882漏洞复现</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/25/%E8%BF%9B%E7%A8%8B%E9%9A%90%E8%97%8F%E6%8A%80%E6%9C%AF/">进程隐藏技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/23/%E6%B5%B7%E8%8E%B2%E8%8A%B1%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/">海莲花样本分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/11/Thallium%E7%97%85%E6%AF%92%E5%88%86%E6%9E%90/">Thallium病毒分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/06/Globelmposter/">Globelmposter</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/06/%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0linux%E4%B8%8B%E7%9A%84RE/">初步学习linux下的RE</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/06/linux/">linux</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/05/yara%E4%BD%BF%E7%94%A8/">yara使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/04/%E6%83%B3%E6%B3%95/">想法</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/04/%E6%B3%A8%E5%85%A5%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/">注入技术学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/17/MEMZ%E5%88%86%E6%9E%90/">MEMZ分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/13/%E5%8F%8D%E8%B0%83%E8%AF%95/">反调试</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/09/%E7%AE%80%E5%8D%95%E6%80%BB%E7%BB%93%E6%8C%87%E9%92%88/">简单总结指针</a></li></ul>
     
 <script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
 
