@@ -179,7 +179,7 @@
                 
                 <section class="switch-part switch-part2">
                     <div class="widget tagcloud" id="js-tagcloud">
-                        <a href="/tags/PE/" style="font-size: 10px;">PE</a> <a href="/tags/Pc%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" style="font-size: 15px;">Pc样本分析</a> <a href="/tags/RE/" style="font-size: 20px;">RE</a> <a href="/tags/c/" style="font-size: 10px;">c</a> <a href="/tags/linuxRE/" style="font-size: 10px;">linuxRE</a> <a href="/tags/windows%E5%86%85%E6%A0%B8/" style="font-size: 10px;">windows内核</a> <a href="/tags/%E5%8F%8D%E8%B0%83%E8%AF%95-%E9%80%86%E5%90%91/" style="font-size: 10px;">反调试 逆向</a> <a href="/tags/%E6%83%B3%E6%B3%95/" style="font-size: 10px;">想法</a>
+                        <a href="/tags/PE/" style="font-size: 10px;">PE</a> <a href="/tags/Pc%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" style="font-size: 15px;">Pc样本分析</a> <a href="/tags/RE/" style="font-size: 20px;">RE</a> <a href="/tags/c/" style="font-size: 10px;">c</a> <a href="/tags/linuxRE/" style="font-size: 10px;">linuxRE</a> <a href="/tags/windoes%E5%86%85%E6%A0%B8/" style="font-size: 10px;">windoes内核</a> <a href="/tags/windows%E5%86%85%E6%A0%B8/" style="font-size: 10px;">windows内核</a> <a href="/tags/%E5%8F%8D%E8%B0%83%E8%AF%95-%E9%80%86%E5%90%91/" style="font-size: 10px;">反调试 逆向</a> <a href="/tags/%E6%83%B3%E6%B3%95/" style="font-size: 10px;">想法</a>
                     </div>
                 </section>
                 
@@ -233,6 +233,241 @@
     </div>
 </nav>
       <div class="body-wrap">
+  
+    <article id="post-windows异常处理机制" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2021/07/07/windows%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6/" class="article-date">
+      <time datetime="2021-07-07T12:38:21.000Z" itemprop="datePublished">2021-07-07</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a  class="article-title" href="/2021/07/07/windows%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6/">windows异常处理机制</a>
+    </h1>
+  
+
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/windoes%E5%86%85%E6%A0%B8/" rel="tag">windoes内核</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-SEH异常处理分析" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2021/07/07/SEH%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E5%88%86%E6%9E%90/" class="article-date">
+      <time datetime="2021-07-07T12:26:28.000Z" itemprop="datePublished">2021-07-07</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a  class="article-title" href="/2021/07/07/SEH%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E5%88%86%E6%9E%90/">SEH异常处理分析</a>
+    </h1>
+  
+
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>个人见解：定义好一个回调函数，然后让异常发生   异常发生时调用回调函数</p>
+<p>SEH详细说明</p>
+<p> SEH链</p>
+<p>   SEH以链的形式存在。第一个异常处理中未处理相关异常，它就会被传递到下一个异常处理器，直到得到处理。SEH是由_EXCEPTION_REGISTRATION_RECORD结构体组成的链表</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ntdll!_EXCEPTION_REGISTRATION_RECORD&#96;&#96;  &#96;&#96;+0x000 Next       : Ptr32 _EXCEPTION_REGISTRATION_RECORD&#96;&#96;  &#96;&#96;+0x004 Handler     : Ptr32 _EXCEPTION_DISPOSITION &#96;&#96;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>   Next成员指向下一个_EXCEPTION_REGISTRATION_RECORD结构体指针，handler成员是异常处理函数（异常处理器）。若Next成员的值为FFFFFFFF，则表示它是链表最后一个结点</p>
+<p>发生异常的时候会按照(A)-&gt;(B)-&gt;(C)的顺序依次传递，直到异常被handler处理</p>
+<p>handler异常处理函数定义：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">EXCEPTION_DISPOSITION __cdecl _except_handler (</span><br><span class="line"> &#96;&#96;EXCEPTION_RECORD   *pRecord,</span><br><span class="line"> &#96;&#96;EXCEPTION_REGISTRATION_RECORD *pFrame,</span><br><span class="line"> &#96;&#96;CONTEXT    *pContext,</span><br><span class="line"> &#96;&#96;PVOID&#96;     &#96;pValue</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+
+
+<p> 由系统调用，是一个回调函数，第一个参数是一个指向EXCEPTION_RECORD结构体的指针</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">typedef&#96; &#96;struct&#96; &#96;_EXCEPTION_RECORD &#123;&#96;&#96;  &#96;&#96;DWORD&#96; &#96;ExceptionCode;  &#96;&#96;&#x2F;&#x2F;异常代码&#96;&#96;  &#96;&#96;DWORD&#96; &#96;ExceptionFlags;&#96;&#96;  &#96;&#96;struct&#96; &#96;_EXCEPTION_RECORD *ExceptionRecord;&#96;&#96;  &#96;&#96;PVOID&#96; &#96;ExceptionAddress;  &#96;&#96;&#x2F;&#x2F;异常发生地址&#96;&#96;  &#96;&#96;DWORD&#96; &#96;NumberParameters;&#96;&#96;  &#96;&#96;ULONG_PTR&#96; &#96;ExceptionInformation[EXCEPTION_MAXIMUM_PARAMETERS];&#96;&#96;&#125; EXCEPTION_RECORD;</span><br></pre></td></tr></table></figure>
+
+<p>   异常处理函数的第三个参数是指向CONTEXT结构体的指针，CONTEXT结构体的定义如下，  CONTEXT结构体用来备份CPU的值。 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">typedef&#96; &#96;struct&#96; &#96;_CONTEXT &#123;&#96;&#96;  &#96;&#96;DWORD&#96; &#96;ContextFlags;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;Dr0;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;Dr1;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;Dr2;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;Dr3;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;Dr6;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;Dr7;&#96;&#96;  &#96;&#96;FLOATING_SAVE_AREA FloatSave;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;SegGs;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;SegFs;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;SegEs;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;SegDs;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;Edi;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;Esi;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;Ebx;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;Edx;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;Ecx;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;Eax;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;Ebp;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;Eip;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;SegCs;       &#96;&#96;&#x2F;&#x2F; MUST BE SANITIZED&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;EFlags;       &#96;&#96;&#x2F;&#x2F; MUST BE SANITIZED&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;Esp;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;SegSs;&#96;&#96;  &#96;&#96;BYTE&#96;  &#96;ExtendedRegisters[MAXIMUM_SUPPORTED_EXTENSION];&#96; &#96;&#125; CONTEXT;</span><br></pre></td></tr></table></figure>
+
+<p>​    异常发生的时候，执行异常代码的线程就会发生中断，转而运行SEH，此时OS会把线程 CONTEXT结构体的指针传递给异常处理函数的相应参数。参数里有个eip成员。在异常处理函数中将参数eip的值（由copntext.eip传递）改为其他地址  然后返回处理函数。这样之前暂停的线程会执行新的EIP地址处的代码（反调试中经常使用这个技术）  </p>
+<p>​    3 TEB.NtTib.ExceptionList</p>
+<p>​    通过TEB结构体的NtTib成员可以很容易的访问进程的SEH链，TEB。</p>
+<p>​     ==NtTib.ExceptionList=FS:[0]==</p>
+<blockquote>
+<p>FS寄存器指向当前活动线程的TEB结构（线程结构）<br>偏移 说明<br>000 指向SEH链指针<br>004 线程堆栈顶部<br>008 线程堆栈底部<br>00C SubSystemTib<br>010 FiberData<br>014 ArbitraryUserPointer<br>018 FS段寄存器在内存中的镜像地址<br>020 进程PID<br>024 线程ID<br>02C 指向线程局部存储指针<br>030 PEB结构地址（进程结构）<br>034 上个错误号</p>
+</blockquote>
+<p>no：</p>
+<p>​    4 SEH安装/删除方法</p>
+<p>​    汇编中安装使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">push @MyHandler ;异常处理程序&#96;&#96;push FS:[0]    ；SEH Linked List头&#96;&#96;mov dword ptr fs:[0],esp ;添加链表</span><br></pre></td></tr></table></figure>
+
+<p>   汇编中的删除SEH代码  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">POP &#96;&#96;DWORD&#96; &#96;PRT FS:[0] ;读取栈值并将其放入FS:[0],这里的栈值存放的下一个SEH的起始地址，执行该命令之后，就可以从栈中删除对应的SEH。&#96;&#96;ADD ESP,4</span><br></pre></td></tr></table></figure>
+
+<p>5 od中的SEH</p>
+<p>   程序在正常运行与调试运行的时候有不同的分支代码，借助SEH实现的反调试及时很多，这为代码的调试带来了很多不便，使调试更加困难。OD提供了很多调试选项，调试中发生异常的时候，调试器不会暂停，会自动将异常派送给被调试者。od中选择options-debugging options-.exception选项卡：灵活使用od的excettion选项，可以在不暂停调试器的前提下自动规避使用SEH的反调试“花招”，从而继续调试。</p>
+<p>如果我们想动态跟踪这个程序，我们按Shift+F9程序就跑飞了</p>
+<p>显示当异常发生之后程序接下来会怎样执行，我们只要在SE句柄前面的数值处下断就可以继续跟踪程序了</p>
+<p>_Handler？？</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/thanklife/article/details/85160840">(11条消息) C++及Windows异常处理（try，catch; __try,__finally; __try, __except）_thanklife的专栏-CSDN博客___try</a></p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RE/" rel="tag">RE</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-APC注入" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2021/07/07/APC%E6%B3%A8%E5%85%A5/" class="article-date">
+      <time datetime="2021-07-07T06:47:52.000Z" itemprop="datePublished">2021-07-07</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a  class="article-title" href="/2021/07/07/APC%E6%B3%A8%E5%85%A5/">APC注入</a>
+    </h1>
+  
+
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>具体的APC机制参考文章《APC机制》</p>
+<h1 id="APC注入"><a href="#APC注入" class="headerlink" title="APC注入"></a>APC注入</h1><h3 id="APC-异步过程调用"><a href="#APC-异步过程调用" class="headerlink" title="APC 异步过程调用"></a>APC 异步过程调用</h3><p>异步过程调用是一种能在特定线程环境中异步执行的系统机制。</p>
+<p>MSDN说,要使用SleepEx,signalObjectAndWait…..等等这些函数才会触发</p>
+<h3 id="注入方法的原理"><a href="#注入方法的原理" class="headerlink" title="注入方法的原理:"></a>注入方法的原理:</h3><p>1.当对面程序执行到某一个上面的等待函数的时候,系统会产生一个中断</p>
+<p>2.当线程唤醒的时候,这个线程会优先去Apc队列中调用回调函数</p>
+<p>3.我们利用QueueUserApc,往这个队列中插入一个回调</p>
+<p>4.插入回调的时候,把插入的回调地址改为LoadLibrary,插入的参数我们使用VirtualAllocEx申请内存,并且写入进去，写入的是Dll的路径。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//1.查找窗口</span></span><br><span class="line">  HWND hWnd = ::FindWindow(<span class="literal">NULL</span>, TEXT(<span class="string">&quot;APCTest&quot;</span>));</span><br><span class="line">  <span class="keyword">if</span> (<span class="literal">NULL</span> == hWnd)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">/*2.获得进程的PID,当然通用的则是你把进程PID当做要注入的程序,这样不局限</span></span><br><span class="line"><span class="comment">  于窗口了.这里简单编写,进程PID可以快照遍历获取</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line">  DWORD dwPid = <span class="number">0</span>;</span><br><span class="line">  DWORD dwTid = <span class="number">0</span>;</span><br><span class="line">  dwTid = GetWindowThreadProcessId(hWnd, &amp;dwPid);</span><br><span class="line"></span><br><span class="line">  <span class="comment">//3.打开进程</span></span><br><span class="line">  HANDLE hProcess = <span class="literal">NULL</span>;</span><br><span class="line">  hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, dwPid);</span><br><span class="line">  <span class="keyword">if</span> (<span class="literal">NULL</span> == hProcess)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//4.成功了,申请远程内存</span></span><br><span class="line">  <span class="keyword">void</span> *lpAddr = <span class="literal">NULL</span>;</span><br><span class="line">  lpAddr = VirtualAllocEx(hProcess, <span class="number">0</span>, <span class="number">0x1000</span>, MEM_COMMIT, PAGE_EXECUTE_READWRITE);</span><br><span class="line">  <span class="keyword">if</span> (<span class="literal">NULL</span> == lpAddr)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//5.写入我们的DLL路径,这里我写入当前根目录下的路径</span></span><br><span class="line">  <span class="keyword">char</span> szBuf[] = <span class="string">&quot;MyDll.dll&quot;</span>;</span><br><span class="line">  BOOL bRet = WriteProcessMemory(hProcess, lpAddr, szBuf, <span class="built_in">strlen</span>(szBuf) + <span class="number">1</span>, <span class="literal">NULL</span>);</span><br><span class="line">  <span class="keyword">if</span> (!bRet)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//6.根据线程Tid,打开线程句柄</span></span><br><span class="line">  HANDLE hThread = <span class="literal">NULL</span>;</span><br><span class="line">  hThread = OpenThread(THREAD_ALL_ACCESS, FALSE, dwTid);</span><br><span class="line">  <span class="keyword">if</span> (<span class="literal">NULL</span> == hThread)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//7.给APC队列中插入回调函数</span></span><br><span class="line">  QueueUserAPC((PAPCFUNC)LoadLibraryA, hThread, (ULONG_PTR)lpAddr);</span><br><span class="line"></span><br><span class="line">  CloseHandle(hThread);</span><br><span class="line">  CloseHandle(hProcess);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">DWORD <span class="title">QueueUserAPC</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">PAPCFUNCpfnAPC, <span class="comment">// APC function                 指向一个用户提供的APC函数的指针</span></span></span></span><br><span class="line"><span class="function"><span class="params">HANDLEhThread, <span class="comment">// handle to thread      		指定特定线程的句柄。</span></span></span></span><br><span class="line"><span class="function"><span class="params">ULONG_PTRdwData <span class="comment">// APC function parameter		指定一个被传到pfnAPC参数指向的APC函数的值</span></span></span></span><br><span class="line"><span class="function"><span class="params">)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>PAPCFUNCpfnAPC  ：这个函数将在指定线程执行an alertable wait operation操作时被调用。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RE/" rel="tag">RE</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+
   
     <article id="post-APC机制" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -782,7 +1017,21 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        
+        <p>例程概念：</p>
+<p>例程的作用类似于函数，但含义更为丰富一些。例程是某个系统对外提供的功能接口或服务的集合。比如操作系统的<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/API/10154">API</a>、服务等就是例程；Delphi或C++Builder提供的<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E6%A0%87%E5%87%86%E5%87%BD%E6%95%B0/7681008">标准函数</a>和<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%BA%93%E5%87%BD%E6%95%B0/3471322">库函数</a>等也是例程。我们编写一个<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/DLL/158044">DLL</a>的时候，里面的输出函数就是这个DLL的例程。</p>
+<p>可以这么简单地来<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E7%90%86%E8%A7%A3">理解</a>：把一段相对独立的代码写成单独的一个模块就是函数的概念。我们可以在自己的程序中编写很多个函数，从而实现模块化编程。但这些模块或者说函数并不一定向外输出（即提供给别的程序使用），只用于当前这个程序里面。此时这些函数就仅仅具有独立函数的意义，但不是例程。</p>
+<p>但如果我们把这些函数编写为DLL动态库的输出函数的话，此时虽然对于编写这个DLL的程序员来讲，仍然可以用函数的概念来理解这些DLL提供的功能，但对于以后调用这个DLL的程序来说，DLL里面提供的输出函数（或者说服务）就是例程了。因此“例程”的基本概念就包含了“例行事务性子程序”的含义，既然是例行的事务子程序，则必然通用性和相对独立性都比较强，所以很适合通过DLL、<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E9%9D%99%E6%80%81%E5%BA%93">静态库</a>（各种编程语言里面的<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%BA%93%E5%87%BD%E6%95%B0">库函数</a>）、API、操作<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E7%B3%BB%E7%BB%9F%E6%9C%8D%E5%8A%A1">系统服务</a>等方式来实现了。</p>
+<h1 id="2种基于异常机制的反调试方法"><a href="#2种基于异常机制的反调试方法" class="headerlink" title="2种基于异常机制的反调试方法"></a>2种基于异常机制的反调试方法</h1><p>利用异常处理例程来进行反跟踪</p>
+<p>SetUnhandledExceptionFilter</p>
+<p> 如题，一种是利用异常处理例程进行反调试:首先安装好一个异常处理例程，然后人为抛出异常在异常处理例程中通过IsDebuggerPresent来判断程序是否被调试；另一种是利用未处理异常进行反跟踪，其原理是：当异常发生时所有异常处理例程都不能处理异常，系统线程异常处理例程将起作用,它调用 ZwQueryInformationProcess 判断是否被调试,<br>如果没有调试并且程序中调用SetUnhandledExceptionFilter安装了最后异常处理例程的话,系统转向对它的调用。</p>
+<pre><code>第一种方法中IsDebuggerPresent是通过返回FS寄存器上记录的地址的一些偏移量来实现的。在debugger中可以任意操作当前进程内存地址上的值，所以只需要用调试器把［［FS:30］:2的值修改成0，IsDebuggerPresent就会返回false，导致判断失败。相比第二种方法中UnhandledExceptionFilter是否调用取决于系统内核的判断。用户态的调试器要想改变这个行为就得颇费功夫了。下面我将依次展示两种反调试方法。
+
+第一种方法，通过在异常处理例程中判断IsDebuggerPresent的返回值:
+</code></pre>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/iBinary/p/7574055.html">常见注入手法第二讲,APC注入 - iBinary - 博客园 (cnblogs.com)</a></p>
+<p><a target="_blank" rel="noopener" href="http://www.cppblog.com/fwxjj/archive/2008/01/25/41914.html">SEH的强大功能之一(转) - 大龙的博客 - C++博客 (cppblog.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_40890756/article/details/89950455">(11条消息) SEH的介绍及实战_For Geek-CSDN博客</a></p>
+
       
     </div>
     
@@ -961,275 +1210,6 @@
         <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PE/" rel="tag">PE</a></li></ul>
     </div>
 
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-HOOK" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a  href="/2021/05/30/HOOK/" class="article-date">
-      <time datetime="2021-05-30T04:38:14.000Z" itemprop="datePublished">2021-05-30</time>
-</a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a  class="article-title" href="/2021/05/30/HOOK/">HOOK</a>
-    </h1>
-  
-
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h1 id="HOOK技术"><a href="#HOOK技术" class="headerlink" title="HOOK技术"></a>HOOK技术</h1><p>1.原理</p>
-<p>修改api函数</p>
-<p>unhook</p>
-<p>恢复修改</p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/iiprogram/article/details/1585922?utm_medium=distribute.pc_relevant.none-task-blog-baidujs_baidulandingword-0&spm=1001.2101.3001.4242">必备绝技–Hook大法( 上 )_iiprogram的博客-CSDN博客</a></p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_37552052/article/details/81453591">Windows Hook原理与实现_安全杂货铺-CSDN博客_hook</a></p>
-<p>1.用户模式Hook</p>
-<p>IAT-hooking</p>
-<p>先找到自己需要hook的函数，然后把目标函数的地址改成我们自己的hook函数，最后在恢复到目标函数的地址(unhook)</p>
-<p>如果是通过动态加载的就不行了<br>因为动态加载的dll的API不在iat中,而是动态生成的.</p>
-<p>（四）局限性：１当程序运用一种叫<code>late-demand binding</code>技术，函数被调用时才定位地址，这样以来就不能在IAT中定位目标函数地址了．２当目标程序用动态加载（LoadLibrary)时，这种方法也将失效．（如果是通过动态加载的就不行了<br>因为动态加载的dll的API不在iat中,而是动态生成的.）</p>
-<ol start="2">
-<li>hook——ZwQuerySystemInformation</li>
-</ol>
-<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/freesec/p/6560935.html">hook技术–代码hook - freesec - 博客园 (cnblogs.com)</a></p>
-<p>3 .HotFix Hook</p>
-<p>从上节对Code Hook方法的讲解中，我们会发现Code Hook存在一个效率的问题，因为每次Code Hook都要进行“挂钩+脱钩”的操作，也就是要对API的前5字节修改两次，这样，当我们要进行全局Hook的时候，系统运行效率会受影响。而且，当一个线程尝试运行某段代码时，若另一个线程正在对该段代码进行“写”操作，这时就会程序冲突，最终引发一些错误。<br>有没有办法避免这种隐患呢？答案是有的，可以使用HotFix Hook（“热补丁”）方法。</p>
-<p>5.3.1 技术原理</p>
-<p>以上累出的API起始代码有如下两个明显的相似点：<br>[1]API代码以“MOV EDI,EDI”指令开始。<br>[2]API代码上方有5个NOP指令。</p>
-<p>MOV EDI,EDI用于将EDI的值再次复制给EDI，这没有什么实际意义。也就是说，API起始代码的MOV指令（2个字节）与其上方的5个NOP指令（5个字节）合起来共7个字节的指令没有任何意义。所以我们就可以通过修改这7个字节来实现Hook操作。这种方法因为可以在进程处于运行状态时临时更改进程内存中的库文件，所以微软也常用这种方法来打“热补丁”。</p>
-<ol start="4">
-<li>Inline Hook</li>
-</ol>
-<p>内联Hook相比于IAT Hook，显得更简单粗暴，它直接修改内存中任意函数的代码，将其劫持至Hook API。同时，它比IAT Hook的适用范围更广，因为只要是内存中有的函数它都能Hook，而后者只能Hook IAT表里存在的函数（有些程序会动态加载函数）。</p>
-<p>技术原理</p>
-<p>Inline Hook的目标是系统函数，如下，左图是Hook之前的状态，procexp.exe进程调用ZwQuerySystemInformation()函数时，ZwQuerySystemInformation()的代码是正常的代码。右图是Hook后的状态，注意红框中的代码，ZwQuerySystemInformation()函数开头5个字节已被修改，变成了jmp 0x10001120，也就是我们恶意代码的地址，之后便可以开始我们的自定义操作。0x1000116A我们先进行unhook操作（脱钩），目的是将ZwQuerySystemInformation()的代码恢复。大家可能有疑惑，为什么刚修改完又要恢复回来，原因很简单，Hook的目的是当调用某个函数时，我们能劫持进程的执行流。现在我们已经劫持了进程的执行流，便可以恢复ZwQuerySystemInformation()的代码，以便我们的恶意代码可以正常调用ZwQuerySystemInformation()。执行完恶意代码后，再次挂钩，监控该函数。</p>
-<p>5.通过消息钩子<br> 1．基本原理：微软自己定义了一个钩子函数，这个钩子可以钩住系统的任何一类消息，并产生相关的回调函数。比如我们设置的是键盘钩子，如果用户按下键盘的键，就可以触发一个我们自定义功能的回调函数。<br> 2．大体框架：<br> 文件1：产生特定功能的Dll，并设置钩子<br>    SetWindowsHookEx(WH_KEYBOARD, myKeyBrdFuncAd, myDllHandle, 0),</p>
-<p> 文件2：将Dll设置到特定目录，隐藏等<br>    安装钩子函数，只要另一个进程按下了键，则钩子启动，加载Dll<br>    卸载钩子</p>
-<p> 4．局限性：会产生Dll体，虽然没有进程，但可以通过其他工具轻易发现</p>
-<ol start="6">
-<li>通过创建远程线程<br> 1．一般思路：远程线程，顾名思义就是在其他进程中创建一个线程，如果这个进程是系统每次启动必须加载的，那么就能每次有注入目标。这主要通过CreateRemoteThread函数完成。<br> 2．大体框架：<br> 文件1：可以重定位的代码，或是DLL,这个代码当然是有特定目的的<br> 文件2：查找特定进程，如文件管理器，打开进程<pre><code> VirtualAllocEx函数在进程中申请分配空间
- WriteProcessMemory函数将远程线程中的代码拷贝到申请到的空间
- CreateRemoteThread函数创建远程线程
-</code></pre>
-</li>
-</ol>
-<p>4.局限性：有时会遇到申请内存失败。</p>
-<p> 总结：以上的几种方法，相互配合将发挥更为强大的力量。但由于都是动作在ring3，有着先天不足的缺点，都逃不过内核模块的监测。</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RE/" rel="tag">RE</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-CVE-2017-11882漏洞复现" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a  href="/2021/05/25/CVE-2017-11882%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" class="article-date">
-      <time datetime="2021-05-25T10:44:04.000Z" itemprop="datePublished">2021-05-25</time>
-</a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a  class="article-title" href="/2021/05/25/CVE-2017-11882%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">CVE-2017-11882漏洞复现</a>
-    </h1>
-  
-
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-进程隐藏技术" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a  href="/2021/05/25/%E8%BF%9B%E7%A8%8B%E9%9A%90%E8%97%8F%E6%8A%80%E6%9C%AF/" class="article-date">
-      <time datetime="2021-05-25T08:19:21.000Z" itemprop="datePublished">2021-05-25</time>
-</a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a  class="article-title" href="/2021/05/25/%E8%BF%9B%E7%A8%8B%E9%9A%90%E8%97%8F%E6%8A%80%E6%9C%AF/">进程隐藏技术</a>
-    </h1>
-  
-
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <p><code>进程隐藏的方法有很多，例如 DLL 劫持、DLL注入、代码注入、进程内存替换、HOOK API 等等。</code></p>
-<h1 id="劫持ZwQuerySystemInformation函数实现进程隐藏"><a href="#劫持ZwQuerySystemInformation函数实现进程隐藏" class="headerlink" title="劫持ZwQuerySystemInformation函数实现进程隐藏"></a>劫持ZwQuerySystemInformation函数实现进程隐藏</h1><p>==HOOK API==</p>
-<p><a target="_blank" rel="noopener" href="https://www.write-bug.com/article/1960.html">技术分享 - 劫持ZwQuerySystemInformation函数实现进程隐藏 (write-bug.com)</a></p>
-<p>占坑 </p>
-<p>等hook系统了解后在来</p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/xiaocaiju/article/details/7586795">hook zwQuerySysteminformation 隐藏进程_小驹的专栏-CSDN博客</a></p>
-<h4 id="实现原理："><a href="#实现原理：" class="headerlink" title="实现原理："></a>实现原理：</h4><p>　　由于遍历进程通常是通过调用WIN32 API函数 EnumProcesses 或是CreateToolhelp32Snapshot 等来实现的。</p>
-<p>　　通过跟踪逆向这些WIN32 API函数可知，它们内部最终是通过调用ZwQuerySystemInformation函数来检索系</p>
-<p>　　统进程信息的，从而实现进程遍历操作。所以，程序只需要HOOK ZwQuerySystemInformation这一个函数就</p>
-<p>　　足够了。在ZwQuerySystem Information函数的内部判断检索的信息是否是进程信息，若是，则对返回的进程</p>
-<p>　　信息进行修改，将隐藏的进程信息从中去掉再返回。因此只要是通过调用ZwQuerySystemInformation来检索</p>
-<p>　　系统进程的，获取到的数据均是被篡改的，自然获取不到隐藏进程的信息，这样，指定进程就被隐藏起来了。</p>
-<p><a target="_blank" rel="noopener" href="http://www.bubuko.com/infodetail-3532998.html">HOOK函数ZwQuerySystemInformation实现进程隐藏-布布扣-bubuko.com</a></p>
-<h1 id="傀儡进程注入"><a href="#傀儡进程注入" class="headerlink" title="傀儡进程注入"></a>傀儡进程注入</h1><p>==也是进程内存替换==</p>
-<p>之前分析的病毒 使用傀儡进程注入(进程内存替换)达到进程隐藏的目的 ，傀儡进程是将目标进程的映射文件替换为指定的映射文件,替换后的进程称之为傀儡进程;常常有恶意程序将隐藏在自己文件内的恶意代码加载进目标进程,而在加载进目标进程之前，会利用ZwUnmpViewOfSection或者NtUnmapViewOfSection进行相关设置</p>
-<blockquote>
-<p>流程概述：</p>
-<p>直接将自身代码注入傀儡进程，不需要DLL。首先用CreateProcess来创建一个挂起的IE进程，创建时候就把它挂起。然后得到它的装载基址，使用函数ZwUnmapViewOfSection来卸载这个这个基址内存空间的数据，。再用VirtualAllocEx来个ie进程重新分配内存空间，大小为要注入程序的大小(就是自身的imagesize)。使用WriteProcessMemory重新写IE进程的基址，就是刚才分配的内存空间的地址。再用WriteProcessMemory把自己的代码写入IE的内存空间。用SetThreadContext设置下进程状态，最后使用ResumeThread继续运行IE进程。</p>
-</blockquote>
-<h2 id="相关技术点"><a href="#相关技术点" class="headerlink" title="相关技术点"></a>相关技术点</h2><h4 id="1-创建挂起进程"><a href="#1-创建挂起进程" class="headerlink" title="1.创建挂起进程"></a>1.创建挂起进程</h4><p>系统函数CreateProcessW中参数dwCreationFlgs传递CREATE_SUSPEND便可以创建一个挂起的进程，进程被创建之后系统会为它分配足够的资源和初始化必要的操作,(常见的操作有:为进程分配空间,加载映像文件,创建主进程,将EIP指向代码入口点,并将主线程挂起等)</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CreateProcessA(strTargetProcess.c_str(),<span class="literal">NULL</span>,NUL <span class="literal">NULL</span>, FALSE,CREATE_SUSPENDED, <span class="literal">NULL</span>, <span class="literal">NULL</span>,&amp;stSi, &amp;stPi)</span><br></pre></td></tr></table></figure>
-
-<h4 id="2-利得到当前的线程上下文"><a href="#2-利得到当前的线程上下文" class="headerlink" title="2.利得到当前的线程上下文"></a>2.利得到当前的线程上下文</h4><p>相关的API和结构信息如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">BOOL WINAPI GetThreadContext(</span><br><span class="line">  __in          HANDLE hThread,</span><br><span class="line">  __in_out      LPCONTEXT lpContext</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">typedef struct _CONTEXT &#123;</span><br><span class="line">    DWORD ContextFlags;</span><br><span class="line">    DWORD   Dr0;</span><br><span class="line">    DWORD   Dr1;</span><br><span class="line">    DWORD   Dr2;</span><br><span class="line">    DWORD   Dr3;</span><br><span class="line">    DWORD   Dr6;</span><br><span class="line">    DWORD   Dr7;</span><br><span class="line">    DWORD   SegGs;</span><br><span class="line">    DWORD   SegFs;</span><br><span class="line">    DWORD   SegEs;</span><br><span class="line">    DWORD   SegDs;</span><br><span class="line">    DWORD   Edi;</span><br><span class="line">    DWORD   Esi;</span><br><span class="line">    DWORD   Ebx;</span><br><span class="line">    DWORD   Edx;</span><br><span class="line">    DWORD   Ecx;</span><br><span class="line">    DWORD   Eax;</span><br><span class="line">    DWORD   Ebp;</span><br><span class="line">    DWORD   Eip;</span><br><span class="line">    DWORD   SegCs;              &#x2F;&#x2F; MUST BE SANITIZED</span><br><span class="line">    DWORD   EFlags;             &#x2F;&#x2F; MUST BE SANITIZED</span><br><span class="line">    DWORD   Esp;</span><br><span class="line">    DWORD   SegSs;</span><br><span class="line">    BYTE    ExtendedRegisters[MAXIMUM_SUPPORTED_EXTENSION];</span><br><span class="line">&#125; CONTEXT;</span><br></pre></td></tr></table></figure>
-
-<p>获得线程信息代码</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">CONTEXT stThreadContext;</span><br><span class="line"> stThreadContext.ContextFlags &#x3D; CONTEXT_FULL;</span><br><span class="line"> if (GetThreadContext(stPi.hThread, &amp;stThreadContext) &#x3D;&#x3D; 0)</span><br><span class="line"> &#123;</span><br><span class="line">    return FALSE;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h4 id="3-清空目标进程的内存空间"><a href="#3-清空目标进程的内存空间" class="headerlink" title="3.清空目标进程的内存空间"></a>3.清空目标进程的内存空间</h4><p>目标进程被初始化后，进程的映像文件也随之被加载进对应的内存空间。傀儡进程在替换之前必须将目标进程的内容清除掉。此时要用到另外一个系统未文档化的函数NtUnmapViewOfSection，需要自行从ntdll.dll中获取。该函数需要指定的进程加载的基地址，基地址即是从第2步中的上下文取得。相关的函数说明及基地址计算方法如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">NTSTATUS NtUnmapViewOfSection(</span><br><span class="line">  _In_     HANDLE ProcessHandle,</span><br><span class="line">  _In_opt_ PVOID  BaseAddress</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-
-<p>ontext.Ebx+ 8 = 基地址的地址，因此从context.Ebx + 8的地址读取4字节的内容并转化为DWORD类型，既是进程加载的基地址。</p>
-<h4 id="4-重新分配空间"><a href="#4-重新分配空间" class="headerlink" title="4.重新分配空间"></a>4.重新分配空间</h4><p>在第3步中，NtUnmapViewOfSection将原始空间清除并释放了，因此在写入傀儡进程之前需要重新在目标进程中分配大小足够的空间。需要用到跨进程内存分配函数VirtualAllocEx。</p>
-<p>一般情况下，在写入傀儡进程之前，需要将傀儡进程对应的文件按照申请空间的首地址作为基地址进行“重定位”，这样才能保证傀儡进程的正常运行。为了避免这一步操作，可以以傀儡进程PE文件头部的建议加载基地址作为VirtualAllocEx 的lpAddress参数，申请与之对应的内存空间，然后以此地址作为基地址将傀儡进程写入目标进程，就不会存在重定位问题。关于“重定位”的原理可以自行网络查找相关资料。</p>
-<h4 id="5-写入傀儡进程"><a href="#5-写入傀儡进程" class="headerlink" title="5.写入傀儡进程"></a>5.写入傀儡进程</h4><p>准备工作完成后，现在开始将傀儡进程的代码写入到对应的空间中，注意写入的时候要按照傀儡进程PE文件头标明的信息进行。一般是先写入PE头，再写入PE节，如果存在附加数据还需要写入附加数据。</p>
-<h4 id="6-恢复现场并运行傀儡进程"><a href="#6-恢复现场并运行傀儡进程" class="headerlink" title="6. 恢复现场并运行傀儡进程"></a>6. 恢复现场并运行傀儡进程</h4><p>在第2步中，保存的线程上下文信息需要在此时就需要及时恢复了。由于目标进程和傀儡进程的入口点一般不相同，因此在恢复之前，需要更改一下其中的线程入口点，需要用到系统函数SetThreadContext。将挂起的进程开始运行需要用到函数ResumeThread。</p>
-<h4 id="7-傀儡进程创建过程总结："><a href="#7-傀儡进程创建过程总结：" class="headerlink" title="7.傀儡进程创建过程总结："></a>7.傀儡进程创建过程总结：</h4><p>(1) CreateProcess一个进程，并挂起，即向dwCreationFlags 参数传入CREATE_SUSPENDED；</p>
-<p>(2) GetThreadContext获取挂起进程CONTEXT，其中，EAX为进程入口点地址，EBX指向进程PEB;</p>
-<p>(3) ZwUnmapViewOfSection卸载挂起进程内存空间数据；</p>
-<p>(4) VirtualAlloc分配内存空间；</p>
-<p>(5) WriteProcessMemory将恶意代码写入分配的内存；</p>
-<p>(6) SetThreadContext设置挂起的进程的状态；</p>
-<p>(6) ResumeThread唤醒进程运行。</p>
-<p>傀儡进程是恶意软件隐藏自身代码的常用方式，在调式过程中，若遇到傀儡进程，需要将创建的子进程数据从内存中dump出来，作为PE文件单独调试，dump的时机为ResumeThead调用之前，此时傀儡进程内存数据已经完全写入，进程还未正式开始运行。</p>
-<p>若dump后文件无法运行，OD加载失败，则需要做如下修复：</p>
-<p>(1) FileAlignment值修改为SectionAlignment值；</p>
-<p>(2) 所有section的Raw Address值修改为Virtual Address.</p>
-<h2 id="代码："><a href="#代码：" class="headerlink" title="代码："></a>代码：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h1 id="DLL劫持"><a href="#DLL劫持" class="headerlink" title="DLL劫持"></a>DLL劫持</h1><h4 id="1-原理概述："><a href="#1-原理概述：" class="headerlink" title="1.原理概述："></a>1.原理概述：</h4><p>首先我们要了解Windows为什么可以DLL劫持呢？主要是因为Windows的资源共享机制。为了尽可能多得安排资源共享，微软建议多个应用程序共享的任何模块应该放在Windows的系统目录中，如kernel32.dll，这样能够方便找到。但是随着时间的推移，安装程序会用旧文件或者未向后兼容的新文件来替换系统目录下的文件，这样会使一些其他的应用程序无法正确执行，因此，微软改变了策略，建议应用程序将所有文件放到自己的目录中去，而不要去碰系统目录下的任何东西。<br>为了提供这样的功能，在Window2000开始，微软加了一个特性，强制操作系统的加载程序首先从应用程序目录中加载模块，只有当加载程序无法在应用程序目录中找到文件，才搜索其他目录。利用系统的这个特性，就可以使应用程序强制加载我们指定的DLL做一些特殊的工作。</p>
-<p>根据前面说的Windows资源共享机制，操作系统加载程序首先从应用程序目录中加载模块。这一特性在注册表中也有体现：HKLM\System\CurrentControlSet\Control\Session Manager\SafeDllSearchMode，如果为1，搜索的顺序为：应用程序所在目录-&gt;系统目录（用GetSystemDirectory获取）-&gt;16位系统目录-&gt;Windows目录（用GetWindowsDirectory获取）-&gt;运行程序的当前目录-&gt;PATH环境变量，如果为0，搜索顺序为：应用程序所在目录-&gt;运行程序的当前目录-&gt;系统目录（用GetSystemDirectory获取）-&gt;16位系统目录-&gt;Windows目录（用GetWindowsDirectory获取）-&gt;PATH环境变量。Windows Server 2003默认值为1，Windows XP/2000默认值为0或者没有这个键值。但是不管是哪种情况，第一个搜索的肯定是应用程序的所在目录，这样就有机会让应用程序去加载我们的DLL。如果这个DLL和系统目录下的某个DLL同名，导出表也相同，功能就是加载系统目录下的那个DLL，并且将导出表转发到那个真实的DLL。这时DLL劫持就发生了。<strong>可以看出，构造一个符合上面要求的DLL，再将其放在可执行文件的目录即可轻松实现DLL劫持了。</strong></p>
-<blockquote>
-<p>这一步我们的工作就是通过编程来实现一个LPK.DLL文件，它与系统目录下的LPK.DLL导出表相同，并能加载系统目录下的LPK.DLL，并且能将导出表转发到真实的LPK.DLL。可以看出我们要实现的这个DLL需求如下：<br>1、构造一个与系统目录下LPK.DLL一样的导出表；<br>2、加载系统目录下的LPK.DLL；<br>3、将导出函数转发到系统目录下的LPK.DLL上；</p>
-<p>4、在初始化函数中加入我们要执行的代码。</p>
-</blockquote>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_30904593/article/details/96203605?utm_medium=distribute.pc_relevant.none-task-blog-baidujs_baidulandingword-0&spm=1001.2101.3001.4242">Dll劫持漏洞详解_山清水秀iOS的博客-CSDN博客</a></p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
       
       <div class="clearfix"></div>
     </div>

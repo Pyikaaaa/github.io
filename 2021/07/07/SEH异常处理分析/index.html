@@ -7,16 +7,19 @@
   
   
   
-  <title>Guard | Pyikaaaa</title>
+  <title>SEH异常处理分析 | Pyikaaaa</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="article">
-<meta property="og:title" content="Guard">
-<meta property="og:url" content="http://example.com/2021/07/05/Guard/index.html">
+  <meta name="description" content="个人见解：定义好一个回调函数，然后让异常发生   异常发生时调用回调函数 SEH详细说明  SEH链    SEH以链的形式存在。第一个异常处理中未处理相关异常，它就会被传递到下一个异常处理器，直到得到处理。SEH是由_EXCEPTION_REGISTRATION_RECORD结构体组成的链表 1ntdll!_EXCEPTION_REGISTRATION_RECORD&#96;&#96;  &amp;#9">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SEH异常处理分析">
+<meta property="og:url" content="http://example.com/2021/07/07/SEH%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E5%88%86%E6%9E%90/index.html">
 <meta property="og:site_name" content="Pyikaaaa">
+<meta property="og:description" content="个人见解：定义好一个回调函数，然后让异常发生   异常发生时调用回调函数 SEH详细说明  SEH链    SEH以链的形式存在。第一个异常处理中未处理相关异常，它就会被传递到下一个异常处理器，直到得到处理。SEH是由_EXCEPTION_REGISTRATION_RECORD结构体组成的链表 1ntdll!_EXCEPTION_REGISTRATION_RECORD&#96;&#96;  &amp;#9">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2021-07-05T09:02:12.000Z">
-<meta property="article:modified_time" content="2021-07-05T09:02:12.954Z">
+<meta property="article:published_time" content="2021-07-07T12:26:28.000Z">
+<meta property="article:modified_time" content="2021-07-07T13:31:34.944Z">
 <meta property="article:author" content="Pyikaaaa">
+<meta property="article:tag" content="RE">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="Pyikaaaa" type="application/atom+xml">
@@ -231,11 +234,11 @@
         </header>
     </div>
 </nav>
-      <div class="body-wrap"><article id="patch-Guard" class="article article-type-patch" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-SEH异常处理分析" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a  href="/2021/07/05/Guard/" class="article-date">
-      <time datetime="2021-07-05T09:02:12.000Z" itemprop="datePublished">2021-07-05</time>
+      <a  href="/2021/07/07/SEH%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E5%88%86%E6%9E%90/" class="article-date">
+      <time datetime="2021-07-07T12:26:28.000Z" itemprop="datePublished">2021-07-07</time>
 </a>
 
     </div>
@@ -249,7 +252,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Guard
+      SEH异常处理分析
     </h1>
   
 
@@ -260,6 +263,10 @@
         
 
         
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RE/" rel="tag">RE</a></li></ul>
+    </div>
+
         <div class="clearfix"></div>
       </div>
       
@@ -267,7 +274,47 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        
+        <p>个人见解：定义好一个回调函数，然后让异常发生   异常发生时调用回调函数</p>
+<p>SEH详细说明</p>
+<p> SEH链</p>
+<p>   SEH以链的形式存在。第一个异常处理中未处理相关异常，它就会被传递到下一个异常处理器，直到得到处理。SEH是由_EXCEPTION_REGISTRATION_RECORD结构体组成的链表</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ntdll!_EXCEPTION_REGISTRATION_RECORD&#96;&#96;  &#96;&#96;+0x000 Next       : Ptr32 _EXCEPTION_REGISTRATION_RECORD&#96;&#96;  &#96;&#96;+0x004 Handler     : Ptr32 _EXCEPTION_DISPOSITION &#96;&#96;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>   Next成员指向下一个_EXCEPTION_REGISTRATION_RECORD结构体指针，handler成员是异常处理函数（异常处理器）。若Next成员的值为FFFFFFFF，则表示它是链表最后一个结点</p>
+<p>发生异常的时候会按照(A)-&gt;(B)-&gt;(C)的顺序依次传递，直到异常被handler处理</p>
+<p>handler异常处理函数定义：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">EXCEPTION_DISPOSITION __cdecl _except_handler (</span><br><span class="line"> &#96;&#96;EXCEPTION_RECORD   *pRecord,</span><br><span class="line"> &#96;&#96;EXCEPTION_REGISTRATION_RECORD *pFrame,</span><br><span class="line"> &#96;&#96;CONTEXT    *pContext,</span><br><span class="line"> &#96;&#96;PVOID&#96;     &#96;pValue</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+
+
+<p> 由系统调用，是一个回调函数，第一个参数是一个指向EXCEPTION_RECORD结构体的指针</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">typedef&#96; &#96;struct&#96; &#96;_EXCEPTION_RECORD &#123;&#96;&#96;  &#96;&#96;DWORD&#96; &#96;ExceptionCode;  &#96;&#96;&#x2F;&#x2F;异常代码&#96;&#96;  &#96;&#96;DWORD&#96; &#96;ExceptionFlags;&#96;&#96;  &#96;&#96;struct&#96; &#96;_EXCEPTION_RECORD *ExceptionRecord;&#96;&#96;  &#96;&#96;PVOID&#96; &#96;ExceptionAddress;  &#96;&#96;&#x2F;&#x2F;异常发生地址&#96;&#96;  &#96;&#96;DWORD&#96; &#96;NumberParameters;&#96;&#96;  &#96;&#96;ULONG_PTR&#96; &#96;ExceptionInformation[EXCEPTION_MAXIMUM_PARAMETERS];&#96;&#96;&#125; EXCEPTION_RECORD;</span><br></pre></td></tr></table></figure>
+
+<p>   异常处理函数的第三个参数是指向CONTEXT结构体的指针，CONTEXT结构体的定义如下，  CONTEXT结构体用来备份CPU的值。 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">typedef&#96; &#96;struct&#96; &#96;_CONTEXT &#123;&#96;&#96;  &#96;&#96;DWORD&#96; &#96;ContextFlags;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;Dr0;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;Dr1;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;Dr2;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;Dr3;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;Dr6;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;Dr7;&#96;&#96;  &#96;&#96;FLOATING_SAVE_AREA FloatSave;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;SegGs;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;SegFs;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;SegEs;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;SegDs;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;Edi;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;Esi;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;Ebx;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;Edx;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;Ecx;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;Eax;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;Ebp;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;Eip;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;SegCs;       &#96;&#96;&#x2F;&#x2F; MUST BE SANITIZED&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;EFlags;       &#96;&#96;&#x2F;&#x2F; MUST BE SANITIZED&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;Esp;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;SegSs;&#96;&#96;  &#96;&#96;BYTE&#96;  &#96;ExtendedRegisters[MAXIMUM_SUPPORTED_EXTENSION];&#96; &#96;&#125; CONTEXT;</span><br></pre></td></tr></table></figure>
+
+<p>​    异常发生的时候，执行异常代码的线程就会发生中断，转而运行SEH，此时OS会把线程 CONTEXT结构体的指针传递给异常处理函数的相应参数。参数里有个eip成员。在异常处理函数中将参数eip的值（由copntext.eip传递）改为其他地址  然后返回处理函数。这样之前暂停的线程会执行新的EIP地址处的代码（反调试中经常使用这个技术）  </p>
+<p>​    3 TEB.NtTib.ExceptionList</p>
+<p>​    通过TEB结构体的NtTib成员可以很容易的访问进程的SEH链，TEB。</p>
+<p>​     ==NtTib.ExceptionList=FS:[0]==</p>
+<blockquote>
+<p>FS寄存器指向当前活动线程的TEB结构（线程结构）<br>偏移 说明<br>000 指向SEH链指针<br>004 线程堆栈顶部<br>008 线程堆栈底部<br>00C SubSystemTib<br>010 FiberData<br>014 ArbitraryUserPointer<br>018 FS段寄存器在内存中的镜像地址<br>020 进程PID<br>024 线程ID<br>02C 指向线程局部存储指针<br>030 PEB结构地址（进程结构）<br>034 上个错误号</p>
+</blockquote>
+<p>no：</p>
+<p>​    4 SEH安装/删除方法</p>
+<p>​    汇编中安装使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">push @MyHandler ;异常处理程序&#96;&#96;push FS:[0]    ；SEH Linked List头&#96;&#96;mov dword ptr fs:[0],esp ;添加链表</span><br></pre></td></tr></table></figure>
+
+<p>   汇编中的删除SEH代码  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">POP &#96;&#96;DWORD&#96; &#96;PRT FS:[0] ;读取栈值并将其放入FS:[0],这里的栈值存放的下一个SEH的起始地址，执行该命令之后，就可以从栈中删除对应的SEH。&#96;&#96;ADD ESP,4</span><br></pre></td></tr></table></figure>
+
+<p>5 od中的SEH</p>
+<p>   程序在正常运行与调试运行的时候有不同的分支代码，借助SEH实现的反调试及时很多，这为代码的调试带来了很多不便，使调试更加困难。OD提供了很多调试选项，调试中发生异常的时候，调试器不会暂停，会自动将异常派送给被调试者。od中选择options-debugging options-.exception选项卡：灵活使用od的excettion选项，可以在不暂停调试器的前提下自动规避使用SEH的反调试“花招”，从而继续调试。</p>
+<p>如果我们想动态跟踪这个程序，我们按Shift+F9程序就跑飞了</p>
+<p>显示当异常发生之后程序接下来会怎样执行，我们只要在SE句柄前面的数值处下断就可以继续跟踪程序了</p>
+<p>_Handler？？</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/thanklife/article/details/85160840">(11条消息) C++及Windows异常处理（try，catch; __try,__finally; __try, __except）_thanklife的专栏-CSDN博客___try</a></p>
+
       
     </div>
     
@@ -275,13 +322,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a  href="/2021/07/05/Guard/">Guard</a></p>
+        <p><span>本文标题:</span><a  href="/2021/07/07/SEH%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E5%88%86%E6%9E%90/">SEH异常处理分析</a></p>
         <p><span>文章作者:</span><a  href="/" title="访问  的个人博客"></a></p>
-        <p><span>发布时间:</span>2021年07月05日 - 17时02分</p>
-        <p><span>最后更新:</span>2021年07月05日 - 17时02分</p>
+        <p><span>发布时间:</span>2021年07月07日 - 20时26分</p>
+        <p><span>最后更新:</span>2021年07月07日 - 21时31分</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2021/07/05/Guard/" title="Guard">http://example.com/2021/07/05/Guard/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://example.com/2021/07/05/Guard/　　作者: " title=""></span>
+            <span>原始链接:</span><a class="post-url" href="/2021/07/07/SEH%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E5%88%86%E6%9E%90/" title="SEH异常处理分析">http://example.com/2021/07/07/SEH%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E5%88%86%E6%9E%90/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://example.com/2021/07/07/SEH%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E5%88%86%E6%9E%90/　　作者: " title=""></span>
         </p>
         <p>
             <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" title="中国大陆 (CC BY-NC-SA 3.0 CN)" target = "_blank">"署名-非商用-相同方式共享 3.0"</a> 转载请保留原文链接及作者。
@@ -292,18 +339,18 @@
 
 <nav id="article-nav">
   
-    <a  href="/2021/07/05/Trojan-Dropper.Win32.Convagent.gen/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a  href="/2021/07/07/windows%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption"><</strong>
       <div class="article-nav-title">
         
-          (no title)
+          windows异常处理机制
         
       </div>
     </a>
   
   
-    <a  href="/2021/07/05/%E8%84%B1%E5%A3%B3/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">脱壳</div>
+    <a  href="/2021/07/07/APC%E6%B3%A8%E5%85%A5/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">APC注入</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -364,13 +411,13 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a  href="/2021/07/05/Trojan-Dropper.Win32.Convagent.gen/" title="上一篇: ">
+            <a  href="/2021/07/07/windows%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6/" title="上一篇: windows异常处理机制">
                 <i class="fa fa-angle-left"></i>
             </a>
         
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
         
-            <a  href="/2021/07/05/%E8%84%B1%E5%A3%B3/" title="下一篇: 脱壳">
+            <a  href="/2021/07/07/APC%E6%B3%A8%E5%85%A5/" title="下一篇: APC注入">
                 <i class="fa fa-angle-right"></i>
             </a>
         

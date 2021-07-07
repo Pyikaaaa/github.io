@@ -9,13 +9,15 @@
   
   <title>利用异常进行反调试 | Pyikaaaa</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="article">
+  <meta name="description" content="例程概念： 例程的作用类似于函数，但含义更为丰富一些。例程是某个系统对外提供的功能接口或服务的集合。比如操作系统的API、服务等就是例程；Delphi或C++Builder提供的标准函数和库函数等也是例程。我们编写一个DLL的时候，里面的输出函数就是这个DLL的例程。 可以这么简单地来理解：把一段相对独立的代码写成单独的一个模块就是函数的概念。我们可以在自己的程序中编写很多个函数，从而实现模块化编">
+<meta property="og:type" content="article">
 <meta property="og:title" content="利用异常进行反调试">
 <meta property="og:url" content="http://example.com/2021/07/05/%E5%88%A9%E7%94%A8%E5%BC%82%E5%B8%B8%E8%BF%9B%E8%A1%8C%E5%8F%8D%E8%B0%83%E8%AF%95/index.html">
 <meta property="og:site_name" content="Pyikaaaa">
+<meta property="og:description" content="例程概念： 例程的作用类似于函数，但含义更为丰富一些。例程是某个系统对外提供的功能接口或服务的集合。比如操作系统的API、服务等就是例程；Delphi或C++Builder提供的标准函数和库函数等也是例程。我们编写一个DLL的时候，里面的输出函数就是这个DLL的例程。 可以这么简单地来理解：把一段相对独立的代码写成单独的一个模块就是函数的概念。我们可以在自己的程序中编写很多个函数，从而实现模块化编">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-07-05T06:28:41.000Z">
-<meta property="article:modified_time" content="2021-07-05T08:59:01.428Z">
+<meta property="article:modified_time" content="2021-07-07T13:31:37.300Z">
 <meta property="article:author" content="Pyikaaaa">
 <meta property="article:tag" content="RE">
 <meta name="twitter:card" content="summary">
@@ -179,7 +181,7 @@
                 
                 <section class="switch-part switch-part2">
                     <div class="widget tagcloud" id="js-tagcloud">
-                        <a href="/tags/PE/" style="font-size: 10px;">PE</a> <a href="/tags/Pc%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" style="font-size: 15px;">Pc样本分析</a> <a href="/tags/RE/" style="font-size: 20px;">RE</a> <a href="/tags/c/" style="font-size: 10px;">c</a> <a href="/tags/linuxRE/" style="font-size: 10px;">linuxRE</a> <a href="/tags/windows%E5%86%85%E6%A0%B8/" style="font-size: 10px;">windows内核</a> <a href="/tags/%E5%8F%8D%E8%B0%83%E8%AF%95-%E9%80%86%E5%90%91/" style="font-size: 10px;">反调试 逆向</a> <a href="/tags/%E6%83%B3%E6%B3%95/" style="font-size: 10px;">想法</a>
+                        <a href="/tags/PE/" style="font-size: 10px;">PE</a> <a href="/tags/Pc%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" style="font-size: 15px;">Pc样本分析</a> <a href="/tags/RE/" style="font-size: 20px;">RE</a> <a href="/tags/c/" style="font-size: 10px;">c</a> <a href="/tags/linuxRE/" style="font-size: 10px;">linuxRE</a> <a href="/tags/windoes%E5%86%85%E6%A0%B8/" style="font-size: 10px;">windoes内核</a> <a href="/tags/windows%E5%86%85%E6%A0%B8/" style="font-size: 10px;">windows内核</a> <a href="/tags/%E5%8F%8D%E8%B0%83%E8%AF%95-%E9%80%86%E5%90%91/" style="font-size: 10px;">反调试 逆向</a> <a href="/tags/%E6%83%B3%E6%B3%95/" style="font-size: 10px;">想法</a>
                     </div>
                 </section>
                 
@@ -272,7 +274,21 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        
+        <p>例程概念：</p>
+<p>例程的作用类似于函数，但含义更为丰富一些。例程是某个系统对外提供的功能接口或服务的集合。比如操作系统的<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/API/10154">API</a>、服务等就是例程；Delphi或C++Builder提供的<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E6%A0%87%E5%87%86%E5%87%BD%E6%95%B0/7681008">标准函数</a>和<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%BA%93%E5%87%BD%E6%95%B0/3471322">库函数</a>等也是例程。我们编写一个<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/DLL/158044">DLL</a>的时候，里面的输出函数就是这个DLL的例程。</p>
+<p>可以这么简单地来<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E7%90%86%E8%A7%A3">理解</a>：把一段相对独立的代码写成单独的一个模块就是函数的概念。我们可以在自己的程序中编写很多个函数，从而实现模块化编程。但这些模块或者说函数并不一定向外输出（即提供给别的程序使用），只用于当前这个程序里面。此时这些函数就仅仅具有独立函数的意义，但不是例程。</p>
+<p>但如果我们把这些函数编写为DLL动态库的输出函数的话，此时虽然对于编写这个DLL的程序员来讲，仍然可以用函数的概念来理解这些DLL提供的功能，但对于以后调用这个DLL的程序来说，DLL里面提供的输出函数（或者说服务）就是例程了。因此“例程”的基本概念就包含了“例行事务性子程序”的含义，既然是例行的事务子程序，则必然通用性和相对独立性都比较强，所以很适合通过DLL、<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E9%9D%99%E6%80%81%E5%BA%93">静态库</a>（各种编程语言里面的<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%BA%93%E5%87%BD%E6%95%B0">库函数</a>）、API、操作<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E7%B3%BB%E7%BB%9F%E6%9C%8D%E5%8A%A1">系统服务</a>等方式来实现了。</p>
+<h1 id="2种基于异常机制的反调试方法"><a href="#2种基于异常机制的反调试方法" class="headerlink" title="2种基于异常机制的反调试方法"></a>2种基于异常机制的反调试方法</h1><p>利用异常处理例程来进行反跟踪</p>
+<p>SetUnhandledExceptionFilter</p>
+<p> 如题，一种是利用异常处理例程进行反调试:首先安装好一个异常处理例程，然后人为抛出异常在异常处理例程中通过IsDebuggerPresent来判断程序是否被调试；另一种是利用未处理异常进行反跟踪，其原理是：当异常发生时所有异常处理例程都不能处理异常，系统线程异常处理例程将起作用,它调用 ZwQueryInformationProcess 判断是否被调试,<br>如果没有调试并且程序中调用SetUnhandledExceptionFilter安装了最后异常处理例程的话,系统转向对它的调用。</p>
+<pre><code>第一种方法中IsDebuggerPresent是通过返回FS寄存器上记录的地址的一些偏移量来实现的。在debugger中可以任意操作当前进程内存地址上的值，所以只需要用调试器把［［FS:30］:2的值修改成0，IsDebuggerPresent就会返回false，导致判断失败。相比第二种方法中UnhandledExceptionFilter是否调用取决于系统内核的判断。用户态的调试器要想改变这个行为就得颇费功夫了。下面我将依次展示两种反调试方法。
+
+第一种方法，通过在异常处理例程中判断IsDebuggerPresent的返回值:
+</code></pre>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/iBinary/p/7574055.html">常见注入手法第二讲,APC注入 - iBinary - 博客园 (cnblogs.com)</a></p>
+<p><a target="_blank" rel="noopener" href="http://www.cppblog.com/fwxjj/archive/2008/01/25/41914.html">SEH的强大功能之一(转) - 大龙的博客 - C++博客 (cppblog.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_40890756/article/details/89950455">(11条消息) SEH的介绍及实战_For Geek-CSDN博客</a></p>
+
       
     </div>
     
@@ -283,7 +299,7 @@
         <p><span>本文标题:</span><a  href="/2021/07/05/%E5%88%A9%E7%94%A8%E5%BC%82%E5%B8%B8%E8%BF%9B%E8%A1%8C%E5%8F%8D%E8%B0%83%E8%AF%95/">利用异常进行反调试</a></p>
         <p><span>文章作者:</span><a  href="/" title="访问  的个人博客"></a></p>
         <p><span>发布时间:</span>2021年07月05日 - 14时28分</p>
-        <p><span>最后更新:</span>2021年07月05日 - 16时59分</p>
+        <p><span>最后更新:</span>2021年07月07日 - 21时31分</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/2021/07/05/%E5%88%A9%E7%94%A8%E5%BC%82%E5%B8%B8%E8%BF%9B%E8%A1%8C%E5%8F%8D%E8%B0%83%E8%AF%95/" title="利用异常进行反调试">http://example.com/2021/07/05/%E5%88%A9%E7%94%A8%E5%BC%82%E5%B8%B8%E8%BF%9B%E8%A1%8C%E5%8F%8D%E8%B0%83%E8%AF%95/</a>
             <span class="copy-path" data-clipboard-text="原文: http://example.com/2021/07/05/%E5%88%A9%E7%94%A8%E5%BC%82%E5%B8%B8%E8%BF%9B%E8%A1%8C%E5%8F%8D%E8%B0%83%E8%AF%95/　　作者: " title=""></span>
@@ -320,7 +336,7 @@
 
     <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
-    
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#2%E7%A7%8D%E5%9F%BA%E4%BA%8E%E5%BC%82%E5%B8%B8%E6%9C%BA%E5%88%B6%E7%9A%84%E5%8F%8D%E8%B0%83%E8%AF%95%E6%96%B9%E6%B3%95"><span class="toc-number">1.</span> <span class="toc-text">2种基于异常机制的反调试方法</span></a></li></ol>
 </div>
 <style>
     .left-col .switch-btn {
@@ -380,7 +396,7 @@
             </a>
         
     </div>
-    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2021/07/07/APC%E6%9C%BA%E5%88%B6/">APC机制</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/07/05/Trojan-Dropper.Win32.Convagent.gen/">Trojan-Dropper.Win32.Convagent.gen</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/07/05/Guard/">Guard</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/07/05/%E8%84%B1%E5%A3%B3/">脱壳</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/07/05/%E5%88%A9%E7%94%A8%E5%BC%82%E5%B8%B8%E8%BF%9B%E8%A1%8C%E5%8F%8D%E8%B0%83%E8%AF%95/">利用异常进行反调试</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/07/03/%E9%87%8A%E6%94%BE%E5%99%A8%E5%88%86%E6%9E%90/">释放器分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/07/01/PE/pe%E8%B5%84%E6%BA%90%E6%8F%90%E5%8F%96/">pe资源提取</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/30/HOOK/">HOOK</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/25/CVE-2017-11882%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">CVE-2017-11882漏洞复现</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/25/%E8%BF%9B%E7%A8%8B%E9%9A%90%E8%97%8F%E6%8A%80%E6%9C%AF/">进程隐藏技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/23/%E6%B5%B7%E8%8E%B2%E8%8A%B1%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/">海莲花样本分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/11/Thallium%E7%97%85%E6%AF%92%E5%88%86%E6%9E%90/">Thallium病毒分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/06/Globelmposter/">Globelmposter</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/06/%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0linux%E4%B8%8B%E7%9A%84RE/">初步学习linux下的RE</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/06/linux/">linux</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/05/yara%E4%BD%BF%E7%94%A8/">yara使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/04/%E6%83%B3%E6%B3%95/">想法</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/04/%E6%B3%A8%E5%85%A5%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/">注入技术学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/17/MEMZ%E5%88%86%E6%9E%90/">MEMZ分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/13/%E5%8F%8D%E8%B0%83%E8%AF%95/">反调试</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/09/%E7%AE%80%E5%8D%95%E6%80%BB%E7%BB%93%E6%8C%87%E9%92%88/">简单总结指针</a></li></ul>
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2021/07/07/windows%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6/">windows异常处理机制</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/07/07/SEH%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E5%88%86%E6%9E%90/">SEH异常处理分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/07/07/APC%E6%B3%A8%E5%85%A5/">APC注入</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/07/07/APC%E6%9C%BA%E5%88%B6/">APC机制</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/07/05/Trojan-Dropper.Win32.Convagent.gen/">Trojan-Dropper.Win32.Convagent.gen</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/07/05/Guard/">Guard</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/07/05/%E8%84%B1%E5%A3%B3/">脱壳</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/07/05/%E5%88%A9%E7%94%A8%E5%BC%82%E5%B8%B8%E8%BF%9B%E8%A1%8C%E5%8F%8D%E8%B0%83%E8%AF%95/">利用异常进行反调试</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/07/03/%E9%87%8A%E6%94%BE%E5%99%A8%E5%88%86%E6%9E%90/">释放器分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/07/01/PE/pe%E8%B5%84%E6%BA%90%E6%8F%90%E5%8F%96/">pe资源提取</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/30/HOOK/">HOOK</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/25/CVE-2017-11882%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">CVE-2017-11882漏洞复现</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/25/%E8%BF%9B%E7%A8%8B%E9%9A%90%E8%97%8F%E6%8A%80%E6%9C%AF/">进程隐藏技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/23/%E6%B5%B7%E8%8E%B2%E8%8A%B1%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/">海莲花样本分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/11/Thallium%E7%97%85%E6%AF%92%E5%88%86%E6%9E%90/">Thallium病毒分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/06/Globelmposter/">Globelmposter</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/06/%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0linux%E4%B8%8B%E7%9A%84RE/">初步学习linux下的RE</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/06/linux/">linux</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/05/yara%E4%BD%BF%E7%94%A8/">yara使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/04/%E6%83%B3%E6%B3%95/">想法</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/04/%E6%B3%A8%E5%85%A5%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/">注入技术学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/17/MEMZ%E5%88%86%E6%9E%90/">MEMZ分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/13/%E5%8F%8D%E8%B0%83%E8%AF%95/">反调试</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/09/%E7%AE%80%E5%8D%95%E6%80%BB%E7%BB%93%E6%8C%87%E9%92%88/">简单总结指针</a></li></ul>
     
 <script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
 

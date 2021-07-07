@@ -7,16 +7,19 @@
   
   
   
-  <title>Guard | Pyikaaaa</title>
+  <title>APC注入 | Pyikaaaa</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="article">
-<meta property="og:title" content="Guard">
-<meta property="og:url" content="http://example.com/2021/07/05/Guard/index.html">
+  <meta name="description" content="具体的APC机制参考文章《APC机制》 APC注入APC 异步过程调用异步过程调用是一种能在特定线程环境中异步执行的系统机制。 MSDN说,要使用SleepEx,signalObjectAndWait…..等等这些函数才会触发 注入方法的原理:1.当对面程序执行到某一个上面的等待函数的时候,系统会产生一个中断 2.当线程唤醒的时候,这个线程会优先去Apc队列中调用回调函数 3.我们利用QueueU">
+<meta property="og:type" content="article">
+<meta property="og:title" content="APC注入">
+<meta property="og:url" content="http://example.com/2021/07/07/APC%E6%B3%A8%E5%85%A5/index.html">
 <meta property="og:site_name" content="Pyikaaaa">
+<meta property="og:description" content="具体的APC机制参考文章《APC机制》 APC注入APC 异步过程调用异步过程调用是一种能在特定线程环境中异步执行的系统机制。 MSDN说,要使用SleepEx,signalObjectAndWait…..等等这些函数才会触发 注入方法的原理:1.当对面程序执行到某一个上面的等待函数的时候,系统会产生一个中断 2.当线程唤醒的时候,这个线程会优先去Apc队列中调用回调函数 3.我们利用QueueU">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2021-07-05T09:02:12.000Z">
-<meta property="article:modified_time" content="2021-07-05T09:02:12.954Z">
+<meta property="article:published_time" content="2021-07-07T06:47:52.000Z">
+<meta property="article:modified_time" content="2021-07-07T06:56:06.496Z">
 <meta property="article:author" content="Pyikaaaa">
+<meta property="article:tag" content="RE">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="Pyikaaaa" type="application/atom+xml">
@@ -231,11 +234,11 @@
         </header>
     </div>
 </nav>
-      <div class="body-wrap"><article id="patch-Guard" class="article article-type-patch" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-APC注入" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a  href="/2021/07/05/Guard/" class="article-date">
-      <time datetime="2021-07-05T09:02:12.000Z" itemprop="datePublished">2021-07-05</time>
+      <a  href="/2021/07/07/APC%E6%B3%A8%E5%85%A5/" class="article-date">
+      <time datetime="2021-07-07T06:47:52.000Z" itemprop="datePublished">2021-07-07</time>
 </a>
 
     </div>
@@ -249,7 +252,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Guard
+      APC注入
     </h1>
   
 
@@ -260,6 +263,10 @@
         
 
         
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RE/" rel="tag">RE</a></li></ul>
+    </div>
+
         <div class="clearfix"></div>
       </div>
       
@@ -267,7 +274,19 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        
+        <p>具体的APC机制参考文章《APC机制》</p>
+<h1 id="APC注入"><a href="#APC注入" class="headerlink" title="APC注入"></a>APC注入</h1><h3 id="APC-异步过程调用"><a href="#APC-异步过程调用" class="headerlink" title="APC 异步过程调用"></a>APC 异步过程调用</h3><p>异步过程调用是一种能在特定线程环境中异步执行的系统机制。</p>
+<p>MSDN说,要使用SleepEx,signalObjectAndWait…..等等这些函数才会触发</p>
+<h3 id="注入方法的原理"><a href="#注入方法的原理" class="headerlink" title="注入方法的原理:"></a>注入方法的原理:</h3><p>1.当对面程序执行到某一个上面的等待函数的时候,系统会产生一个中断</p>
+<p>2.当线程唤醒的时候,这个线程会优先去Apc队列中调用回调函数</p>
+<p>3.我们利用QueueUserApc,往这个队列中插入一个回调</p>
+<p>4.插入回调的时候,把插入的回调地址改为LoadLibrary,插入的参数我们使用VirtualAllocEx申请内存,并且写入进去，写入的是Dll的路径。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//1.查找窗口</span></span><br><span class="line">  HWND hWnd = ::FindWindow(<span class="literal">NULL</span>, TEXT(<span class="string">&quot;APCTest&quot;</span>));</span><br><span class="line">  <span class="keyword">if</span> (<span class="literal">NULL</span> == hWnd)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">/*2.获得进程的PID,当然通用的则是你把进程PID当做要注入的程序,这样不局限</span></span><br><span class="line"><span class="comment">  于窗口了.这里简单编写,进程PID可以快照遍历获取</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line">  DWORD dwPid = <span class="number">0</span>;</span><br><span class="line">  DWORD dwTid = <span class="number">0</span>;</span><br><span class="line">  dwTid = GetWindowThreadProcessId(hWnd, &amp;dwPid);</span><br><span class="line"></span><br><span class="line">  <span class="comment">//3.打开进程</span></span><br><span class="line">  HANDLE hProcess = <span class="literal">NULL</span>;</span><br><span class="line">  hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, dwPid);</span><br><span class="line">  <span class="keyword">if</span> (<span class="literal">NULL</span> == hProcess)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//4.成功了,申请远程内存</span></span><br><span class="line">  <span class="keyword">void</span> *lpAddr = <span class="literal">NULL</span>;</span><br><span class="line">  lpAddr = VirtualAllocEx(hProcess, <span class="number">0</span>, <span class="number">0x1000</span>, MEM_COMMIT, PAGE_EXECUTE_READWRITE);</span><br><span class="line">  <span class="keyword">if</span> (<span class="literal">NULL</span> == lpAddr)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//5.写入我们的DLL路径,这里我写入当前根目录下的路径</span></span><br><span class="line">  <span class="keyword">char</span> szBuf[] = <span class="string">&quot;MyDll.dll&quot;</span>;</span><br><span class="line">  BOOL bRet = WriteProcessMemory(hProcess, lpAddr, szBuf, <span class="built_in">strlen</span>(szBuf) + <span class="number">1</span>, <span class="literal">NULL</span>);</span><br><span class="line">  <span class="keyword">if</span> (!bRet)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//6.根据线程Tid,打开线程句柄</span></span><br><span class="line">  HANDLE hThread = <span class="literal">NULL</span>;</span><br><span class="line">  hThread = OpenThread(THREAD_ALL_ACCESS, FALSE, dwTid);</span><br><span class="line">  <span class="keyword">if</span> (<span class="literal">NULL</span> == hThread)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//7.给APC队列中插入回调函数</span></span><br><span class="line">  QueueUserAPC((PAPCFUNC)LoadLibraryA, hThread, (ULONG_PTR)lpAddr);</span><br><span class="line"></span><br><span class="line">  CloseHandle(hThread);</span><br><span class="line">  CloseHandle(hProcess);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">DWORD <span class="title">QueueUserAPC</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">PAPCFUNCpfnAPC, <span class="comment">// APC function                 指向一个用户提供的APC函数的指针</span></span></span></span><br><span class="line"><span class="function"><span class="params">HANDLEhThread, <span class="comment">// handle to thread      		指定特定线程的句柄。</span></span></span></span><br><span class="line"><span class="function"><span class="params">ULONG_PTRdwData <span class="comment">// APC function parameter		指定一个被传到pfnAPC参数指向的APC函数的值</span></span></span></span><br><span class="line"><span class="function"><span class="params">)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>PAPCFUNCpfnAPC  ：这个函数将在指定线程执行an alertable wait operation操作时被调用。</p>
+
       
     </div>
     
@@ -275,13 +294,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a  href="/2021/07/05/Guard/">Guard</a></p>
+        <p><span>本文标题:</span><a  href="/2021/07/07/APC%E6%B3%A8%E5%85%A5/">APC注入</a></p>
         <p><span>文章作者:</span><a  href="/" title="访问  的个人博客"></a></p>
-        <p><span>发布时间:</span>2021年07月05日 - 17时02分</p>
-        <p><span>最后更新:</span>2021年07月05日 - 17时02分</p>
+        <p><span>发布时间:</span>2021年07月07日 - 14时47分</p>
+        <p><span>最后更新:</span>2021年07月07日 - 14时56分</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2021/07/05/Guard/" title="Guard">http://example.com/2021/07/05/Guard/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://example.com/2021/07/05/Guard/　　作者: " title=""></span>
+            <span>原始链接:</span><a class="post-url" href="/2021/07/07/APC%E6%B3%A8%E5%85%A5/" title="APC注入">http://example.com/2021/07/07/APC%E6%B3%A8%E5%85%A5/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://example.com/2021/07/07/APC%E6%B3%A8%E5%85%A5/　　作者: " title=""></span>
         </p>
         <p>
             <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" title="中国大陆 (CC BY-NC-SA 3.0 CN)" target = "_blank">"署名-非商用-相同方式共享 3.0"</a> 转载请保留原文链接及作者。
@@ -292,18 +311,18 @@
 
 <nav id="article-nav">
   
-    <a  href="/2021/07/05/Trojan-Dropper.Win32.Convagent.gen/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a  href="/2021/07/07/SEH%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E5%88%86%E6%9E%90/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption"><</strong>
       <div class="article-nav-title">
         
-          (no title)
+          SEH异常处理分析
         
       </div>
     </a>
   
   
-    <a  href="/2021/07/05/%E8%84%B1%E5%A3%B3/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">脱壳</div>
+    <a  href="/2021/07/07/APC%E6%9C%BA%E5%88%B6/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">APC机制</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -315,7 +334,7 @@
 
     <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
-    
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#APC%E6%B3%A8%E5%85%A5"><span class="toc-number">1.</span> <span class="toc-text">APC注入</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#APC-%E5%BC%82%E6%AD%A5%E8%BF%87%E7%A8%8B%E8%B0%83%E7%94%A8"><span class="toc-number">1.0.1.</span> <span class="toc-text">APC 异步过程调用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%A8%E5%85%A5%E6%96%B9%E6%B3%95%E7%9A%84%E5%8E%9F%E7%90%86"><span class="toc-number">1.0.2.</span> <span class="toc-text">注入方法的原理:</span></a></li></ol></li></ol></li></ol>
 </div>
 <style>
     .left-col .switch-btn {
@@ -364,13 +383,13 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a  href="/2021/07/05/Trojan-Dropper.Win32.Convagent.gen/" title="上一篇: ">
+            <a  href="/2021/07/07/SEH%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E5%88%86%E6%9E%90/" title="上一篇: SEH异常处理分析">
                 <i class="fa fa-angle-left"></i>
             </a>
         
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
         
-            <a  href="/2021/07/05/%E8%84%B1%E5%A3%B3/" title="下一篇: 脱壳">
+            <a  href="/2021/07/07/APC%E6%9C%BA%E5%88%B6/" title="下一篇: APC机制">
                 <i class="fa fa-angle-right"></i>
             </a>
         
