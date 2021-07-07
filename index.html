@@ -345,7 +345,7 @@
 <h2 id="内核APC的执行过程"><a href="#内核APC的执行过程" class="headerlink" title="内核APC的执行过程"></a>内核APC的执行过程</h2><p>异步过程调用</p>
 <p>内核APC执行流程总结：</p>
 <p>判断第一个链表(内核APC队列)是否为空<br>判断KTHREAD.ApcState.KernelApcInProgress(是否正在执行内核APC)是否为1<br>判断是否禁用内核APC(KTHREAD.KernelApcDisable是否为1)<br>将当前KAPC结构体从链表中摘除<br>执行KAPC.KernelRoutine指定的函数 释放KAPC结构体占用的空间<br>将KTHREAD.ApcState.KernelApcInProgress设置为1 标识正在执行内核APC<br>执行真正的内核APC函数(KAPC.NormalRoutine)<br>执行完毕 将KernelApcInProgress改为0</p>
-<p>用户APC的执行过程<br>当产生系统调用 中断或者异常，线程在返回用户空间前都会调用_KiServiceExit函数，在_KiServiceExit函数里会判断是否有要执行的用户APC，如果有则调用KiDeliverApc函数进行处理</p>
+<h2 id="用户APC的执行过程"><a href="#用户APC的执行过程" class="headerlink" title="用户APC的执行过程"></a>用户APC的执行过程</h2><p>当产生系统调用 中断或者异常，线程在返回用户空间前都会调用_KiServiceExit函数，在_KiServiceExit函数里会判断是否有要执行的用户APC，如果有则调用KiDeliverApc函数进行处理</p>
 <p>执行用户APC时的堆栈操作<br>处理用户APC要比处理内核APC复杂的多，因为用户APC函数要在用户空间执行，这里涉及到大量的换栈操作：</p>
 <p>当线程从用户层进入内核层时，要保留原来的运行环境，比如各种寄存器 栈的位置等等，然后切换成内核的堆栈，如果正常返回，恢复堆栈环境即可</p>
 <p>但如果有用户APC要执行的话，就意味着线程要提前返回到用户空间去执行，而且返回的位置不是线程进入内核时的位置，而是返回到真正执行APC的位置</p>
