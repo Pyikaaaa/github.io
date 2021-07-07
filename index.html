@@ -179,7 +179,7 @@
                 
                 <section class="switch-part switch-part2">
                     <div class="widget tagcloud" id="js-tagcloud">
-                        <a href="/tags/PE/" style="font-size: 10px;">PE</a> <a href="/tags/Pc%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" style="font-size: 20px;">Pc样本分析</a> <a href="/tags/RE/" style="font-size: 15px;">RE</a> <a href="/tags/c/" style="font-size: 10px;">c</a> <a href="/tags/linuxRE/" style="font-size: 10px;">linuxRE</a> <a href="/tags/%E5%8F%8D%E8%B0%83%E8%AF%95-%E9%80%86%E5%90%91/" style="font-size: 10px;">反调试 逆向</a> <a href="/tags/%E6%83%B3%E6%B3%95/" style="font-size: 10px;">想法</a>
+                        <a href="/tags/PE/" style="font-size: 10px;">PE</a> <a href="/tags/Pc%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" style="font-size: 15px;">Pc样本分析</a> <a href="/tags/RE/" style="font-size: 20px;">RE</a> <a href="/tags/c/" style="font-size: 10px;">c</a> <a href="/tags/linuxRE/" style="font-size: 10px;">linuxRE</a> <a href="/tags/windows%E5%86%85%E6%A0%B8/" style="font-size: 10px;">windows内核</a> <a href="/tags/%E5%8F%8D%E8%B0%83%E8%AF%95-%E9%80%86%E5%90%91/" style="font-size: 10px;">反调试 逆向</a> <a href="/tags/%E6%83%B3%E6%B3%95/" style="font-size: 10px;">想法</a>
                     </div>
                 </section>
                 
@@ -234,6 +234,586 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-APC机制" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2021/07/07/APC%E6%9C%BA%E5%88%B6/" class="article-date">
+      <time datetime="2021-07-07T05:31:32.000Z" itemprop="datePublished">2021-07-07</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a  class="article-title" href="/2021/07/07/APC%E6%9C%BA%E5%88%B6/">APC机制</a>
+    </h1>
+  
+
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h1 id="APC机制"><a href="#APC机制" class="headerlink" title="APC机制"></a>APC机制</h1><p>线程如果想结束，一定是<code>自己执行代码把自己杀死</code>，不存在别人把线程结束的情况。如何改变线程的行为，提供一个函数，让他自己去调用，这个函数就是<code>APC</code>，即异步过程调用，把提供的函数挂在APC队列中。</p>
+<h2 id="APC本质"><a href="#APC本质" class="headerlink" title="APC本质"></a>APC本质</h2><h3 id="基本信息"><a href="#基本信息" class="headerlink" title="基本信息"></a>基本信息</h3><h4 id="线程结构体："><a href="#线程结构体：" class="headerlink" title="线程结构体："></a>线程结构体：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">kd&gt; dt _KTHREAD</span><br><span class="line">ntdll!_KTHREAD</span><br><span class="line">+0x040 ApcState         : _KAPC_STATE  &#x2F;&#x2F;子结构体ApcState.即APC队列</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">kd&gt; dt _KAPC_STATE</span><br><span class="line">nt!_KAPC_STATE</span><br><span class="line">   +0x000 ApcListHead			&#x2F;&#x2F;2个APC队列（双向链表） 用户APC队列和内核APC队列 ，队列存储的都是APC函数 </span><br><span class="line">   +0x010 Process				&#x2F;&#x2F;线程所属进程或者所挂靠的进程 如果没有挂靠指向的地址与ethread 220成员threadprocess 指向地址相同</span><br><span class="line">   +0x014 KernelApcInProgress	&#x2F;&#x2F;内核APC是否正在执行</span><br><span class="line">   +0x015 KernelApcPending		&#x2F;&#x2F;是否有正在等待执行的内核APC函数 存在置为1</span><br><span class="line">   +0x016 UserApcPending		&#x2F;&#x2F;是否有正在等待执行的用户APC函数  存在置为1</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p> ApcListHead 两个双向链表组成 16个字节</p>
+<p>改变线程执行流程，把给定的函数挂载到链表中，在某个时刻，当前线程会检查当前的函数列表，当里面有函数的时候，就会去调用。</p>
+<h4 id="APC结构："><a href="#APC结构：" class="headerlink" title="APC结构："></a>APC结构：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">kd&gt; dt _KAPC</span><br><span class="line">ntdll!_KAPC</span><br><span class="line">   +0x000 Type             : UChar </span><br><span class="line">   +0x001 SpareByte0       : UChar</span><br><span class="line">   +0x002 Size             : UChar</span><br><span class="line">   +0x003 SpareByte1       : UChar</span><br><span class="line">   +0x004 SpareLong0       : Uint4B</span><br><span class="line">   +0x008 Thread           : Ptr32 _KTHREAD</span><br><span class="line">   +0x00c ApcListEntry     : _LIST_ENTRY</span><br><span class="line">   +0x014 KernelRoutine    : Ptr32     void </span><br><span class="line">   +0x018 RundownRoutine   : Ptr32     void </span><br><span class="line">   +0x01c NormalRoutine    : Ptr32     void    指向我所提供的APC函数（想执行的函数），并不完全等APC函数的地址。</span><br><span class="line">   +0x020 NormalContext    : Ptr32 Void</span><br><span class="line">   +0x024 SystemArgument1  : Ptr32 Void</span><br><span class="line">   +0x028 SystemArgument2  : Ptr32 Void</span><br><span class="line">   +0x02c ApcStateIndex    : Char</span><br><span class="line">   +0x02d ApcMode          : Char</span><br><span class="line">   +0x02e Inserted         : UChar</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="通过NormalRoutine成员找到我所提供的APC函数-指向apc函数）"><a href="#通过NormalRoutine成员找到我所提供的APC函数-指向apc函数）" class="headerlink" title="通过NormalRoutine成员找到我所提供的APC函数   (指向apc函数）"></a>通过NormalRoutine成员找到我所提供的APC函数   (指向apc函数）</h4><p>总结：如果我们想要改变一个线程，可以先提供一个APC，然后通过 <code>_KAPC.NormalRoutine</code> 指向我们提供的APC在哪里，再将APC存到 <code>_KTHREAD.ApcState.ApcListHead</code> 的第一个成员中</p>
+<h4 id="当前的线程什么时候会执行所提供的APC函数"><a href="#当前的线程什么时候会执行所提供的APC函数" class="headerlink" title="当前的线程什么时候会执行所提供的APC函数"></a>当前的线程什么时候会执行所提供的APC函数</h4><p>发生系统调用 异常或中断返回用户空间的时候</p>
+<p>执行函数KiServiceExit（检查是否有apc请求，有则KiDeliverApc处理—&gt;改变线程流程）</p>
+<h3 id="APC相关函数"><a href="#APC相关函数" class="headerlink" title="APC相关函数"></a>APC相关函数</h3><h4 id="KiServiceExit"><a href="#KiServiceExit" class="headerlink" title="KiServiceExit"></a>KiServiceExit</h4><p>这个函数是系统调用 异常或中断返回用户空间的必经之路</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">KiServiceExit()</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">cmp [ kthread.apcstate.userapcpending] 0 ;检查是否有用户apc请求。。。。。不判断有无内核apc请求，有内核apc请求先处理内核的（KiDeliveApc处理），处理完了处理用户的</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img-blog.csdnimg.cn/20191219104508974.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxOTg4NDQ4,size_16,color_FFFFFF,t_70" alt="img"></p>
+<h4 id="KiDeliveApc"><a href="#KiDeliveApc" class="headerlink" title="KiDeliveApc"></a>KiDeliveApc</h4><p>负责执行，处理 APC函数</p>
+<h2 id="备用APC队列"><a href="#备用APC队列" class="headerlink" title="备用APC队列"></a>备用APC队列</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">kd&gt; dt _KTHREAD</span><br><span class="line">ntdll!_KTHREAD</span><br><span class="line">+0x040 ApcState         : _KAPC_STATE</span><br><span class="line">+0x170 SavedApcState    : _KAPC_STATE 备用APC队列</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>_KAPC_STATE     _KAPC_STATE     这两个成员的结构是完全一样的</p>
+<h3 id="ApcState的含义"><a href="#ApcState的含义" class="headerlink" title="ApcState的含义"></a>ApcState的含义</h3><p>线程队列中的APC函数都是与进程相关联的，具体点说：A进程的T线程中所有的APC函数，要访问的内存地址都是A进程的。</p>
+<p>但线程是可以挂靠到其他的进程：比如A进程的线程T，通过修改CR3（   CR3是页目录基址寄存器，保存页目录表的物理地址，页目录表总是放在以4K字节为单位的存储器边界上，因此，它的地址的低12位总为0，不起作用，即使写上内容，也不会被理会。）改为B进程的页目录基址，就可以访问B进程的地址空间，即所谓的进程挂靠。</p>
+<p>当T线程挂靠B进程后，APC队列中存储的仍然是原来的APC。具体点说，比如某个<code>APC函数</code>要读取地址为0x12345678的数据，如果此时进行读取<strong>，读到的将是B进程的地址空间，</strong>这样逻辑就错误了。</p>
+<p>为了避免混乱，在T线程挂靠B进程时，会将ApcState中的值（apc队列）暂时存储到SavedApcState中，等回到原进程A时，再将APC队列恢复</p>
+<p>所以，SavedApcState又称为备用APC队列</p>
+<h3 id="挂靠环境下ApcState的意义"><a href="#挂靠环境下ApcState的意义" class="headerlink" title="挂靠环境下ApcState的意义"></a>挂靠环境下ApcState的意义</h3><p>在挂靠的环境下，也是可以先线程APC队列插入APC的  此时插入进ApcState队列。</p>
+<p>A进程的T线程挂靠B进程  A是T的所属进程  B是T的挂靠进程<br>ApcState        B进程相关的APC函数<br>SavedApcState    A进程相关的APC函数</p>
+<h3 id="进程挂靠"><a href="#进程挂靠" class="headerlink" title="进程挂靠"></a>进程挂靠</h3><p>创建一个傀儡进程。 DirectoryTableBase里面存的就页目录表基址。想读哪个进程，就把傀儡进程的DirectoryTableBase改成哪个进程的的。再用标准api读傀儡进程内存，很安全的，杀软还不报</p>
+<h3 id="ApcStatePointer"><a href="#ApcStatePointer" class="headerlink" title="ApcStatePointer"></a>ApcStatePointer</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">kd&gt; dt _KTHREAD</span><br><span class="line">ntdll!_KTHREAD</span><br><span class="line">+0x040 ApcState         : _KAPC_STATE</span><br><span class="line">+0x0b8 ApcQueueable     : Pos 5, 1 Bit &#x2F;&#x2F;用于表示是否可以向线程的APC队列中插入APC</span><br><span class="line">+0x134 ApcStateIndex    : UChar &#x2F;&#x2F;0 正常状态 1 挂靠状态 2当前环境 3 插入apc时的当前环境</span><br><span class="line">+0x168 ApcStatePointer  : [2] Ptr32 _KAPC_STATE  ！！&#x2F;&#x2F;两种情况下指向apc队列（apcstate savedapcstate）</span><br><span class="line">+0x170 SavedApcState    : _KAPC_STATE 备用APC队列 与acpstate一样的结构</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>为了操作方便（找到apc队列方便），KTHREAD结构体中定义了一个指针数组ApcStatePointer，长度为2</p>
+<p>正常情况下：</p>
+<blockquote>
+<p> ApcStatePointer[0]指向ApcState</p>
+<p> ApcStatePointer[1]指向SavedApcState</p>
+</blockquote>
+<p>挂靠情况下：</p>
+<blockquote>
+<p> ApcStatePointer[0]指向SavedApcState</p>
+<p> ApcStatePointer[1]指向ApcState</p>
+</blockquote>
+<h3 id="ApcStateIndex"><a href="#ApcStateIndex" class="headerlink" title="ApcStateIndex"></a>ApcStateIndex</h3><p>ApcStateIndex用来标识当前线程处于什么状态：0正常状态 1挂靠状态</p>
+<h3 id="ApcStatePointer与ApcStateIndex组合寻址-（寻址方便）"><a href="#ApcStatePointer与ApcStateIndex组合寻址-（寻址方便）" class="headerlink" title="ApcStatePointer与ApcStateIndex组合寻址 （寻址方便）"></a>ApcStatePointer与ApcStateIndex组合寻址 （寻址方便）</h3><p>正常情况下，向ApcState队列插入APC时：</p>
+<blockquote>
+<p> ApcStatePointer[0]指向ApcState，此时ApcStateIndex的值为0</p>
+<p> ApcStatePointer[ApcStateIndex]指向ApcState</p>
+</blockquote>
+<p>挂靠情况下，向ApcState队列中插入APC时：</p>
+<blockquote>
+<p> ApcStatePointer[1]指向ApcState，此时ApcStateIndex的值为1</p>
+<p> ApcStatePointer[ApcStateIndex]指向ApcState</p>
+</blockquote>
+<p><strong>无论什么环境下，ApcStatePointer[ApcStateIndex]指向的都是ApcState，ApcState则总是表示线程当前使用的APC状态</strong></p>
+<h3 id="ApcQueueable"><a href="#ApcQueueable" class="headerlink" title="ApcQueueable"></a>ApcQueueable</h3><p>用于表示是否可以向线程的APC队列中插入APC。</p>
+<p>当线程正在执行退出的代码时，会将这个值设置为0，如果此时执行插入APC的代码，在插入函数中会判断这个值的状态，如果为0，则插入失败。</p>
+<h2 id="APC挂入过程"><a href="#APC挂入过程" class="headerlink" title="APC挂入过程"></a>APC挂入过程</h2><h3 id="KAPC结构"><a href="#KAPC结构" class="headerlink" title="KAPC结构"></a>KAPC结构</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">kd&gt; dt _KAPC</span><br><span class="line">nt!_KAPC</span><br><span class="line">   +0x000 Type		&#x2F;&#x2F;类型  APC类型为0x12</span><br><span class="line">   +0x002 Size		&#x2F;&#x2F;本结构体的大小  0x30</span><br><span class="line">   +0x004 Spare0    	&#x2F;&#x2F;未发现被使用                             </span><br><span class="line">   +0x008 Thread 		&#x2F;&#x2F;属于哪个线程                                  </span><br><span class="line">   +0x00c ApcListEntry	&#x2F;&#x2F;APC队列挂的位置 双向链表 ，KiInsertQueueApc函数将 将KAPC挂到对应的队列中（挂到KAPC的成员ApcListEntry指向处）</span><br><span class="line">   +0x014 KernelRoutine	&#x2F;&#x2F;指向一个函数(调用ExFreePoolWithTag 释放APC)</span><br><span class="line">   +0x018 RundownRoutine&#x2F;&#x2F;略 </span><br><span class="line">   +0x01c NormalRoutine	&#x2F;&#x2F;用户APC ：用户APC 总入口  或者 内核apc ：真正的内核apc函数 ！！</span><br><span class="line">   +0x020 NormalContext	&#x2F;&#x2F;内核APC：NULL  用户APC：真正的APC函数 ！！</span><br><span class="line">   +0x024 SystemArgument1&#x2F;&#x2F;APC函数的参数	</span><br><span class="line">   +0x028 SystemArgument2&#x2F;&#x2F;APC函数的参数</span><br><span class="line">   +0x02c ApcStateIndex	&#x2F;&#x2F;APC函数挂哪个队列，有四个值：0 1 2 3</span><br><span class="line">   +0x02d ApcMode	&#x2F;&#x2F;当前的APC是用户APC还是内核APC</span><br><span class="line">   +0x02e Inserted	&#x2F;&#x2F;当前的KAPC结构体是否已经插入到APC队列 挂入前：0  挂入后  1</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Type ：类型。在Windows里，任何一种内核对象都有一个编号，这个编号用来标识你是属于哪一种类型，APC本身也是一种内核对象，它也有一个编号，是0x12</li>
+<li>Thread：每一个线程都有自己的APC队列，这个成员指定了APC属于哪一个线程</li>
+<li>ApcListEntry：APC队列挂的位置，是一个双向链表，通过这个双向链表可以找到下一个APC</li>
+<li>NormalRoutine：如果当前是内核APC，通过这个值找到的就是真正的内核APC函数；如果当前的APC是用户APC，那么这个位置指向的是用户APC总入口，通过这个总入口可以找到所有用户提供的APC函数<br>NormalContext：如果当前是内核APC，通过这个值为空；如果当前的APC是用户APC，那么这个值指向的是真正的用户APC函数</li>
+</ul>
+<h3 id="挂入过程"><a href="#挂入过程" class="headerlink" title="挂入过程"></a>挂入过程</h3><p>[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-G9mKCBcJ-1625635962417)(C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210706195310593.png)]</p>
+<h3 id="KeInitializeApc"><a href="#KeInitializeApc" class="headerlink" title="KeInitializeApc"></a>KeInitializeApc</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">VOID KeInitializeApc</span><br><span class="line">(</span><br><span class="line">	IN PKAPC Apc,&#x2F;&#x2F;KAPC指针</span><br><span class="line">	IN PKTHREAD Thread,&#x2F;&#x2F;目标线程</span><br><span class="line">	IN KAPC_ENVIRONMENT TargetEnvironment,&#x2F;&#x2F;0 1 2 3四种状态</span><br><span class="line">	IN PKKERNEL_ROUTINE KernelRoutine,&#x2F;&#x2F;销毁KAPC的函数地址</span><br><span class="line">	IN PKRUNDOWN_ROUTINE RundownRoutine OPTIONAL,</span><br><span class="line">	IN PKNORMAL_ROUTINE NormalRoutine,&#x2F;&#x2F;用户APC总入口或者内核apc函数</span><br><span class="line">	IN KPROCESSOR_MODE Mode,&#x2F;&#x2F;要插入用户apc队列还是内核apc队列</span><br><span class="line">	IN PVOID Context&#x2F;&#x2F;内核APC：NULL  用户APC：真正的APC函数</span><br><span class="line">) </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-P17R77Ph-1625635962418)(C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210706201058231.png)]</p>
+<h3 id="ApcStateIndex-1"><a href="#ApcStateIndex-1" class="headerlink" title="ApcStateIndex"></a>ApcStateIndex</h3><p>与KTHREAD(+0x134)的属性同名，但含义不一样：</p>
+<p>ApcStateIndex有四个值：</p>
+<p>0 原始环境-&gt;插入到当前线程的所属进程APC队列，不管是否挂靠都插入到当前线程的所属进程。<br>1 挂靠环境<br>2 当前环境-&gt;插入到<code>当前进程</code>的APC队列，如果没有挂靠，当前进程则是父进程，如果挂靠了，当前进程就是挂靠进程</p>
+<p>初始化时的值</p>
+<p>3 <code>插入APC时的</code>当前环境-&gt;<code>线程随时处于切换状态</code> 当值为3时，在插入APC之前会判断当前线程是否处于挂靠状态 再进行APC插入<br>插入时的值</p>
+<h3 id="KiInsertQueueApc"><a href="#KiInsertQueueApc" class="headerlink" title="KiInsertQueueApc"></a>KiInsertQueueApc</h3><ol>
+<li>根据KAPC结构中的ApcStateIndex找到对应的APC队列</li>
+<li>再根据KAPC结构中的ApcMode确定是用户队列还是内核队列</li>
+<li>将KAPC挂到对应的队列中，挂到KAPC的==ApcListEntry==处 ？？？？？？  </li>
+<li>再根据KAPC结构中的Inserted置1，标识当前的KAPC为已插入状态</li>
+<li>修改KAPC_STATE结构中的KernelApcPending/UserApcPending</li>
+</ol>
+<h2 id="内核APC的执行过程"><a href="#内核APC的执行过程" class="headerlink" title="内核APC的执行过程"></a>内核APC的执行过程</h2><p>异步过程调用</p>
+<p>内核APC执行流程总结：</p>
+<p>判断第一个链表(内核APC队列)是否为空<br>判断KTHREAD.ApcState.KernelApcInProgress(是否正在执行内核APC)是否为1<br>判断是否禁用内核APC(KTHREAD.KernelApcDisable是否为1)<br>将当前KAPC结构体从链表中摘除<br>执行KAPC.KernelRoutine指定的函数 释放KAPC结构体占用的空间<br>将KTHREAD.ApcState.KernelApcInProgress设置为1 标识正在执行内核APC<br>执行真正的内核APC函数(KAPC.NormalRoutine)<br>执行完毕 将KernelApcInProgress改为0</p>
+<p>用户APC的执行过程<br>当产生系统调用 中断或者异常，线程在返回用户空间前都会调用_KiServiceExit函数，在_KiServiceExit函数里会判断是否有要执行的用户APC，如果有则调用KiDeliverApc函数进行处理</p>
+<p>执行用户APC时的堆栈操作<br>处理用户APC要比处理内核APC复杂的多，因为用户APC函数要在用户空间执行，这里涉及到大量的换栈操作：</p>
+<p>当线程从用户层进入内核层时，要保留原来的运行环境，比如各种寄存器 栈的位置等等，然后切换成内核的堆栈，如果正常返回，恢复堆栈环境即可</p>
+<p>但如果有用户APC要执行的话，就意味着线程要提前返回到用户空间去执行，而且返回的位置不是线程进入内核时的位置，而是返回到真正执行APC的位置</p>
+<p>每处理一个用户APC就会涉及到：内核—&gt;用户空间—&gt;再回到内核空间</p>
+<p>执行用户APC最为关键的就是理解堆栈操作的细节</p>
+<p>用户APC执行流程总结：</p>
+<p>判断用户APC链表是否为空<br>判断第一个参数是为1，为1说明处理用户APC和内核APC<br>判断ApcState.UserApcPending(是否正在执行用户APC)是否为1<br>将ApcState.UserApcPending设置为0，表示正在处理用户APC<br>链表操作 将当前APC从用户队列中拆除<br>调用函数(KAPC.KernelRoutine)释放KAPC结构体内存空间<br>调用KiInitializeUserApc函数</p>
+<p>KiInitializeUserApc函数分析：备份CONTEXT<br>线程进0环时，原来的运行环境(寄存器栈顶等)保存到_Trap_Frame结构体中，如果要提前返回3环去处理用户APC，就必须修改_Trap_Frame结构体,因为此时Trap_Frame中存储的EIP是从三环进零环时保存的EIP，而不是用户APC函数的地址</p>
+<p>比如：进0环时的位置存储在EIP中，现在要提前返回，而且返回的并不是原来的位置，那就意味着必须要修改EIP为新的返回位置，还有堆栈ESP也要修改为处理APC需要的堆栈。那原来的值怎么办？处理完APC后该如何返回原来的位置呢？</p>
+<p>KiInitializeUserApc要做的第一件事就是备份：</p>
+<p>将原来_Trap_Frame的值备份到一个新的结构体中(CONTEXT)，这个功能由其子函数KeContextFromKframes来完成</p>
+<p>[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-boWvAAVS-1625635962420)(C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210707133006329.png)]</p>
+<p><strong>总结：</strong></p>
+<ol>
+<li>段寄存器 SS DS FS GS</li>
+<li>修改EFLAGS寄存器</li>
+<li>修改ESP</li>
+<li>修改EIP-&gt;ntdll.KiUserApcDispatcher</li>
+</ol>
+<h3 id="ntdll-KiUserApcDispatcher函数分析"><a href="#ntdll-KiUserApcDispatcher函数分析" class="headerlink" title="ntdll.KiUserApcDispatcher函数分析"></a>ntdll.KiUserApcDispatcher函数分析</h3><ol>
+<li>返回内核，如果还有用户APC，重复上面的执行过程<br>后该如何返回原来的位置呢？</li>
+</ol>
+<p>KiInitializeUserApc要做的第一件事就是备份：</p>
+<p>将原来_Trap_Frame的值备份到一个新的结构体中(CONTEXT)，这个功能由其子函数KeContextFromKframes来完成</p>
+<p>[外链图片转存中…(img-boWvAAVS-1625635962420)]</p>
+<p><strong>总结：</strong></p>
+<ol>
+<li>段寄存器 SS DS FS GS</li>
+<li>修改EFLAGS寄存器</li>
+<li>修改ESP</li>
+<li>修改EIP-&gt;ntdll.KiUserApcDispatcher</li>
+</ol>
+<h3 id="ntdll-KiUserApcDispatcher函数分析-1"><a href="#ntdll-KiUserApcDispatcher函数分析-1" class="headerlink" title="ntdll.KiUserApcDispatcher函数分析"></a>ntdll.KiUserApcDispatcher函数分析</h3><ol>
+<li>返回内核，如果还有用户APC，重复上面的执行过程</li>
+<li>如果没有需要执行的用户APC，会将CONTEXT赋值给Trap_Frame结构体，回到0环</li>
+</ol>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/windows%E5%86%85%E6%A0%B8/" rel="tag">windows内核</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Trojan-Dropper.Win32.Convagent.gen" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2021/07/05/Trojan-Dropper.Win32.Convagent.gen/" class="article-date">
+      <time datetime="2021-07-05T14:03:45.440Z" itemprop="datePublished">2021-07-05</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h1 id="Trojan-Dropper-Win32-Convagent-gen"><a href="#Trojan-Dropper-Win32-Convagent-gen" class="headerlink" title="Trojan-Dropper.Win32.Convagent.gen"></a>Trojan-Dropper.Win32.Convagent.gen</h1><p>Trojan-Dropper.Win32.Convagent.gen家族：先再缓冲区读取释放⽂件的数据，将数据进行解密，解密函数40B5b0，最后创建⽂件，写⼊⽂件。</p>
+<hr>
+<h2 id="51f4e1aca8ece1a28c375ef06c94a60d分析"><a href="#51f4e1aca8ece1a28c375ef06c94a60d分析" class="headerlink" title="51f4e1aca8ece1a28c375ef06c94a60d分析"></a>51f4e1aca8ece1a28c375ef06c94a60d分析</h2><h3 id="基础信息"><a href="#基础信息" class="headerlink" title="基础信息"></a>基础信息</h3><p><img src="https://i.imgur.com/xkT8m6H.png"></p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="patch-Guard" class="article article-type-patch" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2021/07/05/Guard/" class="article-date">
+      <time datetime="2021-07-05T09:02:12.000Z" itemprop="datePublished">2021-07-05</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a  class="article-title" href="/2021/07/05/Guard/">Guard</a>
+    </h1>
+  
+
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-脱壳" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2021/07/05/%E8%84%B1%E5%A3%B3/" class="article-date">
+      <time datetime="2021-07-05T06:37:06.000Z" itemprop="datePublished">2021-07-05</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a  class="article-title" href="/2021/07/05/%E8%84%B1%E5%A3%B3/">脱壳</a>
+    </h1>
+  
+
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h3 id="脱壳"><a href="#脱壳" class="headerlink" title="脱壳"></a>脱壳</h3><h4 id="1-概述："><a href="#1-概述：" class="headerlink" title="1.概述："></a>1.概述：</h4><p>1.壳：</p>
+<p>一：加壳的目的：为了隐藏程序真正的OEP（入口点），防止被破解。</p>
+<p>二：加壳软件是一种在编译好可执行文件之后，为了一些特定的需求，而做的一些事情，常见需求有：</p>
+<p>​        有一些版权信息需要保护起来，不想让别人随便改动</p>
+<p>​        为了让程序小一点，从而方便使用（把可执行文件进行压缩使用）</p>
+<p>​        给木马等软件加壳以避免杀毒软件</p>
+<p>三：壳的加载过程：</p>
+<p>​    一般壳的装载过程：</p>
+<p>​            （1）获取壳所需要使用的API地址<br>加壳后的文件，比未加壳的文件的输入表所引入的API少（甚至只有Kernel32.dll以及GetProcAddress这个API函数）；壳实际上还需要其他API函数来完成一些事情，它为了隐藏这些API，一般只在壳的代码中用显式链接的方式来动态加载这些API</p>
+<p>​            （2）解密原程序的各个区块（Section）的数据<br>壳一般是按区块加密的，那么解密的时候也是按区块解密，并且把解密的区块数据按照区块的定义放在合适的内存位置；如果加壳时用到了压缩技术，那么在解密之前，需要用对应的解压缩技术。</p>
+<p>​            （3）重定位</p>
+<p>​            （4）HOOK-API<br>程序文件中的输入表的作用：让Windows系统在程序运行时提供API的实际地址给程序使用，这个是在程序的第一行代码执行之前，由Windows系统完成的操作。<br>而壳一般是修改了原程序文件的输入表，然后仿照Windows系统的工作来填充输入表中的相关数据，在填充过程中，外壳就可填充HOOK-API的代码地址，从而可以间接获得程序的控制权。</p>
+<p>​            （5）跳转到程序原入口点<br>这个时候，壳把控制权交还给原程序</p>
+<p>[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-LrESqGdT-1625549563239)(C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210204180643199.png)]</p>
+<p>2.什么是脱壳</p>
+<p>找到程序真正的入口点（OEP）</p>
+<h4 id="3-分类："><a href="#3-分类：" class="headerlink" title="3.分类："></a>3.分类：</h4><p>简单分为两类  压缩壳  加密壳</p>
+<p>压缩壳只是减少程序体积对资源进行压缩，加密壳是程序输入表等等进行加密保护</p>
+<p>[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-Fjfs4YOc-1625549563243)(C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210204172527304.png)]</p>
+<h4 id="4-脱壳工具"><a href="#4-脱壳工具" class="headerlink" title="4.脱壳工具"></a>4.脱壳工具</h4><p>OD   找OEP 利用插件dump也可脱壳</p>
+<p> PEID/Exeinfope..   查壳</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/0e8937b957f4a76897a9845ae697f9ad.png"></p>
+<p>ImportREC  修复的</p>
+<p>LordPE  脱壳的   win10 用不了  </p>
+<p>无法找到进程</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/ce84b24c452bc70903f70a5af679d672.png"></p>
+<p>方法：右击相应的进程, 修复镜像大小, 完整转存.</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/1e6cdab46ee5f0ade906607cf344c58f.png"></p>
+<p>脱壳机也行</p>
+<h4 id="5-预备知识："><a href="#5-预备知识：" class="headerlink" title="5.预备知识："></a>5.预备知识：</h4><p>1.PUSHAD （压栈） 代表程序的入口点,</p>
+<p>●把从EAX到EDI寄存器压入堆栈，保存现场（原来的值）</p>
+<p>2.POPAD （出栈） 代表程序的出口点，与PUSHAD想对应，一般找到这个OEP就在附近<br>3.OEP：程序的入口点，软件加壳就是隐藏了OEP（或者用了假的OEP/FOEP），只要我们找到程序真正的OEP，就可以立刻脱壳。</p>
+<h4 id="6-步骤"><a href="#6-步骤" class="headerlink" title="6.步骤"></a>6.步骤</h4><h5 id="1-识别壳"><a href="#1-识别壳" class="headerlink" title="1.识别壳"></a>1.识别壳</h5><p>1.查壳工具</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/ae2a7ab8e70eb9a30b7d0b2250e003d5.png"></p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/c6c99e4676ca8999a2ff38c7a21779e4.png"></p>
+<p>目的：知道壳的版本和编译程序的语言和编译器</p>
+<p>2.通过入口特征和区段特征来识别</p>
+<p>连接器版本</p>
+<p>区段</p>
+<p>壳的版本</p>
+<p>结合OD看入口点特征 ，需要积累 多看</p>
+<p>常见入口点特征：</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/w_g3366/article/details/94595881">https://blog.csdn.net/w_g3366/article/details/94595881</a></p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/7f0584d2060a14bb49cdeffddd2e192a.png"></p>
+<p>判断是什么语言写的 可以查看区段和入口特征:</p>
+<p>(1)VC6特点：入口点代码是固定的代码，入口调用的API也是相同的，其中有的push地址不同程序可能不同；区段有四个也是固定的.text、.rdata、.data和.rsrc。</p>
+<p>(2)VS特点：入口点只有两行代码，一个CALL后直接JMP，第一个CALL进去后调用的API也是相同的；区段相对于VC6多了一个.reloc。</p>
+<p>(3)易语言独立编译是调用VC的链接程序编译的，所以从区段和入口代码特征和VC相同</p>
+<p>(4)非独立编译比较容易识别，入口特征和模块特征都有krnln.fnr</p>
+<p><strong>入口特征</strong>可以通过<a target="_blank" rel="noopener" href="http://www.52pojie.cn/thread-14986-1-1.html">OllyDBG</a>载入获得，载入后可以按一下“Ctrl+A”，让OD分析一下代码，就可以把入口点一些特征字符串分析出来，对于Shielden、Safengine、VProtect这类加壳程序都可以使用这种方法判断出来。</p>
+<h5 id="2-寻找oep"><a href="#2-寻找oep" class="headerlink" title="2.寻找oep"></a>2.寻找oep</h5><h5 id="3-dump"><a href="#3-dump" class="headerlink" title="3.dump"></a>3.dump</h5><h5 id="4-修复文件"><a href="#4-修复文件" class="headerlink" title="4.修复文件"></a>4.修复文件</h5><h5 id="5-其他"><a href="#5-其他" class="headerlink" title="5.其他"></a>5.其他</h5><p>importREC自动修复失败 手动修复IAT</p>
+<h4 id="7-方法相关知识："><a href="#7-方法相关知识：" class="headerlink" title="7.方法相关知识："></a>7.方法相关知识：</h4><h5 id="（1）ESP定律法："><a href="#（1）ESP定律法：" class="headerlink" title="（1）ESP定律法："></a>（1）ESP定律法：</h5><p><strong>堆栈平衡</strong></p>
+<p>壳代码就像一个函数，进入时会开辟堆栈，保存寄存器环境，退出时会恢复堆栈，恢复寄存器。所以是堆栈平衡</p>
+<p>所以 在壳代码操作了堆栈后对堆栈设置硬件访问断点，然后运行程序，当断点命中的时候，就是退出壳代码的时候</p>
+<p>在其附近单步几次。就可以到达程序原始的OEP</p>
+<p>❤ 第一次回到初始空栈状态就可以找到我们的OEP</p>
+<p>●断点：运行到这个地方就zanting</p>
+<p>●访问断点再次访问这个地方 就停</p>
+<p><strong>！！注意！！</strong></p>
+<p>普通软件断点用于代码段，硬件断点可以用于内存，堆栈上</p>
+<h5 id="（2）内存镜像法："><a href="#（2）内存镜像法：" class="headerlink" title="（2）内存镜像法："></a>（2）内存镜像法：</h5><p>内存镜像法下的内存访问断点</p>
+<p>内存断点一般分为 内存访问断点  内存写入断点</p>
+<p>内存访问断点：当代码读取内存的数据的时候程序暂停</p>
+<p>内存写入断点：当代码向内存中写入数据的时候程序暂停</p>
+<p>❤总结：</p>
+<p>第一次内存访问断点：为了让前面的部分先解码</p>
+<p>第二次内存访问断点：为了让后面部分也解码完成，同时在访问代码段的时候，很可能会直接断在OEP处</p>
+<h4 id="8-脱壳方法："><a href="#8-脱壳方法：" class="headerlink" title="8.脱壳方法："></a>8.脱壳方法：</h4><h5 id="方法一：单步跟踪法"><a href="#方法一：单步跟踪法" class="headerlink" title="方法一：单步跟踪法"></a>方法一：单步跟踪法</h5><p>1.用OD载入，点“不分析代码！”<br>2.单步向下跟踪F8，实现向下的跳。也就是说向上的跳不让其实现！（通过F4）<br>3.遇到程序往回跳的（包括循环），我们在下一句代码处按F4（或者右健单击代码，选择断点——&gt;运行到所选）<br>4.绿色线条表示跳转没实现，不用理会，红色线条表示跳转已经实现！</p>
+<p>●如果让程序向上跳转，则可能程序往反方向跳转，无休无止，也就找不到OEP）</p>
+<p>5.如果刚载入程序，在附近就有一个CALL的，我们就F7跟进去，不然程序很容易跑飞，这样很快就能到程序的OEP<br>6.在跟踪的时候，如果运行到某个CALL程序就运行的，就在这个CALL中F7进入<br>7.一般有很大的跳转（大跨段），比如 jmp XXXXXX 或者 JE XXXXXX 或者有RETN的一般很快就会到程序的OEP。<br> PS:在有些壳无法向下跟踪的时候，我们可以在附近找到没有实现的大跳转，右键–&gt;“跟随”,然后F2下断，Shift+F9运行停在“跟随”的位置，再取消断点，继续F8单步跟踪。一般情况下可以轻松到达OEP！</p>
+<p>❤ OD 不能在nop处下断点</p>
+<h5 id="方法二：ESP定律法"><a href="#方法二：ESP定律法" class="headerlink" title="方法二：ESP定律法"></a>方法二：ESP定律法</h5><p> ESP定理脱壳（ESP在OD的寄存器中，我们只要在命令行下ESP的硬件访问断点，就会一下来到程序的OEP了！）<br>1.开始就点F8，注意观察OD右上角的寄存器中ESP有没突现（变成红色）。<br>（这只是一般情况下，更确切的说我们选择的ESP值是关键句之后的第一个ESP值）<br>2.在命令行下：dd XXXXXXXX(指在当前代码中的ESP地址，或者是hr XXXXXXXX)，按回车！<br>3.选中下断的地址，断点—&gt;硬件访问断点&gt;WORD断点。<br>4.按一下F9运行程序，直接来到了跳转处，按下F8，到达程序OEP。</p>
+<h5 id="方法三：内存镜像法"><a href="#方法三：内存镜像法" class="headerlink" title="方法三：内存镜像法"></a>方法三：内存镜像法</h5><p>1：用OD打开软件！<br>2：点击选项——调试选项——异常，把里面的忽略全部√上！CTRL+F2重载下程序！<br>3：按ALT+M,打开内存镜象，找到程序的第一个.rsrc.按F2下断点，然后按SHIFT+F9运行到断点，接着再按ALT+M,打开内存镜象，找到程序的第一个.rsrc.上面的.CODE（也就是00401000处），按F2下断点！然后按SHIFT+F9（或者是在没异常情况下按F9），直接到达程序OEP！</p>
+<h5 id="方法四：一步到达OEP"><a href="#方法四：一步到达OEP" class="headerlink" title="方法四：一步到达OEP"></a>方法四：一步到达OEP</h5><p>1.开始按Ctrl+F,输入：popad（只适合少数壳，包括UPX，ASPACK壳），然后按下F2，F9运行到此处<br>2.来到大跳转处，点下F8，到达OEP！</p>
+<h5 id="方法五：最后一次异常法"><a href="#方法五：最后一次异常法" class="headerlink" title="方法五：最后一次异常法"></a>方法五：最后一次异常法</h5><p>1：用OD打开软件<br>2：点击选项——调试选项——异常，把里面的√全部去掉！CTRL+F2重载下程序<br>3：一开始程序就是一个跳转，在这里我们按SHIFT+F9，直到程序运行，记下从开始按SHIFT+F9到程序运行的次数m！<br>4：CTRL+F2重载程序，按SHIFT+F9（这次按的次数为程序运行的次数m-1次）<br>5：在OD的右下角我们看见有一个”SE 句柄”，这时我们按CTRL+G，输入SE 句柄前的地址！<br>6：按F2下断点！然后按SHIFT+F9来到断点处！<br>7：去掉断点，按F8慢慢向下走！<br>8：到达程序的OEP！</p>
+<p>❤ 这是总结出来的一种捷径. </p>
+<p> 原理就是. 最后一次异常之后就正常运行了. 这个正常运行必须是真正的OEP. 所以最后一次异常是最靠近的</p>
+<h5 id="方法六：模拟跟踪法"><a href="#方法六：模拟跟踪法" class="headerlink" title="方法六：模拟跟踪法"></a>方法六：模拟跟踪法</h5><p>1：先试运行，跟踪一下程序，看有没有SEH暗桩之类<br>2：ALT+M打开内存镜像，找到（包含=SFX,imports,relocations）<br>内存镜像，项目 30<br>地址=0054B000<br>大小=00002000 (8192.)<br>Owner=check 00400000<br>区段=.aspack<br>包含=SFX,imports,relocations<br>类型=Imag 01001002<br>访问=R<br>初始访问=RWE<br>3：地址为0054B000，如是我们在命令行输入tc eip&lt;0054B000,回车，正在跟踪ing。。<br>PS:大家在使用这个方法的时候，要理解他是要在怎么样的情况下才可以使用</p>
+<h5 id="方法七：“SFX”法"><a href="#方法七：“SFX”法" class="headerlink" title="方法七：“SFX”法"></a>方法七：“SFX”法</h5><p>1：设置OD，忽略所有异常，也就是说异常选项卡里面都打上勾<br>2：切换到SFX选项卡，<strong>选择“字节模式跟踪实际入口（速度非常慢）</strong>”，确定。<br>3：重载程序（如果跳出是否“压缩代码？”选择“否”，OD直接到达OEP）<br>ps:这种方法不要滥用得好，锻炼能力为妙。</p>
+<p> 这里最常用的ESP定律法(堆栈平衡原理)，为什么说是ESP呢，当所有的寄存器都压入栈时(pushad)，esp地址的是指向栈顶的地址的，当壳将执行权交给源程序时，esp地址要回到pushad之前的状态，这时就可以看到esp变化了，这就是源程序的入口点。（汇编，汇编，汇编！）</p>
+<p>SFX:od程序自带的调试功能，用来寻找相应的OEP</p>
+<p>使用注意：SFX使用的范围是当程序载入OD之后，入口点必须是代码段之外才可以使用</p>
+<p>总结：</p>
+<h4 id="9-例子"><a href="#9-例子" class="headerlink" title="9.例子"></a>9.例子</h4><p>upx壳</p>
+<blockquote>
+<p>upx的工作原理其实是这样的：首先将程序压缩。<br>所谓的压缩包括两方面：<br>一方面在程序的开头或者其他合适的地方 插入一段代码。<br>另一方面是将程序的其他地方做压缩（也就是上面讲到的压缩）。压缩也可以叫做加密，因为压缩后的程序比较难看懂，原来的代码有很大的不同。</p>
+<p>当程序执行时：实时的对程序解压缩。解压缩功能是在第一步时插入的代码完成的功能。</p>
+<p>联起来就是：upx可以完成代码的压缩和实时解压执行。且不会影响程序的执行效率。</p>
+</blockquote>
+<p>用upx压缩之后形式为：1–&gt;2–&gt;3–&gt;4–&gt;5–&gt;6 </p>
+<p>最初代码的形式就应该是：7–&gt;8–&gt;9–&gt;5–&gt;6</p>
+<p>执行时的形式变为：1–&gt;7–&gt;8–&gt;9–&gt;5–&gt;6  </p>
+<p>● 1是upx插入的代码</p>
+<p>●内存镜像法： </p>
+<p>○需要读取2 3 4内存空间的代码，这个就会存在内存访问，然后把2 3 4 解压出来，就会有内存写入</p>
+<p>○把2 看作代码段  3 看做数据段 4 看做资源段 </p>
+<p>○假设解码的顺序是按照2 3 4进行</p>
+<p>，<strong>第一个内存访问断点</strong>，下在4 资源段处</p>
+<p>当程序断下来的时候，说明代码段2和数据段3都解码完成了</p>
+<p>1 7 8 4 5 6</p>
+<p>○<strong>第二个内存访问断点</strong> ，下在解压完成的代码段</p>
+<p>为啥：第二次断下来的时候，4肯定解码完成了，这时候就完成了所有解码，</p>
+<p>1 7 8 9 5 6</p>
+<p>接下来就是找OEP了，OEP在代码段7中的代码中，所以我们下的是代码段的访问断点，达到OEP就会访问代码段，所以就可以找到OEP进而完成脱壳</p>
+<blockquote>
+<p>手脱upx方法：</p>
+<p>1.单步跟踪</p>
+<p>2.一步到达（利用popad）</p>
+<p>3.esp定律</p>
+<p>4.内存镜像法</p>
+</blockquote>
+<h4 id="10-dump"><a href="#10-dump" class="headerlink" title="10.dump"></a>10.dump</h4><p>利用od自带的插件ollydump完成脱壳</p>
+<h4 id="11-修复文件"><a href="#11-修复文件" class="headerlink" title="11.修复文件"></a>11.修复文件</h4><p>用importREC修复导入表</p>
+<p>前提（已经找到OEP）</p>
+<p>1、脱壳在当前进程,如脱壳出来的程序不能运行，提示无法定位程序输入点，需要使用<br>importREC修复导入表。<br>2、打开importREC，选正ollydbg正在调试的进程，填入正确的OEP,点ITA AutoSearch，<br>如oep正确将得到正确提示，点GetImport，得到正确的导入表。点Fix Dump，选择脱壳<br>出来的保存文件，Done!（修正后的程序为原程序名后加一下划线，原程序不会被修改。） </p>
+<h4 id="12-emmm"><a href="#12-emmm" class="headerlink" title="12.emmm"></a>12.emmm</h4><p>如果直接Dump文件，修复导入表会发现程序仍然不能正常运行，那么他就不是一个单纯的压缩壳，壳中加密技术一般有IAT加密，混淆花指令，偷取OEP,反调试，代码虚拟化</p>
+<p>importREC自动修复失败 手动修复IAT：</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/5315hejialei/p/7060315.html">https://www.cnblogs.com/5315hejialei/p/7060315.html</a></p>
+<p>原理：</p>
+<p>程序的IAT是连续的排列的，所以我们只需要找到IAT的起始位置和末位置，就可以确定IAT的地址和大小。在压缩壳中，我们只要找一个调用系统的API的Call的地址，然后在数据窗口中查找，确定IAT起始和结束地址。然后在OD中手动修复</p>
+<h4 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h4><p><img src="https://img-blog.csdnimg.cn/2020112721264018.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80Mzc4MTEzOQ==,size_16,color_FFFFFF,t_70" alt="img"></p>
+<p>手脱各种壳：</p>
+<p>手脱 <strong>UPX 壳</strong>的捷径</p>
+<p>1、直接ESP定律</p>
+<p>2、用我们已开始提到的”关键提示“。</p>
+<p> 具体操作：OD载入程序后，直接Ctrl+F，输入 POPAD ;</p>
+<p>点确定后 来到这个命令所在的位置。按F2，在这个地方下断；</p>
+<p>再按F9（运行）；</p>
+<p>停止后，按F2取消刚才下的断点。再F8单步！</p>
+<p>手脱 <strong>ASPCK</strong> 的壳</p>
+<p>脱这个壳用ESP定律，还是相对快捷的。</p>
+<p>可以用载入程序后，第二行（是一个CALL）那里面的ESP。 //多数程序这个壳的第二行都是一个CALL 在左OD左下角的命令行中，输入命令：hr ESP地址（如 hr 0012FFA4）；</p>
+<p>F9 运行。</p>
+<p>然后从OD”调试菜单“中的”硬件断点“<strong>这一项将刚才下的断点删除</strong>，这点很重要！最后F8单步！</p>
+<p>用内存镜像法手脱FSG 1.33 和 PCshrink 的壳</p>
+<p>1、忽略所有异常 </p>
+<p>2、Alt+M 打开内存镜像，找到第一个 ”.rsrc“ </p>
+<p>3、F2（下断），F9（运行） </p>
+<p>4、Alt+M 打开内存镜像，找到”Code“段；</p>
+<p> 5、F2（下断），Shift+F9【这点一定要记住，切记是 Shift+F9】运行；</p>
+<p> 6、先按F8，再按下F4，直接到达OEP</p>
+<p>PEpack 1.0 和 WinUpack 0.37-0.39 和 RLPack v.1.14-16</p>
+<p>用esp定律</p>
+<p>手脱 JDpack 壳</p>
+<p>脱这个壳推荐使用内存镜像法 。</p>
+<p>手脱 PEDiminisher ；Dxpack 0.86 ；</p>
+<p>32lite 0.03a ；PEtite 2.2 这几种壳的简单方法</p>
+<p>脱PEDiminisher ；Dxpack 0.86 ；</p>
+<p>这两种壳的时候，直接用之前讲到的ESP定律，即可完美脱壳。命令：【hr ESP地址】</p>
+<p><strong>用ESP脱 32lite 0.03a 后 要注意的是，需要用 ImportREC 这个工具进行修复。</strong>如：00410D50 在输入框中输入 10D50 就可以了【004舍去】</p>
+<p><strong>在用ESP定律脱 PEtite 2.2 的时候，推荐选择 Pushad 下面那行地址中的 ESP</strong></p>
+<p>手脱 Exestealth 2.72 的壳</p>
+<p>看到这或许会沉迷与ESP定律当中，在这里提醒大家：<strong>Exestealth 2.72 的壳 用我们一开始提到的”懒方法脱壳“是最简单的；</strong></p>
+<hr>
+<p>手脱nspack（北斗）1.3 的壳</p>
+<p>1、ESP定律，命令：hr ESP地址 【脱壳后程序不能正常运行】 </p>
+<p>2、用 ImportREC 这个工具进行修复，修复后程序正常运行。</p>
+<p><strong>另类方法脱 ASPack 2.12R 壳的技巧</strong></p>
+<p>Ctrl+S 搜索：retn 0C【retn和零C 中间有个空格】 找到后向下看，如下：</p>
+<p>retn 0C  push 0 //在 retn 0C 的下面  retn //在这个地方按 F2（下断） ；</p>
+<p>F9（运行）</p>
+<p>停止后按 一下 F8（单步）；</p>
+<p>再按一下 F7（跟进） 观看这看不懂？没关系，要是我，我也看不懂，所以我早有准备；</p>
+<p>详细步骤，如下（这是某程序的一部分）：</p>
+<p>程序中断后来到这里：   0046B3B8 C2 oc00 retn 0C //开始F8（单步）</p>
+<p>  0046B3B9 68 64584500 push registra.00455864 //这里调用来自 00455864 （OEP）  0046B3C0 C3 retn //F7(跟进) 步入到OEP</p>
+<p><strong>注意</strong>：<strong>这种壳</strong>ESP<strong>不能直接脱</strong>。</p>
+<p>脱FSG v2.0技巧</p>
+<p>用od打开之后找到一个三跳转的地方，就是一个判断跳转语句跳过了一个jmp，用F4走到jmp的位置，单步就可以找到oep的位置，用lordpe转存之后在修复的时候还有个坑，fsg会在输入表的地方加一些无用的干扰，所以要手工定位，找到一个API，用d 地址的命令找到输入表开始的地方减去基址为rva，在判断一下大小，最后把无效函数去掉，在修复转存文件就可以了。</p>
+<p>手脱PECompact 2.x</p>
+<p>这个壳一般先给eax赋值然后压栈，那么一定会访问eax，所以我们运行到push eax下面，然后给eax里的地址下一个访问断点，接着不断地f9，会有一个jmp大跳转，单步跟过去就是oep</p>
+<p>手脱KBys Packer</p>
+<p>od载入，先走几步F8，发现了PUSHAD，这就可以用ESP了，再ESP下断点，F9一步，走到oep附近，F8，发现一个jmp大跳转，跟过去就是熟悉的入口指令，这就是oep了</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RE/" rel="tag">RE</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-利用异常进行反调试" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2021/07/05/%E5%88%A9%E7%94%A8%E5%BC%82%E5%B8%B8%E8%BF%9B%E8%A1%8C%E5%8F%8D%E8%B0%83%E8%AF%95/" class="article-date">
+      <time datetime="2021-07-05T06:28:41.000Z" itemprop="datePublished">2021-07-05</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a  class="article-title" href="/2021/07/05/%E5%88%A9%E7%94%A8%E5%BC%82%E5%B8%B8%E8%BF%9B%E8%A1%8C%E5%8F%8D%E8%B0%83%E8%AF%95/">利用异常进行反调试</a>
+    </h1>
+  
+
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RE/" rel="tag">RE</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+
+  
     <article id="post-释放器分析" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -263,8 +843,7 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h1 id="Trojan-Dropper-Win32-Delf-eimp-分析报告"><a href="#Trojan-Dropper-Win32-Delf-eimp-分析报告" class="headerlink" title="Trojan-Dropper.Win32.Delf.eimp 分析报告"></a>Trojan-Dropper.Win32.Delf.eimp 分析报告</h1><p>Trojan-Dropper.Win32.Delf.eimp类总结：释放器释放的文件没有进行加密等操作直接存在原始文件的pe数据段中，编写代码对这类样本释放的文件直接提取</p>
-<h3 id="822f943bfb27abc5f1acd66bd76ea46b分析过程："><a href="#822f943bfb27abc5f1acd66bd76ea46b分析过程：" class="headerlink" title="822f943bfb27abc5f1acd66bd76ea46b分析过程："></a>822f943bfb27abc5f1acd66bd76ea46b分析过程：</h3><p>vt分析：</p>
+        <h1 id="释放器类样本-分析报告"><a href="#释放器类样本-分析报告" class="headerlink" title="释放器类样本 分析报告"></a>释放器类样本 分析报告</h1><h3 id="822f943bfb27abc5f1acd66bd76ea46b分析过程："><a href="#822f943bfb27abc5f1acd66bd76ea46b分析过程：" class="headerlink" title="822f943bfb27abc5f1acd66bd76ea46b分析过程："></a>822f943bfb27abc5f1acd66bd76ea46b分析过程：</h3><p>vt分析：</p>
 <p><img src="https://i.imgur.com/okQTi3r.png"></p>
 <p><img src="https://i.imgur.com/eX3dwZ7.png"></p>
 <p>释放文件</p>
@@ -599,7 +1178,7 @@
 <p>　　信息进行修改，将隐藏的进程信息从中去掉再返回。因此只要是通过调用ZwQuerySystemInformation来检索</p>
 <p>　　系统进程的，获取到的数据均是被篡改的，自然获取不到隐藏进程的信息，这样，指定进程就被隐藏起来了。</p>
 <p><a target="_blank" rel="noopener" href="http://www.bubuko.com/infodetail-3532998.html">HOOK函数ZwQuerySystemInformation实现进程隐藏-布布扣-bubuko.com</a></p>
-<h1 id="进程内存替换"><a href="#进程内存替换" class="headerlink" title="进程内存替换"></a>进程内存替换</h1><p>==也是傀儡进程注入==</p>
+<h1 id="傀儡进程注入"><a href="#傀儡进程注入" class="headerlink" title="傀儡进程注入"></a>傀儡进程注入</h1><p>==也是进程内存替换==</p>
 <p>之前分析的病毒 使用傀儡进程注入(进程内存替换)达到进程隐藏的目的 ，傀儡进程是将目标进程的映射文件替换为指定的映射文件,替换后的进程称之为傀儡进程;常常有恶意程序将隐藏在自己文件内的恶意代码加载进目标进程,而在加载进目标进程之前，会利用ZwUnmpViewOfSection或者NtUnmapViewOfSection进行相关设置</p>
 <blockquote>
 <p>流程概述：</p>
@@ -670,622 +1249,9 @@
 
 
   
-    <article id="post-海莲花样本分析" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a  href="/2021/05/23/%E6%B5%B7%E8%8E%B2%E8%8A%B1%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" class="article-date">
-      <time datetime="2021-05-23T07:14:37.000Z" itemprop="datePublished">2021-05-23</time>
-</a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a  class="article-title" href="/2021/05/23/%E6%B5%B7%E8%8E%B2%E8%8A%B1%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/">海莲花样本分析</a>
-    </h1>
-  
-
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <p>环境：win10  offic2003 </p>
-<p>工具：ida  od windbg </p>
-<p><strong>MD5：</strong>e5c766ad580b5bc5f74acc8d2f5dd028c11495d2ce503de7c7a294f94583849d</p>
-<p>病毒触发样本是一个含有CVE-2017-11882 漏洞的word诱导文档文件，（下一篇为复现文章：栈溢出）</p>
-<p>用office2003 sp3  打开文档   </p>
-<p><img src="https://i.imgur.com/C6GWj7P.png"></p>
-<p>被defender拦截 ， 查看内容，在C:\Users\lenovo\AppData\Roaming\Microsoft-Windows-DiskDiagnosticResolver_2021325962 目录下 有三个文件 ，均是 文档释放的</p>
-<p><img src="https://i.imgur.com/qXfIs4z.png"></p>
-<p>病毒触发样本是一个含有CVE-2017-11882 漏洞的word诱导文档文件，在用符合该CVE漏洞版本的office打开该诱导文档后，诱导文件会触发该CVE漏洞执行一段shellcode从诱导文件的二进制资源段中释MicrosoftWindowsDiskDiagnosticResolver.exe、OUTLFLTR.DAT、rastls.dll 3个文件</p>
-<p>MicrosoftWindowsDiskDiagnosticResolver.exe 是 有微软签名的白文件</p>
-<p><img src="https://i.imgur.com/vnJ990b.png"></p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Pc%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" rel="tag">Pc样本分析</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Thallium病毒分析" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a  href="/2021/05/11/Thallium%E7%97%85%E6%AF%92%E5%88%86%E6%9E%90/" class="article-date">
-      <time datetime="2021-05-11T07:13:56.000Z" itemprop="datePublished">2021-05-11</time>
-</a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a  class="article-title" href="/2021/05/11/Thallium%E7%97%85%E6%AF%92%E5%88%86%E6%9E%90/">Thallium病毒分析</a>
-    </h1>
-  
-
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h1 id="分析过程"><a href="#分析过程" class="headerlink" title="分析过程"></a>分析过程</h1><p>样本类型：doc</p>
-<p>样本利用方式：宏代码利用</p>
-<p><img src="https://i.imgur.com/ghxLpqB.png"></p>
-<p>原始病毒样本是通过 宏代码 利用  然后远程连接c2服务器  进行下载.so文件  </p>
-<p>把通过c2 服务器下载的 payload 后缀名改为.exe</p>
-<p>直接分析.exe 文件  后续的payload文件</p>
-<p>下载的TEMP.so为exe文件，md5为： f160c057fded2c01bfdb65bb7aa9dfcc    </p>
-<p>行为分析：用process monitor 监测 payload的行为 ，设置过滤器  重命名为 tt.exe </p>
-<p>可以看到一些对文件的操作 ， 还有注册表之类的</p>
-<p>主要行为：</p>
-<p>在c：programdata \a7963 下  拷贝自身过去</p>
-<p><img src="https://i.imgur.com/NUzQiPo.png"></p>
-<p><img src="https://i.imgur.com/vysRksB.png"></p>
-<p>无壳 </p>
-<p>分析过程：</p>
-<p>1.查了资料后  知道这是 MFC的程序 ，看代码的特征，确实是MFC独有的</p>
-<p>2.行为分析的时候（检测行为时）也可以感受到 在运行之后  有个明显的时间差  才有弹窗</p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210511210004487.png" alt="image-20210511210004487"></p>
-<p>大循环   造成延迟的主要原因</p>
-<p>0x0BAADBEEF —-&gt;   3131948783 </p>
-<p>VirtualProtect：</p>
-<p><img src="https://i.imgur.com/88Oz8Cu.png"></p>
-<p>0x40 : 启用对已提交页区域的执行、读和写访问  </p>
-<p><strong>循环结束之后，先用VirtualProtect函数更改0x422548到0x42A548的内存属性为0x40，也就是可读可写可执行，</strong></p>
-<p>之后调用401670 函数，函数不能反汇编出来，直接看汇编代码</p>
-<p><img src="https://i.imgur.com/yuMSb4U.png"></p>
-<p><img src="https://i.imgur.com/WuRgdAB.png"></p>
-<p><img src="https://i.imgur.com/CR5idIG.png"></p>
-<p><img src="https://i.imgur.com/gHrciG0.png"></p>
-<p>加载有效地址（load effective address）指令就是lea,他的指令形式就是从内存读取数据到寄存器，但是实际上他没有引用内存，而是将有效地址写入到目的的操作数</p>
-<p><img src="https://i.imgur.com/eunlYQg.png"></p>
-<p>在4012A2 处下断点，之后f8   查看407068处的汇编  发现内容已经改变</p>
-<p><img src="https://i.imgur.com/tvwUVHd.png"></p>
-<p><img src="https://i.imgur.com/4bg5fS3.png"></p>
-<p>前：</p>
-<p><img src="https://i.imgur.com/G6wIcJg.png"></p>
-<p>后：</p>
-<p><img src="https://i.imgur.com/8t69XTI.png"></p>
-<p>一步步跟一下 看看解密后的内容都干了什么</p>
-<p><img src="https://i.imgur.com/cKFZ6FZ.png"></p>
-<p>当执行 00427115 的指令时  发现很大的延迟 。回车跟进 004255c8 函数  看一下内容：</p>
-<p><img src="https://i.imgur.com/KPvrYJI.png"></p>
-<p>熟悉的大循环</p>
-<p>返回上级函数，接着向下跟，观察寄存器的值的变化，</p>
-<p><img src="https://i.imgur.com/CDoypKT.png"></p>
-<p>出现字符串</p>
-<p><img src="https://i.imgur.com/kRS26EG.png"></p>
-<p>疑似解密  具体不清楚干啥 接着跟</p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210513201316844.png" alt="image-20210513201316844"></p>
-<p>运行到这的时候  弹出cmd窗口，速度太快 截不到图</p>
-<p>跟进函数 004236A8内部 ： 一步步简单跟一下 </p>
-<p>00423827处    重新创建自身进程</p>
-<p><img src="https://i.imgur.com/jIB0CqP.png"></p>
-<p>0042442A处 创建傀儡进程</p>
-<p><img src="https://i.imgur.com/HHWluCv.png"></p>
-<p>424475</p>
-<p><img src="https://i.imgur.com/iIdBhdd.png"></p>
-<p>通过ZwResumeThread恢复目标进程执行</p>
-<p><img src="https://i.imgur.com/pkTklUH.png"></p>
-<h1 id="找解密的文件存在哪了："><a href="#找解密的文件存在哪了：" class="headerlink" title="找解密的文件存在哪了："></a>找解密的文件存在哪了：</h1><p>出现字符串  之后单步跟 ，找到解密的文件</p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210522124544312.png" alt="image-20210522124544312"></p>
-<p>另一种找 解密的  注入的傀儡进程pe   的方法</p>
-<p>调用ZwResumeThread、ZwSetContexThread这一系列的函数进行傀儡进程注入的时候，注意观察参数和右边的寄存器窗口，会有注入的目标PE的内存地址</p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210522132401605.png" alt="image-20210522132401605"></p>
-<p>（ resumethread()将新的指令指针指向添加的代码并恢复线程执行：之后执行注入的部分）</p>
-<p>从resumethread  中  一步步  单步跟   之后rent到  4271f3  处   看eax处  跟随到数据窗口  就是 注入的pe</p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210522132650820.png" alt="image-20210522132650820"></p>
-<p>压栈 eax值   pe的首地址</p>
-<p><strong>重新调试 先看解密后的地址  再跟resumethread后 的地址   发现pe存的地址相同</strong></p>
-<h1 id="dump解密文件，分析："><a href="#dump解密文件，分析：" class="headerlink" title="dump解密文件，分析："></a>dump解密文件，分析：</h1><p>使用od  dump下来的格式不是pe文件格式使</p>
-<p>使用x32dbg dump   pe文件</p>
-<p>选中pe文件，右键二进制编辑，复制</p>
-<p><img src="https://i.imgur.com/KuPAdii.png"></p>
-<p>使用winhex保存文件 okokook.exe  （编辑，剪贴板数据，写入，ascii-hex）</p>
-<p><img src="https://i.imgur.com/dyh65kA.png"></p>
-<h1 id="IDA对后续okokook-exe进行分析"><a href="#IDA对后续okokook-exe进行分析" class="headerlink" title="IDA对后续okokook.exe进行分析"></a>IDA对后续okokook.exe进行分析</h1><p>程序中的字符串均已加密，程序定义了一个字符串a7963b909152f8ebc3ec69b1dee2b255a9678a5用于动态解密其他字符串</p>
-<p><img src="https://i.imgur.com/rKZOo7C.png"></p>
-<p><img src="https://i.imgur.com/buhrJWJ.png"></p>
-<p><img src="https://i.imgur.com/r3GH5iK.png"></p>
-<p>分析401040函数</p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210703174403466.png" alt="image-20210703174403466"></p>
-<p>4014D0函数大量使用解密函数，动调看解密出什么</p>
-<p><img src="https://i.imgur.com/AWTZXlx.png"></p>
-<p><img src="https://i.imgur.com/CocrIaE.png"></p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210703165034256.png" alt="image-20210703165034256"></p>
-<p>程序会调用这个解密函数解密出一系列杀软文件名并判断是否存在这些杀软文件名。。。。。同理  动调出剩下的杀软名</p>
-<p><img src="https://i.imgur.com/Y1TdMPP.png"></p>
-<p>接着动调该函数401040</p>
-<p>得到创建的文件目录</p>
-<p><img src="https://i.imgur.com/SmXTjF0.png"></p>
-<p>接下来 ，创建进程</p>
-<p><img src="https://i.imgur.com/DvuAwh6.png">ht</p>
-<p><img src="https://i.imgur.com/3SJTTck.png"></p>
-<p>cmd指令执行注册表行为，添加自启动项</p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210703175852824.png" alt="image-20210703175852824"></p>
-<p>发现ip地址，访问不了。</p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210703173824489.png" alt="image-20210703173824489"></p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210703174137500.png" alt="image-20210703174137500"></p>
-<p>后面是解密id  版本号 等信息</p>
-<p>最终获得的请求信息</p>
-<p><img src="https://i.imgur.com/J0TqD3K.png"></p>
-<p>gethostbyname  获取目标主机地址</p>
-<p><img src="https://i.imgur.com/hm2zUN8.png"></p>
-<p><img src="https://i.imgur.com/o15Mfn7.png"></p>
-<p><img src="https://i.imgur.com/7ELhilY.png"></p>
-<p>通过post的方式将数据send到目标ip</p>
-<p>之后就是永真循环</p>
-<p><img src="https://i.imgur.com/9XewwaF.png"></p>
-<p>应该是等待服务器返回后续操作命令，但是服务器连接不上，后续行为无法继续分析。</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Pc%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" rel="tag">Pc样本分析</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Globelmposter" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a  href="/2021/05/06/Globelmposter/" class="article-date">
-      <time datetime="2021-05-06T12:46:10.000Z" itemprop="datePublished">2021-05-06</time>
-</a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a  class="article-title" href="/2021/05/06/Globelmposter/">Globelmposter</a>
-    </h1>
-  
-
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h1 id="GlobeImposter病毒分析报告"><a href="#GlobeImposter病毒分析报告" class="headerlink" title="GlobeImposter病毒分析报告"></a>GlobeImposter病毒分析报告</h1><h2 id="0x00-基础信息"><a href="#0x00-基础信息" class="headerlink" title="0x00 基础信息"></a>0x00 基础信息</h2><p>病毒背景：</p>
-<p>这个勒索病毒关键在于加密文件</p>
-<p>运行环境：win10 </p>
-<p>一个勒索病毒  去微步下个样本回来</p>
-<p><img src="https://i.imgur.com/bwqXvfZ.png"></p>
-<h2 id="0x01-简单分析"><a href="#0x01-简单分析" class="headerlink" title="0x01 简单分析"></a>0x01 简单分析</h2><p>1.DIE查壳  无壳</p>
-<p>图：</p>
-<p>2.</p>
-<p>图：</p>
-<p><img src="https://i.imgur.com/IVzxN61.png"></p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210422211436355.png" alt="image-20210422211436355"></p>
-<p>很多很多  </p>
-<p>大概都是  创建文件 注册表相关的</p>
-<p>3.简单运行：</p>
-<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210506204728059.png"></p>
-<p><img src="https://i.imgur.com/7LuaP33.png"></p>
-<p><img src="https://i.imgur.com/oDczpqb.png"></p>
-<p><img src="https://i.imgur.com/Si7nMhr.png"></p>
-<p>发现后缀名.Snake4444   </p>
-<p>HOW_TO_BACK_FILES.txt</p>
-<p>E9………..文件</p>
-<p>根据提示消息  发现  E9.。。。。。文件的 后部分内容就是personal  id </p>
-<h2 id="0x02-进一步分析"><a href="#0x02-进一步分析" class="headerlink" title="0x02 进一步分析"></a>0x02 进一步分析</h2><p>start函数—&gt; 跟进函数 sub_409C6B—–&gt;</p>
-<p><img src="https://i.imgur.com/QzVrwfl.png"></p>
-<p><img src="https://i.imgur.com/O0vpeLR.png"></p>
-<p>跟进sub_408B19 函数  以下是加密解密相关的  </p>
-<p>学了AES RSA  继续分析后</p>
-<h3 id="sub-408B19-函数"><a href="#sub-408B19-函数" class="headerlink" title="sub_408B19 函数"></a>sub_408B19 函数</h3><p>结论：用AES内置的密钥解密出内置的RSA公钥</p>
-<p>分析：</p>
-<p><img src="https://i.imgur.com/PyeniKD.png"></p>
-<h3 id="sub-4088F4函数"><a href="#sub-4088F4函数" class="headerlink" title="sub_4088F4函数"></a>sub_4088F4函数</h3><p>结论：计算解密出来的RSA公钥的SHA256</p>
-<p>分析：</p>
-<p><img src="https://i.imgur.com/lf3vN2U.png"></p>
-<h3 id="下一步分析"><a href="#下一步分析" class="headerlink" title="下一步分析"></a>下一步分析</h3><p><img src="https://i.imgur.com/v26COZU.png"></p>
-<p>可以看到GetModuleFileNameW 函数：获取当前程序运行的路径  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GetModuleFileNameW </span><br><span class="line">参数：第一个参数为句柄（NULL则指向当前程序本身）。第二个参数用于存放地址的指针，第三个参数，系统自带的宏定义  不用管。</span><br></pre></td></tr></table></figure>
-
-<p>接着调用两次sub_408B19函数（AES解密函数）：传入RSA公钥的SAH256值作为AES的密钥</p>
-<p>第一次调用：</p>
-<p><img src="https://i.imgur.com/guOM2ne.png"></p>
-<p>动调发现解密出.Snake4444 ，经过简单运行观察到，这是被加密文件的后缀名</p>
-<p><img src="https://i.imgur.com/ZbeEg1P.png"></p>
-<p>第二次调用：</p>
-<p>动调发现解密出HOW_TO_BACK_FILES.txt</p>
-<p><img src="https://i.imgur.com/WlvuWJJ.png"></p>
-<h3 id="sub-409ABF函数"><a href="#sub-409ABF函数" class="headerlink" title="sub_409ABF函数"></a>sub_409ABF函数</h3><p>结论：解密函数  内部有408B19 函数  还是一个 AES解密函数</p>
-<p>分析： </p>
-<p>第一次调用：</p>
-<p>还看到下面有关于逗号的操作，不重要，不重点分析</p>
-<p>动调： 跟到解密出的数据  是一些文件名</p>
-<p><img src="https://i.imgur.com/4SO3hG2.png"></p>
-<p>图：</p>
-<p>第二次调用：同理  是利用AES解密</p>
-<p>动调观看解密出的内容：</p>
-<p>图：是一些目录名</p>
-<p><img src="https://i.imgur.com/QK6yz1c.png"></p>
-<h3 id="接着分析"><a href="#接着分析" class="headerlink" title="接着分析"></a>接着分析</h3><p>发现调用GetEnvironmentVariableW函数</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">从调用该函数的进程的环境变量中,返回指定的变量名的值 参数：lpName:要获取值的变量名字符串指针.lpBuffer:接收变量值的字符串指针nSize:接收变量值的内存大小. 函数成功执行返回字符数量</span><br></pre></td></tr></table></figure>
-
-
-
-<p>PathAddBackslashW函数：对应路径加上反斜杠 构成正确语法</p>
-<p><img src="https://i.imgur.com/UoPlGS9.png"></p>
-<p>这部分内容就是，判断运行文件的路径是否为LOACLAPPDATA环境变量路径，如果不是的话，路径后加\ 构成合理语法，根据运行程序的路径 ，获取文件名，接着拼接到路径上，之后 比较环境变量的路径值和当前程序运行的目录，判断运行文件的路径是否是LOACLAPPDATA环境变量路径 ，如果不是则把文件复制过去。如图</p>
-<p><img src="https://i.imgur.com/imaZMXQ.png"></p>
-<h3 id="sub-409624函数"><a href="#sub-409624函数" class="headerlink" title="sub_409624函数"></a>sub_409624函数</h3><p>结论：设置注册表的自启动</p>
-<p>分析：路径相同  goto_lable_8</p>
-<p>跟进函数：</p>
-<p><img src="https://i.imgur.com/hDkhAS1.png"></p>
-<p>发现都是注册表相关的函数，</p>
-<p>RegOpenKeyExW</p>
-<p>RegQueryValueExW</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">hKey是主键。</span><br><span class="line"></span><br><span class="line">lpValueName是键值名称。</span><br><span class="line"></span><br><span class="line">lpType是类型。</span><br><span class="line"></span><br><span class="line">lpData是读出来数据保存地方。</span><br><span class="line"></span><br><span class="line">lpcbData是读取数据多少。</span><br></pre></td></tr></table></figure>
-
-
-
-<p>RegCreateKeyExW ：创建指定的注册表项。如果键已经存在，函数将打开它。</p>
-<p>RegSetValueExW：RegSetValueEx函数在注册表项下设置指定值的数据和类型。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">LONG RegSetValueEx(</span><br><span class="line">  HKEY hKey,           &#x2F;&#x2F; handle to key</span><br><span class="line">  LPCTSTR lpValueName, &#x2F;&#x2F; value name</span><br><span class="line">  DWORD Reserved,      &#x2F;&#x2F; reserved</span><br><span class="line">  DWORD dwType,        &#x2F;&#x2F; value type</span><br><span class="line">  CONST BYTE *lpData,  &#x2F;&#x2F; value data</span><br><span class="line">  DWORD cbData         &#x2F;&#x2F; size of value data</span><br><span class="line">);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>RegCloseKey</p>
-<p>subkey<img src="https://i.imgur.com/VV2wvdv.png"></p>
-<p>总结就是 必须先通过RegOpenKey来找到Key，然后再通过RegQueryValueEx来找到这个Key中包含的Valuename。</p>
-<p>如果传进来的参数（路径）不等于 根据RegQueryValueExW这个函数找到的数据 （也就是自启动没有这个路径）就创建</p>
-<p>总结： 这个就是实现程序开机自启动的</p>
-<h3 id="接着分析-1"><a href="#接着分析-1" class="headerlink" title="接着分析"></a>接着分析</h3><p><img src="https://i.imgur.com/WfcDyPn.png"></p>
-<p>运行文件的路径是否为Public环境变量路径 ,如果是</p>
-<p>{</p>
-<p>sub_402828：用rsa-sha256 做参数 做些改变  然后存进一段堆空间中   也是吧rsa公钥的sha256 转为字符串</p>
-<p>sub_409408：转换 </p>
-<p><img src="https://i.imgur.com/4DKAiFK.png"></p>
-<p>现在lpstring2  就是根据rsa公钥的SAH256值  做改变后的字符串</p>
-<p><img src="https://i.imgur.com/z9poYhc.png"></p>
-<p>sub_4017E8 在前面分析过 是HOW_TO BACK_FILE.txt</p>
-<p>还是个转换</p>
-<p>HOW_TO BACK_FILE.txt 复制给lpstring1</p>
-<p>路径加反斜杠   与lpstring2进行拼接  </p>
-<p>拼接后</p>
-<h4 id="C-用户-public-E93F1BcB76F796……-E93F1BcB76F796……-这一串是-解密出的rsa的-sha256的值"><a href="#C-用户-public-E93F1BcB76F796……-E93F1BcB76F796……-这一串是-解密出的rsa的-sha256的值" class="headerlink" title="C:\用户\public\E93F1BcB76F796……..     E93F1BcB76F796……..   这一串是  解密出的rsa的 sha256的值"></a>C:\用户\public\E93F1BcB76F796……..     E93F1BcB76F796……..   这一串是  解密出的rsa的 sha256的值</h4><p>}</p>
-<p>v7 v8 控制循环次数</p>
-<h3 id="sub-409B4B函数"><a href="#sub-409B4B函数" class="headerlink" title="sub_409B4B函数"></a>sub_409B4B函数</h3><p>结论：生成user-rsa密钥对 ，并把生成的公钥和计算生成的personalid写入<strong>E93F1BcB76F796……..</strong> 文件中</p>
-<p>分析：从</p>
-<p>把拼接后的路径作为参数传入sub_409B4B函数 </p>
-<p>创建个文件名是拼接的内容的文件 ，直接看else的内容，（因为getlasterror()   返回值只有是0的时候 操作功能完成）</p>
-<p><img src="https://i.imgur.com/fSsP1DY.png"></p>
-<h3 id="sub-40A116函数"><a href="#sub-40A116函数" class="headerlink" title="sub_40A116函数"></a>sub_40A116函数</h3><p>跟进sub_40A116函数</p>
-<p>观察参数  有解密后的RSA公钥，有拼接后的路径名，有加密后缀Snake4444，有HOW_TO_BACK_FILES.txt</p>
-<p>看到有rsa_genkey   这是个有关于RSA函数</p>
-<p><img src="https://i.imgur.com/agRs9rQ.png"></p>
-<p><img src="https://i.imgur.com/Kl8Ee3q.png"></p>
-<p>跟进sub_409FC8—&gt;sub_409FC8—&gt; 然后调用Wirtefile 向c:..E9… 文件中写入lpstring </p>
-<p>lpstring 是 生成的user rsa pub </p>
-<p>根据最初简单运行时发现的HOW_TO_BACK_FILES.txt  中的提示信息可以知道  第二部分是personalid</p>
-<p>personal id  的生成{</p>
-<p>用生成的 user-rsa-public 和  私钥  与 一个字符串进行拼接  </p>
-<p>拼接后的 字符串   被内置的黑客的 rsa公钥  加密  </p>
-<p>加密后当做  personal  id  存进  E9.。。。。文件中</p>
-<p>}</p>
-<p>总结：sub_409B4B 函数  作用  利用RSA加密生成用户的公钥和私钥 </p>
-<p> 然后把生成的personalid写入拼接后的文件</p>
-<h4 id=""><a href="#" class="headerlink" title=""></a></h4><h3 id="sub-4099A3函数"><a href="#sub-4099A3函数" class="headerlink" title="sub_4099A3函数"></a>sub_4099A3函数</h3><p>跟进函数，</p>
-<p><img src="https://i.imgur.com/HiOLY4a.png"></p>
-<p>遍历盘符，为每一个盘符创建一个线程，跟进startaddress—》</p>
-<p><img src="https://i.imgur.com/G23Zpo2.png"></p>
-<p><img src="https://i.imgur.com/rNrWlxE.png"></p>
-<p>遍历文件 ，比较是不是.snake4444   是不是HOW..文件，是不是保存用户id的文件，获取当前运行的文件的路径，看是否是当前的文件本身，如果都不是，</p>
-<p>跟进函数sub_408D8B</p>
-<p>看不出来要干嘛  但是有个 用rsa加密的函数   猜测这个函数与加密有关</p>
-<p>所以是遍历文件进行加密  ，加密成功之后，会对文件拼接一个.snake4444 后缀</p>
-<p>确定sub_408D8B  函数  就是对文件及进行加密的函数</p>
-<p>!!!!!!! 具体的如何实现的文件加密  太乱了  我不会 sos   </p>
-<p>查看资料后：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">生成随机的key----》key1-----》用参数传入的生成的RSA公钥加密key1-----》调用AES进行文件的加密</span><br></pre></td></tr></table></figure>
-
-
-
-<p>跟进函数sub_40935E</p>
-<h3 id="sub-40935E函数"><a href="#sub-40935E函数" class="headerlink" title="sub_40935E函数"></a>sub_40935E函数</h3><p>结论：释放how_to_back_file.txt在相应目录</p>
-<p><img src="https://i.imgur.com/15BJqbn.png"></p>
-<h3 id="sub-409449函数"><a href="#sub-409449函数" class="headerlink" title="sub_409449函数"></a>sub_409449函数</h3><p>结论：创建.bat文件  （内容是解密后写进去的）执行这个文件</p>
-<p><img src="https://i.imgur.com/SaZg32a.png"></p>
-<p>调用8B19函数  对数据进行解密，写进bat文件中，</p>
-<p>sub_409305函数：跟进有个creatprocess函数 ，应该是执行这个bat文件</p>
-<p>图：   .bat内容</p>
-<p>《看不懂，看的别人的》  作用：Bat会删除远程桌面连接信息文件 default.rdp，并通过wevtutil.execl命令删除日志信息</p>
-<p><img src="https://i.imgur.com/U1pgMGi.png"></p>
-<h3 id="sub-409509函数："><a href="#sub-409509函数：" class="headerlink" title="sub_409509函数："></a>sub_409509函数：</h3><p>结论：执行当前运行的程序的自我删除</p>
-<p><img src="https://i.imgur.com/9i5QrcL.png"></p>
-<h2 id="0x0x总结流程"><a href="#0x0x总结流程" class="headerlink" title="0x0x总结流程"></a>0x0x总结流程</h2><p>1.解密一些东西 为之后加密文件做准备</p>
-<p>2.把自己复制到localappdata路径</p>
-<p>3.设置自启动</p>
-<p>4.生成名为RSA公钥的sha256的文件 文件内容是生成的user_rsa_public 和 personal id </p>
-<p>5.遍历磁盘 遍历文件加密</p>
-<p>6.把HOW_TO_BACK_FILE.txt文件释放到每个对应的文件下</p>
-<p>7.创建个批处理文件 解密内容 执行操作</p>
-<p>8.自我删除</p>
-<h2 id="-1"><a href="#-1" class="headerlink" title=""></a></h2><h2 id="文件加密的一个总结-（SOS！-不总结实在是太乱了）"><a href="#文件加密的一个总结-（SOS！-不总结实在是太乱了）" class="headerlink" title="文件加密的一个总结  （SOS！  不总结实在是太乱了）"></a>文件加密的一个总结  （SOS！  不总结实在是太乱了）</h2><p>《内置的rsa 的sha256 值》 文件中 ：</p>
-<p>生成的user rsa pub</p>
-<p>还有 （生成的  user  公钥私钥  与字符串拼接  再用hacker  自己的  公钥  对拼接后的  ） 字符串  进行RSA加密    密钥用的是  内置的RSA 公钥</p>
-<p>文件加密  参数 用户id  和 生成的rsa公钥</p>
-<p>文件加密：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">生成随机的key----》key1-----》用参数传入的生成的RSA公钥加密key1-----》key 2   ----》调用AES进行文件的加密 （key2  为AES加密的，密钥）</span><br></pre></td></tr></table></figure>
-
-
-
-<p>用参数传入的RSA公钥加密生成AES的key1，其中off_40111C为公钥指数e:固定为0x010001</p>
-<p>sos！！！！！！！</p>
-<h2 id="动调过程："><a href="#动调过程：" class="headerlink" title="动调过程："></a>动调过程：</h2><p>00409c84：调用MYAESDecode()    解密出 不被加密的RSA值</p>
-<p>00409cfe：调用MYAESDecode()  解密出 被加密文件的后缀名.Snake4444<br>00409d13:调用MYAESDecode()  解密出 HOW_TO_BACK_FILES.txt<br>00409ad5:调用 MYAESDecode()  解密出 不被加密的文件名<br>00409ad5:调用 MYAESDecode()  解密出 不被加密的目录名</p>
-<p>得等文件加密完才会断下来  不等了</p>
-<p>004094b8：调用 MYAESDecode()  解密出.bat文件的内容</p>
-<p>00409fa0：把生成的user_rsa_piublic 写进e9.。。文件中</p>
-<p>0040A2AF：把生成的user 密钥 与  字符串进行拼接</p>
-<p>0040A2DD：使用内置的rsa公钥 加密拼接好的密钥字符串</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Pc%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" rel="tag">Pc样本分析</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-初步学习linux下的RE" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a  href="/2021/05/06/%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0linux%E4%B8%8B%E7%9A%84RE/" class="article-date">
-      <time datetime="2021-05-06T12:36:23.000Z" itemprop="datePublished">2021-05-06</time>
-</a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a  class="article-title" href="/2021/05/06/%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0linux%E4%B8%8B%E7%9A%84RE/">初步学习linux下的RE</a>
-    </h1>
-  
-
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <p>开始linux下的RE学习   </p>
-<p>初来乍到  学习下基础的东西</p>
-<p>先把yara下载了 sudo   apt-get install  yara</p>
-<p>下载yara官方的规则库： </p>
-<p>git clone git://github.com/Yara-Rules/rules </p>
-<p>验证是否成功：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;rule dummy &#123; condition: true &#125;&quot; &gt; my_first_rule</span><br><span class="line"></span><br><span class="line">yara yara my_first_rule my_first_rule</span><br></pre></td></tr></table></figure>
-
-<p>apt-get install vim</p>
-<p>vim  使用：</p>
-<p>简单使用：</p>
-<p>vim 文件名</p>
-<p>i 进入插入模式 ，esc 普通模式 ，接着按：wq   保存并退出  ：！q  不保存  直接退出 。   ：q  保存 ，可以通过ctrl + z 推出</p>
-<p>cat 文件名  查看文件内容</p>
-<p>gcc a.c  </p>
-<p>./a.out   运行文件</p>
-<p>aot-get install gdb</p>
-<p>gdb：调试器</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linuxRE/" rel="tag">linuxRE</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-linux" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a  href="/2021/05/06/linux/" class="article-date">
-      <time datetime="2021-05-06T12:36:02.000Z" itemprop="datePublished">2021-05-06</time>
-</a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a  class="article-title" href="/2021/05/06/linux/">linux</a>
-    </h1>
-  
-
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
     </nav>
   
 

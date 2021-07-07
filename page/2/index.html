@@ -179,7 +179,7 @@
                 
                 <section class="switch-part switch-part2">
                     <div class="widget tagcloud" id="js-tagcloud">
-                        <a href="/tags/PE/" style="font-size: 10px;">PE</a> <a href="/tags/Pc%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" style="font-size: 20px;">Pc样本分析</a> <a href="/tags/RE/" style="font-size: 15px;">RE</a> <a href="/tags/c/" style="font-size: 10px;">c</a> <a href="/tags/linuxRE/" style="font-size: 10px;">linuxRE</a> <a href="/tags/%E5%8F%8D%E8%B0%83%E8%AF%95-%E9%80%86%E5%90%91/" style="font-size: 10px;">反调试 逆向</a> <a href="/tags/%E6%83%B3%E6%B3%95/" style="font-size: 10px;">想法</a>
+                        <a href="/tags/PE/" style="font-size: 10px;">PE</a> <a href="/tags/Pc%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" style="font-size: 15px;">Pc样本分析</a> <a href="/tags/RE/" style="font-size: 20px;">RE</a> <a href="/tags/c/" style="font-size: 10px;">c</a> <a href="/tags/linuxRE/" style="font-size: 10px;">linuxRE</a> <a href="/tags/windows%E5%86%85%E6%A0%B8/" style="font-size: 10px;">windows内核</a> <a href="/tags/%E5%8F%8D%E8%B0%83%E8%AF%95-%E9%80%86%E5%90%91/" style="font-size: 10px;">反调试 逆向</a> <a href="/tags/%E6%83%B3%E6%B3%95/" style="font-size: 10px;">想法</a>
                     </div>
                 </section>
                 
@@ -233,6 +233,619 @@
     </div>
 </nav>
       <div class="body-wrap">
+  
+    <article id="post-海莲花样本分析" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2021/05/23/%E6%B5%B7%E8%8E%B2%E8%8A%B1%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" class="article-date">
+      <time datetime="2021-05-23T07:14:37.000Z" itemprop="datePublished">2021-05-23</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a  class="article-title" href="/2021/05/23/%E6%B5%B7%E8%8E%B2%E8%8A%B1%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/">海莲花样本分析</a>
+    </h1>
+  
+
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>环境：win10  offic2003 </p>
+<p>工具：ida  od windbg </p>
+<p><strong>MD5：</strong>e5c766ad580b5bc5f74acc8d2f5dd028c11495d2ce503de7c7a294f94583849d</p>
+<p>病毒触发样本是一个含有CVE-2017-11882 漏洞的word诱导文档文件，（下一篇为复现文章：栈溢出）</p>
+<p>用office2003 sp3  打开文档   </p>
+<p><img src="https://i.imgur.com/C6GWj7P.png"></p>
+<p>被defender拦截 ， 查看内容，在C:\Users\lenovo\AppData\Roaming\Microsoft-Windows-DiskDiagnosticResolver_2021325962 目录下 有三个文件 ，均是 文档释放的</p>
+<p><img src="https://i.imgur.com/qXfIs4z.png"></p>
+<p>病毒触发样本是一个含有CVE-2017-11882 漏洞的word诱导文档文件，在用符合该CVE漏洞版本的office打开该诱导文档后，诱导文件会触发该CVE漏洞执行一段shellcode从诱导文件的二进制资源段中释MicrosoftWindowsDiskDiagnosticResolver.exe、OUTLFLTR.DAT、rastls.dll 3个文件</p>
+<p>MicrosoftWindowsDiskDiagnosticResolver.exe 是 有微软签名的白文件</p>
+<p><img src="https://i.imgur.com/vnJ990b.png"></p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Pc%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" rel="tag">Pc样本分析</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Thallium病毒分析" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2021/05/11/Thallium%E7%97%85%E6%AF%92%E5%88%86%E6%9E%90/" class="article-date">
+      <time datetime="2021-05-11T07:13:56.000Z" itemprop="datePublished">2021-05-11</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a  class="article-title" href="/2021/05/11/Thallium%E7%97%85%E6%AF%92%E5%88%86%E6%9E%90/">Thallium病毒分析</a>
+    </h1>
+  
+
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h1 id="分析过程"><a href="#分析过程" class="headerlink" title="分析过程"></a>分析过程</h1><p>样本类型：doc</p>
+<p>样本利用方式：宏代码利用</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/f12ec48c948927e1425cd23b7313d24c.png"></p>
+<p>原始病毒样本是通过 宏代码利用  然后远程连接c2服务器  进行下载.so文件  </p>
+<p>把通过c2 服务器下载的 payload 后缀名改为.exe</p>
+<p>直接分析.exe 文件  后续的payload文件</p>
+<p>下载的TEMP.so为exe文件，md5为： f160c057fded2c01bfdb65bb7aa9dfcc    </p>
+<p>行为分析：用process monitor 监测 payload的行为 ，设置过滤器  重命名为 tt.exe </p>
+<p>可以看到一些对文件的操作 ， 还有注册表之类的</p>
+<p>主要行为：</p>
+<p>在c：programdata \a7963 下  拷贝自身过去</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/84c40b1654ef446e4a404a0925e9c2d3.png"></p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/e90fde0ac980fb0069aef0645e99cf27.png"></p>
+<p>无壳 </p>
+<p>分析过程：</p>
+<p>1.查了资料后  知道这是 MFC的程序 ，看代码的特征，确实是MFC独有的</p>
+<p>2.行为分析的时候（检测行为时）也可以感受到 在运行之后  有个明显的时间差  才有弹窗</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/621daae931a63c297ce4454d259eeefb.png"></p>
+<p>大循环   造成延迟的主要原因</p>
+<p>0x0BAADBEEF —-&gt;   3131948783 </p>
+<p>VirtualProtect：</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/fae521966323ecc6a7ac67491f9f598e.png"></p>
+<p>0x40 : 启用对已提交页区域的执行、读和写访问  </p>
+<p><strong>循环结束之后，先用VirtualProtect函数更改0x422548到0x42A548的内存属性为0x40，也就是可读可写可执行，</strong></p>
+<p>之后调用401670 函数，函数不能反汇编出来，直接看汇编代码</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/af6fdfc9256d3f29466daa87b52978cc.png"></p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/0891e274e1ea9d9d2f1b170f2d42c9e7.png"></p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/d8682e45770d1fcdf2e5818c94bd0abe.png"></p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/390fe3e75c33dba23b44598d6f7464a3.png"></p>
+<p>加载有效地址（load effective address）指令就是lea,他的指令形式就是从内存读取数据到寄存器，但是实际上他没有引用内存，而是将有效地址写入到目的的操作数</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/d1f13bba760ad9fb7f94ef054ba4286d.png"></p>
+<p>在4012A2 处下断点，之后f8   查看407068处的汇编  发现内容已经改变</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/7beac3e99a4303f593e28ca58a98d166.png"></p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/5be6d8c237868b7ca783e18dc9b64de9.png"></p>
+<p>前：</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/991761078b1f11f3998d35f4784fb7e5.png"></p>
+<p>后：</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/5e800ca3fd218c932a5009fb04e7e145.png"></p>
+<p>一步步跟一下 看看解密后的内容都干了什么</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/ee55ef67a74e1378fe6212ad308525ef.png"></p>
+<p>当执行 00427115 的指令时  发现很大的延迟 。回车跟进 004255c8 函数  看一下内容：</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/bf063d2d1efca956da4e107d5b812aa0.png"></p>
+<p>熟悉的大循环</p>
+<p>返回上级函数，接着向下跟，观察寄存器的值的变化，</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/512fcd1568ad21a9b695ea6ee20db3ab.png"></p>
+<p>出现字符串</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/4f2094f5ff3b8fccca0d228fbecff167.png"></p>
+<p>疑似解密  具体不清楚干啥 接着跟</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/fbf209bc65011832659f972771340303.png"></p>
+<p>运行到这的时候  弹出cmd窗口，速度太快 截不到图</p>
+<p>跟进函数 004236A8内部 ： 一步步简单跟一下 </p>
+<p>00423827处    重新创建自身进程</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/07c3e2807bc9f36c99ee237ba558cffa.png"></p>
+<p>0042442A处 创建傀儡进程</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/fdd55cfcae33abb5e7d723ff538d2ae9.png"></p>
+<p>424475</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/54249edb58749383bcdd3851f6bfb1d4.png"></p>
+<p>通过ZwResumeThread恢复目标进程执行</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/6828b3b5bc900facdf652a639ce3f725.png"></p>
+<h1 id="找解密的文件存在哪了："><a href="#找解密的文件存在哪了：" class="headerlink" title="找解密的文件存在哪了："></a>找解密的文件存在哪了：</h1><p>出现字符串  之后单步跟 ，找到解密的文件</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/dfe2f808022dfff62ef084c8aea919e2.png"></p>
+<p>另一种找 解密的  注入的傀儡进程pe   的方法</p>
+<p>调用ZwResumeThread、ZwSetContexThread这一系列的函数进行傀儡进程注入的时候，注意观察参数和右边的寄存器窗口，会有注入的目标PE的内存地址</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/ce88b5b1a5e0aa2c23a78fd05f99df6e.png"></p>
+<p>（ resumethread()将新的指令指针指向添加的代码并恢复线程执行：之后执行注入的部分）</p>
+<p>从resumethread  中  一步步  单步跟   之后rent到  4271f3  处   看eax处  跟随到数据窗口  就是 注入的pe</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/5c44ed88f3254897ef3e57104f8ac0af.png"></p>
+<p>压栈 eax值   pe的首地址</p>
+<p><strong>重新调试 先看解密后的地址  再跟resumethread后 的地址   发现pe存的地址相同</strong></p>
+<h1 id="dump解密文件，分析："><a href="#dump解密文件，分析：" class="headerlink" title="dump解密文件，分析："></a>dump解密文件，分析：</h1><p>使用od  dump下来的格式不是pe文件格式使</p>
+<p>使用x32dbg dump   pe文件</p>
+<p>选中pe文件，右键二进制编辑，复制</p>
+<p>[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-XpuRVhVt-1625548021171)(<a target="_blank" rel="noopener" href="https://i.imgur.com/KuPAdii.png)]">https://i.imgur.com/KuPAdii.png)]</a></p>
+<p>使用winhex保存文件 okokook.exe  （编辑，剪贴板数据，写入，ascii-hex）</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/0ccae963d40d7ccbd5a9d4e6708847f7.png"></p>
+<h1 id="IDA对后续okokook-exe进行分析"><a href="#IDA对后续okokook-exe进行分析" class="headerlink" title="IDA对后续okokook.exe进行分析"></a>IDA对后续okokook.exe进行分析</h1><p>程序中的字符串均已加密，程序定义了一个字符串a7963b909152f8ebc3ec69b1dee2b255a9678a5用于动态解密其他字符串</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/d120060bd9fffc303664d5c10d154989.png"></p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/bd3f60f63390f23bc8923fbe5e1b5e6a.png"></p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/6cbf510b458bf022303734586be7d09b.png"></p>
+<p>分析401040函数</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/473781dd4ec766206ef8c95c63bcade4.png"></p>
+<p>4014D0函数大量使用解密函数，动调看解密出什么</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/96db7759d9a1b9c44955e7e4a0447965.png"></p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/27613a06ad913bb322c4a1c3d2d121a7.png"></p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/c9c0df94664ab26b3c2bbc2b00e3d052.png"></p>
+<p>程序会调用这个解密函数解密出一系列杀软文件名并判断是否存在这些杀软文件名。。。。。同理  动调出剩下的杀软名</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/a66b9eaf8961d529baa1eb49fe7cefd8.png"></p>
+<p>接着动调该函数401040</p>
+<p>得到创建的文件目录</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/a639171d167a95076c2a8f44fbae0fe4.png"></p>
+<p>接下来 ，创建进程</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/203450c1ba044fc7640fb30afddafd16.png">ht</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/19af27948e6200cb660320d52f96ea72.png"></p>
+<p>cmd指令执行注册表行为，添加自启动项</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/4eb0573c756b8bcedcb15104b59eeedb.png"></p>
+<p>发现ip地址，访问不了。</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/4307e2f04a4af8c16b294320406a669d.png"></p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/44bd19fc63904c4efb03abd07ef54dc9.png"></p>
+<p>后面是解密id  版本号 等信息</p>
+<p>最终获得的请求信息</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/9c586c45d3d61f5644d724cff52dd7bc.png"></p>
+<p>gethostbyname  获取目标主机地址</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/0c7b89411ddced1e2635eef4dcbfcfc9.png"></p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/e21f21fba71ef72d1e2538b48ed830b0.png"></p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/9d5492b3f4b6ca3fde1cbdef844f6eb4.png"></p>
+<p>通过post的方式将数据send到目标ip</p>
+<p>之后就是永真循环</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/4aeeeff58d449c12aae0798b46636f33.png"></p>
+<p>应该是等待服务器返回后续操作命令，但是服务器连接不上，后续行为无法继续分析。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Pc%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" rel="tag">Pc样本分析</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Globelmposter" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2021/05/06/Globelmposter/" class="article-date">
+      <time datetime="2021-05-06T12:46:10.000Z" itemprop="datePublished">2021-05-06</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a  class="article-title" href="/2021/05/06/Globelmposter/">Globelmposter</a>
+    </h1>
+  
+
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h1 id="GlobeImposter病毒分析报告"><a href="#GlobeImposter病毒分析报告" class="headerlink" title="GlobeImposter病毒分析报告"></a>GlobeImposter病毒分析报告</h1><h2 id="0x00-基础信息"><a href="#0x00-基础信息" class="headerlink" title="0x00 基础信息"></a>0x00 基础信息</h2><p>病毒背景：</p>
+<p>这个勒索病毒关键在于加密文件</p>
+<p>运行环境：win10 </p>
+<p>一个勒索病毒  去微步下个样本回来</p>
+<p><img src="https://i.imgur.com/bwqXvfZ.png"></p>
+<h2 id="0x01-简单分析"><a href="#0x01-简单分析" class="headerlink" title="0x01 简单分析"></a>0x01 简单分析</h2><p>1.DIE查壳  无壳</p>
+<p>图：</p>
+<p>2.</p>
+<p>图：</p>
+<p><img src="https://i.imgur.com/IVzxN61.png"></p>
+<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210422211436355.png" alt="image-20210422211436355"></p>
+<p>很多很多  </p>
+<p>大概都是  创建文件 注册表相关的</p>
+<p>3.简单运行：</p>
+<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210506204728059.png"></p>
+<p><img src="https://i.imgur.com/7LuaP33.png"></p>
+<p><img src="https://i.imgur.com/oDczpqb.png"></p>
+<p><img src="https://i.imgur.com/Si7nMhr.png"></p>
+<p>发现后缀名.Snake4444   </p>
+<p>HOW_TO_BACK_FILES.txt</p>
+<p>E9………..文件</p>
+<p>根据提示消息  发现  E9.。。。。。文件的 后部分内容就是personal  id </p>
+<h2 id="0x02-进一步分析"><a href="#0x02-进一步分析" class="headerlink" title="0x02 进一步分析"></a>0x02 进一步分析</h2><p>start函数—&gt; 跟进函数 sub_409C6B—–&gt;</p>
+<p><img src="https://i.imgur.com/QzVrwfl.png"></p>
+<p><img src="https://i.imgur.com/O0vpeLR.png"></p>
+<p>跟进sub_408B19 函数  以下是加密解密相关的  </p>
+<p>学了AES RSA  继续分析后</p>
+<h3 id="sub-408B19-函数"><a href="#sub-408B19-函数" class="headerlink" title="sub_408B19 函数"></a>sub_408B19 函数</h3><p>结论：用AES内置的密钥解密出内置的RSA公钥</p>
+<p>分析：</p>
+<p><img src="https://i.imgur.com/PyeniKD.png"></p>
+<h3 id="sub-4088F4函数"><a href="#sub-4088F4函数" class="headerlink" title="sub_4088F4函数"></a>sub_4088F4函数</h3><p>结论：计算解密出来的RSA公钥的SHA256</p>
+<p>分析：</p>
+<p><img src="https://i.imgur.com/lf3vN2U.png"></p>
+<h3 id="下一步分析"><a href="#下一步分析" class="headerlink" title="下一步分析"></a>下一步分析</h3><p><img src="https://i.imgur.com/v26COZU.png"></p>
+<p>可以看到GetModuleFileNameW 函数：获取当前程序运行的路径  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GetModuleFileNameW </span><br><span class="line">参数：第一个参数为句柄（NULL则指向当前程序本身）。第二个参数用于存放地址的指针，第三个参数，系统自带的宏定义  不用管。</span><br></pre></td></tr></table></figure>
+
+<p>接着调用两次sub_408B19函数（AES解密函数）：传入RSA公钥的SAH256值作为AES的密钥</p>
+<p>第一次调用：</p>
+<p><img src="https://i.imgur.com/guOM2ne.png"></p>
+<p>动调发现解密出.Snake4444 ，经过简单运行观察到，这是被加密文件的后缀名</p>
+<p><img src="https://i.imgur.com/ZbeEg1P.png"></p>
+<p>第二次调用：</p>
+<p>动调发现解密出HOW_TO_BACK_FILES.txt</p>
+<p><img src="https://i.imgur.com/WlvuWJJ.png"></p>
+<h3 id="sub-409ABF函数"><a href="#sub-409ABF函数" class="headerlink" title="sub_409ABF函数"></a>sub_409ABF函数</h3><p>结论：解密函数  内部有408B19 函数  还是一个 AES解密函数</p>
+<p>分析： </p>
+<p>第一次调用：</p>
+<p>还看到下面有关于逗号的操作，不重要，不重点分析</p>
+<p>动调： 跟到解密出的数据  是一些文件名</p>
+<p><img src="https://i.imgur.com/4SO3hG2.png"></p>
+<p>图：</p>
+<p>第二次调用：同理  是利用AES解密</p>
+<p>动调观看解密出的内容：</p>
+<p>图：是一些目录名</p>
+<p><img src="https://i.imgur.com/QK6yz1c.png"></p>
+<h3 id="接着分析"><a href="#接着分析" class="headerlink" title="接着分析"></a>接着分析</h3><p>发现调用GetEnvironmentVariableW函数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">从调用该函数的进程的环境变量中,返回指定的变量名的值 参数：lpName:要获取值的变量名字符串指针.lpBuffer:接收变量值的字符串指针nSize:接收变量值的内存大小. 函数成功执行返回字符数量</span><br></pre></td></tr></table></figure>
+
+
+
+<p>PathAddBackslashW函数：对应路径加上反斜杠 构成正确语法</p>
+<p><img src="https://i.imgur.com/UoPlGS9.png"></p>
+<p>这部分内容就是，判断运行文件的路径是否为LOACLAPPDATA环境变量路径，如果不是的话，路径后加\ 构成合理语法，根据运行程序的路径 ，获取文件名，接着拼接到路径上，之后 比较环境变量的路径值和当前程序运行的目录，判断运行文件的路径是否是LOACLAPPDATA环境变量路径 ，如果不是则把文件复制过去。如图</p>
+<p><img src="https://i.imgur.com/imaZMXQ.png"></p>
+<h3 id="sub-409624函数"><a href="#sub-409624函数" class="headerlink" title="sub_409624函数"></a>sub_409624函数</h3><p>结论：设置注册表的自启动</p>
+<p>分析：路径相同  goto_lable_8</p>
+<p>跟进函数：</p>
+<p><img src="https://i.imgur.com/hDkhAS1.png"></p>
+<p>发现都是注册表相关的函数，</p>
+<p>RegOpenKeyExW</p>
+<p>RegQueryValueExW</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">hKey是主键。</span><br><span class="line"></span><br><span class="line">lpValueName是键值名称。</span><br><span class="line"></span><br><span class="line">lpType是类型。</span><br><span class="line"></span><br><span class="line">lpData是读出来数据保存地方。</span><br><span class="line"></span><br><span class="line">lpcbData是读取数据多少。</span><br></pre></td></tr></table></figure>
+
+
+
+<p>RegCreateKeyExW ：创建指定的注册表项。如果键已经存在，函数将打开它。</p>
+<p>RegSetValueExW：RegSetValueEx函数在注册表项下设置指定值的数据和类型。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">LONG RegSetValueEx(</span><br><span class="line">  HKEY hKey,           &#x2F;&#x2F; handle to key</span><br><span class="line">  LPCTSTR lpValueName, &#x2F;&#x2F; value name</span><br><span class="line">  DWORD Reserved,      &#x2F;&#x2F; reserved</span><br><span class="line">  DWORD dwType,        &#x2F;&#x2F; value type</span><br><span class="line">  CONST BYTE *lpData,  &#x2F;&#x2F; value data</span><br><span class="line">  DWORD cbData         &#x2F;&#x2F; size of value data</span><br><span class="line">);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>RegCloseKey</p>
+<p>subkey<img src="https://i.imgur.com/VV2wvdv.png"></p>
+<p>总结就是 必须先通过RegOpenKey来找到Key，然后再通过RegQueryValueEx来找到这个Key中包含的Valuename。</p>
+<p>如果传进来的参数（路径）不等于 根据RegQueryValueExW这个函数找到的数据 （也就是自启动没有这个路径）就创建</p>
+<p>总结： 这个就是实现程序开机自启动的</p>
+<h3 id="接着分析-1"><a href="#接着分析-1" class="headerlink" title="接着分析"></a>接着分析</h3><p><img src="https://i.imgur.com/WfcDyPn.png"></p>
+<p>运行文件的路径是否为Public环境变量路径 ,如果是</p>
+<p>{</p>
+<p>sub_402828：用rsa-sha256 做参数 做些改变  然后存进一段堆空间中   也是吧rsa公钥的sha256 转为字符串</p>
+<p>sub_409408：转换 </p>
+<p><img src="https://i.imgur.com/4DKAiFK.png"></p>
+<p>现在lpstring2  就是根据rsa公钥的SAH256值  做改变后的字符串</p>
+<p><img src="https://i.imgur.com/z9poYhc.png"></p>
+<p>sub_4017E8 在前面分析过 是HOW_TO BACK_FILE.txt</p>
+<p>还是个转换</p>
+<p>HOW_TO BACK_FILE.txt 复制给lpstring1</p>
+<p>路径加反斜杠   与lpstring2进行拼接  </p>
+<p>拼接后</p>
+<h4 id="C-用户-public-E93F1BcB76F796……-E93F1BcB76F796……-这一串是-解密出的rsa的-sha256的值"><a href="#C-用户-public-E93F1BcB76F796……-E93F1BcB76F796……-这一串是-解密出的rsa的-sha256的值" class="headerlink" title="C:\用户\public\E93F1BcB76F796……..     E93F1BcB76F796……..   这一串是  解密出的rsa的 sha256的值"></a>C:\用户\public\E93F1BcB76F796……..     E93F1BcB76F796……..   这一串是  解密出的rsa的 sha256的值</h4><p>}</p>
+<p>v7 v8 控制循环次数</p>
+<h3 id="sub-409B4B函数"><a href="#sub-409B4B函数" class="headerlink" title="sub_409B4B函数"></a>sub_409B4B函数</h3><p>结论：生成user-rsa密钥对 ，并把生成的公钥和计算生成的personalid写入<strong>E93F1BcB76F796……..</strong> 文件中</p>
+<p>分析：从</p>
+<p>把拼接后的路径作为参数传入sub_409B4B函数 </p>
+<p>创建个文件名是拼接的内容的文件 ，直接看else的内容，（因为getlasterror()   返回值只有是0的时候 操作功能完成）</p>
+<p><img src="https://i.imgur.com/fSsP1DY.png"></p>
+<h3 id="sub-40A116函数"><a href="#sub-40A116函数" class="headerlink" title="sub_40A116函数"></a>sub_40A116函数</h3><p>跟进sub_40A116函数</p>
+<p>观察参数  有解密后的RSA公钥，有拼接后的路径名，有加密后缀Snake4444，有HOW_TO_BACK_FILES.txt</p>
+<p>看到有rsa_genkey   这是个有关于RSA函数</p>
+<p><img src="https://i.imgur.com/agRs9rQ.png"></p>
+<p><img src="https://i.imgur.com/Kl8Ee3q.png"></p>
+<p>跟进sub_409FC8—&gt;sub_409FC8—&gt; 然后调用Wirtefile 向c:..E9… 文件中写入lpstring </p>
+<p>lpstring 是 生成的user rsa pub </p>
+<p>根据最初简单运行时发现的HOW_TO_BACK_FILES.txt  中的提示信息可以知道  第二部分是personalid</p>
+<p>personal id  的生成{</p>
+<p>用生成的 user-rsa-public 和  私钥  与 一个字符串进行拼接  </p>
+<p>拼接后的 字符串   被内置的黑客的 rsa公钥  加密  </p>
+<p>加密后当做  personal  id  存进  E9.。。。。文件中</p>
+<p>}</p>
+<p>总结：sub_409B4B 函数  作用  利用RSA加密生成用户的公钥和私钥 </p>
+<p> 然后把生成的personalid写入拼接后的文件</p>
+<h4 id=""><a href="#" class="headerlink" title=""></a></h4><h3 id="sub-4099A3函数"><a href="#sub-4099A3函数" class="headerlink" title="sub_4099A3函数"></a>sub_4099A3函数</h3><p>跟进函数，</p>
+<p><img src="https://i.imgur.com/HiOLY4a.png"></p>
+<p>遍历盘符，为每一个盘符创建一个线程，跟进startaddress—》</p>
+<p><img src="https://i.imgur.com/G23Zpo2.png"></p>
+<p><img src="https://i.imgur.com/rNrWlxE.png"></p>
+<p>遍历文件 ，比较是不是.snake4444   是不是HOW..文件，是不是保存用户id的文件，获取当前运行的文件的路径，看是否是当前的文件本身，如果都不是，</p>
+<p>跟进函数sub_408D8B</p>
+<p>看不出来要干嘛  但是有个 用rsa加密的函数   猜测这个函数与加密有关</p>
+<p>所以是遍历文件进行加密  ，加密成功之后，会对文件拼接一个.snake4444 后缀</p>
+<p>确定sub_408D8B  函数  就是对文件及进行加密的函数</p>
+<p>!!!!!!! 具体的如何实现的文件加密  太乱了  我不会 sos   </p>
+<p>查看资料后：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">生成随机的key----》key1-----》用参数传入的生成的RSA公钥加密key1-----》调用AES进行文件的加密</span><br></pre></td></tr></table></figure>
+
+
+
+<p>跟进函数sub_40935E</p>
+<h3 id="sub-40935E函数"><a href="#sub-40935E函数" class="headerlink" title="sub_40935E函数"></a>sub_40935E函数</h3><p>结论：释放how_to_back_file.txt在相应目录</p>
+<p><img src="https://i.imgur.com/15BJqbn.png"></p>
+<h3 id="sub-409449函数"><a href="#sub-409449函数" class="headerlink" title="sub_409449函数"></a>sub_409449函数</h3><p>结论：创建.bat文件  （内容是解密后写进去的）执行这个文件</p>
+<p><img src="https://i.imgur.com/SaZg32a.png"></p>
+<p>调用8B19函数  对数据进行解密，写进bat文件中，</p>
+<p>sub_409305函数：跟进有个creatprocess函数 ，应该是执行这个bat文件</p>
+<p>图：   .bat内容</p>
+<p>《看不懂，看的别人的》  作用：Bat会删除远程桌面连接信息文件 default.rdp，并通过wevtutil.execl命令删除日志信息</p>
+<p><img src="https://i.imgur.com/U1pgMGi.png"></p>
+<h3 id="sub-409509函数："><a href="#sub-409509函数：" class="headerlink" title="sub_409509函数："></a>sub_409509函数：</h3><p>结论：执行当前运行的程序的自我删除</p>
+<p><img src="https://i.imgur.com/9i5QrcL.png"></p>
+<h2 id="0x0x总结流程"><a href="#0x0x总结流程" class="headerlink" title="0x0x总结流程"></a>0x0x总结流程</h2><p>1.解密一些东西 为之后加密文件做准备</p>
+<p>2.把自己复制到localappdata路径</p>
+<p>3.设置自启动</p>
+<p>4.生成名为RSA公钥的sha256的文件 文件内容是生成的user_rsa_public 和 personal id </p>
+<p>5.遍历磁盘 遍历文件加密</p>
+<p>6.把HOW_TO_BACK_FILE.txt文件释放到每个对应的文件下</p>
+<p>7.创建个批处理文件 解密内容 执行操作</p>
+<p>8.自我删除</p>
+<h2 id="-1"><a href="#-1" class="headerlink" title=""></a></h2><h2 id="文件加密的一个总结-（SOS！-不总结实在是太乱了）"><a href="#文件加密的一个总结-（SOS！-不总结实在是太乱了）" class="headerlink" title="文件加密的一个总结  （SOS！  不总结实在是太乱了）"></a>文件加密的一个总结  （SOS！  不总结实在是太乱了）</h2><p>《内置的rsa 的sha256 值》 文件中 ：</p>
+<p>生成的user rsa pub</p>
+<p>还有 （生成的  user  公钥私钥  与字符串拼接  再用hacker  自己的  公钥  对拼接后的  ） 字符串  进行RSA加密    密钥用的是  内置的RSA 公钥</p>
+<p>文件加密  参数 用户id  和 生成的rsa公钥</p>
+<p>文件加密：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">生成随机的key----》key1-----》用参数传入的生成的RSA公钥加密key1-----》key 2   ----》调用AES进行文件的加密 （key2  为AES加密的，密钥）</span><br></pre></td></tr></table></figure>
+
+
+
+<p>用参数传入的RSA公钥加密生成AES的key1，其中off_40111C为公钥指数e:固定为0x010001</p>
+<p>sos！！！！！！！</p>
+<h2 id="动调过程："><a href="#动调过程：" class="headerlink" title="动调过程："></a>动调过程：</h2><p>00409c84：调用MYAESDecode()    解密出 不被加密的RSA值</p>
+<p>00409cfe：调用MYAESDecode()  解密出 被加密文件的后缀名.Snake4444<br>00409d13:调用MYAESDecode()  解密出 HOW_TO_BACK_FILES.txt<br>00409ad5:调用 MYAESDecode()  解密出 不被加密的文件名<br>00409ad5:调用 MYAESDecode()  解密出 不被加密的目录名</p>
+<p>得等文件加密完才会断下来  不等了</p>
+<p>004094b8：调用 MYAESDecode()  解密出.bat文件的内容</p>
+<p>00409fa0：把生成的user_rsa_piublic 写进e9.。。文件中</p>
+<p>0040A2AF：把生成的user 密钥 与  字符串进行拼接</p>
+<p>0040A2DD：使用内置的rsa公钥 加密拼接好的密钥字符串</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Pc%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" rel="tag">Pc样本分析</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-初步学习linux下的RE" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2021/05/06/%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0linux%E4%B8%8B%E7%9A%84RE/" class="article-date">
+      <time datetime="2021-05-06T12:36:23.000Z" itemprop="datePublished">2021-05-06</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a  class="article-title" href="/2021/05/06/%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0linux%E4%B8%8B%E7%9A%84RE/">初步学习linux下的RE</a>
+    </h1>
+  
+
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>开始linux下的RE学习   </p>
+<p>初来乍到  学习下基础的东西</p>
+<p>先把yara下载了 sudo   apt-get install  yara</p>
+<p>下载yara官方的规则库： </p>
+<p>git clone git://github.com/Yara-Rules/rules </p>
+<p>验证是否成功：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;rule dummy &#123; condition: true &#125;&quot; &gt; my_first_rule</span><br><span class="line"></span><br><span class="line">yara yara my_first_rule my_first_rule</span><br></pre></td></tr></table></figure>
+
+<p>apt-get install vim</p>
+<p>vim  使用：</p>
+<p>简单使用：</p>
+<p>vim 文件名</p>
+<p>i 进入插入模式 ，esc 普通模式 ，接着按：wq   保存并退出  ：！q  不保存  直接退出 。   ：q  保存 ，可以通过ctrl + z 推出</p>
+<p>cat 文件名  查看文件内容</p>
+<p>gcc a.c  </p>
+<p>./a.out   运行文件</p>
+<p>aot-get install gdb</p>
+<p>gdb：调试器</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linuxRE/" rel="tag">linuxRE</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-linux" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2021/05/06/linux/" class="article-date">
+      <time datetime="2021-05-06T12:36:02.000Z" itemprop="datePublished">2021-05-06</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a  class="article-title" href="/2021/05/06/linux/">linux</a>
+    </h1>
+  
+
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+
   
     <article id="post-yara使用" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -964,7 +1577,7 @@
 <p>汇编中使用in/out来访问系统的io空间。</p>
 <h1 id="四、干扰调试器的功能"><a href="#四、干扰调试器的功能" class="headerlink" title="四、干扰调试器的功能"></a>四、干扰调试器的功能</h1><p>未实践 占坑</p>
 <h1 id="五、调试器漏洞"><a href="#五、调试器漏洞" class="headerlink" title="五、调试器漏洞"></a>五、调试器漏洞</h1><p>未实践  占坑</p>
-<h1 id="六：利用异常进行反调试"><a href="#六：利用异常进行反调试" class="headerlink" title="六：利用异常进行反调试"></a>六：利用异常进行反调试</h1><p>学习来源：《加密与解密》 《恶意代码分析实战》《逆向工程核心原理》</p>
+<p>学习来源：《加密与解密》 《恶意代码分析实战》《逆向工程核心原理》</p>
 <p>别人的文章等</p>
 
       
@@ -998,139 +1611,9 @@
 
 
   
-    <article id="post-简单总结指针" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a  href="/2021/04/09/%E7%AE%80%E5%8D%95%E6%80%BB%E7%BB%93%E6%8C%87%E9%92%88/" class="article-date">
-      <time datetime="2021-04-09T09:09:12.000Z" itemprop="datePublished">2021-04-09</time>
-</a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a  class="article-title" href="/2021/04/09/%E7%AE%80%E5%8D%95%E6%80%BB%E7%BB%93%E6%8C%87%E9%92%88/">简单总结指针</a>
-    </h1>
-  
-
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="指针"><a href="#指针" class="headerlink" title="指针"></a>指针</h2><p>1.任何类型都可以带*  加上*就是指针类型  *可以是任意多个</p>
-<p>2.指针类型的变量宽度永远是四个字节无论类型是什么  无论有几个*   （因为四个字节  绝对满足需求）</p>
-<p>3.指针类型 ++  或者–  增加（减少）的数量是去掉一个*后  变量的宽度    （因为有可能有多个 *）      </p>
-<ol start="4">
-<li>指针类型变量+N =指针类型变量+N*(去掉一个 *后类型的宽度)        -N同理     —–这个就是 你之前看的那个面试题</li>
-</ol>
-<p>5.指针类型可以做大小比较     指针无符号类型</p>
-<p>6.&amp;   取某一个变量的内存地址   不能是常量   常量不是容器</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">char  a;</span><br><span class="line">&amp;a   就是  char * a</span><br></pre></td></tr></table></figure>
-
-<p>7.*号后面一定是指针类型</p>
-<p>8.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">int ****  a;</span><br><span class="line">*(a) n  就是 *** a</span><br></pre></td></tr></table></figure>
-
-<p>对指针类型   前面加一个*  就是类型减少一个 *</p>
-<p>9.数组  传递的是地址  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">printf（&quot;%d\n&quot;,arr[i]）;</span><br><span class="line"></span><br><span class="line">部分汇编：</span><br><span class="line">mov  edx，dword ptr [ebp-4]</span><br><span class="line">mov  eax,dword ptr [ebp+8]</span><br><span class="line">mov  ecx,dword ptr [eax+edx*4]</span><br><span class="line">push ecx</span><br><span class="line">push ....&quot;%d\n&quot;....</span><br><span class="line">call printf(函数地址)</span><br><span class="line">add esp，8</span><br></pre></td></tr></table></figure>
-
-<p>edx做索引   ebp-4中  存储的是i</p>
-<p>传递给edx做索引，  ebp-8中存的是数组的首地址</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">printf(&quot;&amp;d\n&quot;,*(p+i));</span><br><span class="line"></span><br><span class="line">反汇编中与   数组作为参数传递 没区别</span><br></pre></td></tr></table></figure>
-
-<p>arr[i]=<em>(p+i)=p[i]</em></p>
-<p><em>=</em>(arr+i)    <strong>本质是地址   所以等价</strong></p>
-<p>10  指针与字符串</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> str[<span class="number">6</span>] = &#123;<span class="string">&#x27;a&#x27;</span>,<span class="string">&#x27;b&#x27;</span>,<span class="string">&#x27;c&#x27;</span>,<span class="string">&#x27;d&#x27;</span>,<span class="string">&#x27;e&#x27;</span>&#125; ;<span class="comment">//&#x27;\0&#x27; 或者 0有点忘了  具体的 </span></span><br><span class="line">char str[] = &#123;&#x27;abcde&#x27;&#125; ;//    先存在常量区  在复制到数组中      编译器末尾填0    有点忘了  具体的   </span><br><span class="line">char * str=&#x27;&#x27;abcde&#x27;&#x27;; //先在常量区存字符串   在指针里存地址 </span><br></pre></td></tr></table></figure>
-
-
-
-<p>11, 指针函数   就是普通的函数   但是返回值是指针类型</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">int *fun(int x,int y);</span><br></pre></td></tr></table></figure>
-
-<ol start="12">
-<li><p>函数指针</p>
-<p> 函数指针类型变量的定义</p>
-<p>定义的格式：</p>
-<p>返回类型 (调用约定  *变量名)(参数列表);</p>
-<p>int (__cdecl *pFun)(int,int);</p>
-</li>
-</ol>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"></span><br><span class="line"> <span class="comment">// 定义函数指针变量</span></span><br><span class="line"> <span class="keyword">int</span> (__cdecl *pFun)(<span class="keyword">int</span>,<span class="keyword">int</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//为函数指针变量赋值(赋的是地址)</span></span><br><span class="line">pFun =<span class="keyword">int</span> (__cdecl *)(<span class="keyword">int</span>,<span class="keyword">int</span>)<span class="number">10</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用函数指针变量</span></span><br><span class="line"><span class="keyword">int</span> r =pFun(<span class="number">1</span>,<span class="number">2</span>);</span><br><span class="line"> </span><br><span class="line"> <span class="keyword">return</span>; <span class="comment">//结束</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>// 我知道的是  定义函数指针   可以简单防止函数被下断点</p>
-<p>  断的是函数指针的位置</p>
-<ol start="12">
-<li>*（）和 [ ]</li>
-</ol>
-<p>可以相互转换</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">*(p+i)=p[i];</span><br><span class="line">*(*(p+i)+k)=p[i][K]</span><br><span class="line">*(*(*(p+i)+k)+m)=p[i][k][m]</span><br><span class="line">    </span><br></pre></td></tr></table></figure>
-
-<p>13  结构体指针</p>
-<p>（类似于  xx指针就是 指向xx  的 这种话是错误的     指针的类型只是说明 他的特性（就是宽度   4     加减操作这些））</p>
-<p>例如：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">struct Point&#123;</span><br><span class="line">int x;</span><br><span class="line">int y;</span><br><span class="line">&#125;</span><br><span class="line">void main（）</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">int arr[10]&#x3D;&#123;1,2,3,4,5,6,7,8,9,10&#125;</span><br><span class="line">Point* pp&#x3D;（struct Point *）arr；</span><br><span class="line">int x&#x3D;px-&gt;x;</span><br><span class="line">int y&#x3D;px-&gt;y;</span><br><span class="line">&#x2F;&#x2F;这个就是将结构体指针指向数组   但是需要强转</span><br><span class="line">这里  x就是1   y就是2</span><br><span class="line">px++；</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;指针++  px大小8个字节  所以之后指向 地址+8后 </span><br><span class="line">此时 px-&gt;x   就是 3    px-&gt;y  就是4</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>14 指针数组  和数组指针</p>
-<p>（1）指针数组   </p>
-<p>就是数组   </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">char* arr[10];&#x2F;&#x2F; 指针数组  10个指针 宽度四个字节</span><br><span class="line">Point* arr[10];&#x2F;&#x2F;宽度四个字节</span><br><span class="line">int******   arr[10];&#x2F;&#x2F;宽度四个字节</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">char* a &#x3D;&#39;&#39;hello&#39;&#39;;</span><br><span class="line"></span><br><span class="line">char* b&#x3D;&#39;&#39;world&#39;&#39;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">(1)char* arr[2]&#x3D;&#123;a,b&#125;;</span><br><span class="line">(2)char* arr[2];</span><br><span class="line">arr[0]&#x3D;a;</span><br><span class="line">arr[1]&#x3D;b;</span><br><span class="line">(3) char* arr[2]&#x3D;</span><br><span class="line">&#123;</span><br><span class="line">&#39;&#39;hello&#39;&#39;,</span><br><span class="line">&#39;&#39;world&#39;&#39;</span><br><span class="line"></span><br><span class="line">&#125;;&#x2F;&#x2F; 指针数组   成员还是指针类型  所以存的是字符串的内存地址 而不是字符串的ascll 码值</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 三种方式在内存布局上相同</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>（2）数组指针</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">int (*p)[10];</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>数组首地址的指针     p就是指向数组的指针</p>
-<p><img src="https://i.imgur.com/SWEtLSq.png"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">void main()</span><br><span class="line">&#123;</span><br><span class="line">int arr[]&#x3D;&#123;1,2,3,4,5,6,7,8,9,10&#125;</span><br><span class="line">int* x&#x3D;arr; &#x2F;&#x2F; int *</span><br><span class="line">int* y &#x3D;（int *）&amp;arr；&#x2F;&#x2F; int (*)[10]</span><br><span class="line">return</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/" rel="tag">c</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+      <a class="extend prev" rel="prev" href="/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">Next &amp;raquo;</a>
     </nav>
   
 

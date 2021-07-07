@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="baidu-site-verification" content="L6Lm9d5Crl"/>
+  
+  
+  
+  
+  <title>脱壳 | Pyikaaaa</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="脱壳1.概述：1.壳： 一：加壳的目的：为了隐藏程序真正的OEP（入口点），防止被破解。 二：加壳软件是一种在编译好可执行文件之后，为了一些特定的需求，而做的一些事情，常见需求有： ​        有一些版权信息需要保护起来，不想让别人随便改动 ​        为了让程序小一点，从而方便使用（把可执行文件进行压缩使用） ​        给木马等软件加壳以避免杀毒软件 三：壳的加载过程： ​">
+<meta property="og:type" content="article">
+<meta property="og:title" content="脱壳">
+<meta property="og:url" content="http://example.com/2021/07/05/%E8%84%B1%E5%A3%B3/index.html">
+<meta property="og:site_name" content="Pyikaaaa">
+<meta property="og:description" content="脱壳1.概述：1.壳： 一：加壳的目的：为了隐藏程序真正的OEP（入口点），防止被破解。 二：加壳软件是一种在编译好可执行文件之后，为了一些特定的需求，而做的一些事情，常见需求有： ​        有一些版权信息需要保护起来，不想让别人随便改动 ​        为了让程序小一点，从而方便使用（把可执行文件进行压缩使用） ​        给木马等软件加壳以避免杀毒软件 三：壳的加载过程： ​">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/img_convert/0e8937b957f4a76897a9845ae697f9ad.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/img_convert/ce84b24c452bc70903f70a5af679d672.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/img_convert/1e6cdab46ee5f0ade906607cf344c58f.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/img_convert/ae2a7ab8e70eb9a30b7d0b2250e003d5.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/img_convert/c6c99e4676ca8999a2ff38c7a21779e4.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/img_convert/7f0584d2060a14bb49cdeffddd2e192a.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2020112721264018.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80Mzc4MTEzOQ==,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2021-07-05T06:37:06.000Z">
+<meta property="article:modified_time" content="2021-07-06T05:33:42.688Z">
+<meta property="article:author" content="Pyikaaaa">
+<meta property="article:tag" content="RE">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/img_convert/0e8937b957f4a76897a9845ae697f9ad.png">
+  
+    <link rel="alternative" href="/atom.xml" title="Pyikaaaa" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/img/favicon.png">
+  
+  
+  
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  
+  
+      <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  
+  <!-- 加载特效 -->
+    <script src="/js/pace.js"></script>
+    <link href="/css/pace/pace-theme-flash.css" rel="stylesheet" />
+  <script>
+      var yiliaConfig = {
+          fancybox: true,
+          animate: true,
+          isHome: false,
+          isPost: true,
+          isArchive: false,
+          isTag: false,
+          isCategory: false,
+          open_in_new: false
+      }
+  </script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+
+        <a href="/" class="profilepic">
+            
+            <img lazy-src="/img/avatar.png" class="js-avatar">
+            
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/"></a></h1>
+        </hgroup>
+        
+        
+            <form>
+                <input type="text" class="st-default-search-input search" id="local-search-input" placeholder="搜索一下" autocomplete="off">
+            </form>
+            <div id="local-search-result"></div>
+        
+        
+            <script type="text/javascript">
+                (function() {
+                    'use strict';
+                    function getMatchData(keyword, data) {
+                        var matchData = [];
+                        for(var i =0;i<data.length;i++){
+                            if(data[i].title.toLowerCase().indexOf(keyword)>=0) 
+                                matchData.push(data[i])
+                        }
+                        return matchData;
+                    }
+                    var $input = $('#local-search-input');
+                    var $resultContent = $('#local-search-result');
+                    $input.keyup(function(){
+                        $.ajax({
+                            url: '/search.json',
+                            dataType: "json",
+                            success: function( json ) {
+                                var str='<ul class=\"search-result-list\">';                
+                                var keyword = $input.val().trim().toLowerCase();
+                                $resultContent.innerHTML = "";
+                                if ($input.val().trim().length <= 0) {
+                                    $resultContent.empty();
+                                    $('#switch-area').show();
+                                    return;
+                                }
+                                var results = getMatchData(keyword, json);
+                                if(results.length === 0){
+                                    $resultContent.empty();
+                                    $('#switch-area').show();
+                                    return;
+                                } 
+                                for(var i =0; i<results.length; i++){
+                                    str += "<li><a href='"+ results[i].url +"' class='search-result-title'>"+ results[i].title +"</a></li>";
+                                }
+                                str += "</ul>";
+                                $resultContent.empty();
+                                $resultContent.append(str);
+                                $('#switch-area').hide();
+                            }
+                        });
+                    });
+                })();
+            </script>
+        
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a  href="/archives/">所有文章</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fl github"  target="_blank" href="https://github.com/Pyikaaaa" title="github">github</a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <a href="/tags/PE/" style="font-size: 10px;">PE</a> <a href="/tags/Pc%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" style="font-size: 15px;">Pc样本分析</a> <a href="/tags/RE/" style="font-size: 20px;">RE</a> <a href="/tags/c/" style="font-size: 10px;">c</a> <a href="/tags/linuxRE/" style="font-size: 10px;">linuxRE</a> <a href="/tags/windows%E5%86%85%E6%A0%B8/" style="font-size: 10px;">windows内核</a> <a href="/tags/%E5%8F%8D%E8%B0%83%E8%AF%95-%E9%80%86%E5%90%91/" style="font-size: 10px;">反调试 逆向</a> <a href="/tags/%E6%83%B3%E6%B3%95/" style="font-size: 10px;">想法</a>
+                    </div>
+                </section>
+                
+                
+                
+                
+                <section class="switch-part switch-part3">
+                
+                    <div id="js-aboutme">喜新念旧   芜湖!</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页"></a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                
+                    <img lazy-src="/img/avatar.png" class="js-avatar">
+                
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页"></a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a class="github" target="_blank" href="https://github.com/Pyikaaaa" title="github">github</a>
+                    
+                </div>
+            </nav>
+        </header>
+    </div>
+</nav>
+      <div class="body-wrap"><article id="post-脱壳" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2021/07/05/%E8%84%B1%E5%A3%B3/" class="article-date">
+      <time datetime="2021-07-05T06:37:06.000Z" itemprop="datePublished">2021-07-05</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      脱壳
+    </h1>
+  
+
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RE/" rel="tag">RE</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h3 id="脱壳"><a href="#脱壳" class="headerlink" title="脱壳"></a>脱壳</h3><h4 id="1-概述："><a href="#1-概述：" class="headerlink" title="1.概述："></a>1.概述：</h4><p>1.壳：</p>
+<p>一：加壳的目的：为了隐藏程序真正的OEP（入口点），防止被破解。</p>
+<p>二：加壳软件是一种在编译好可执行文件之后，为了一些特定的需求，而做的一些事情，常见需求有：</p>
+<p>​        有一些版权信息需要保护起来，不想让别人随便改动</p>
+<p>​        为了让程序小一点，从而方便使用（把可执行文件进行压缩使用）</p>
+<p>​        给木马等软件加壳以避免杀毒软件</p>
+<p>三：壳的加载过程：</p>
+<p>​    一般壳的装载过程：</p>
+<p>​            （1）获取壳所需要使用的API地址<br>加壳后的文件，比未加壳的文件的输入表所引入的API少（甚至只有Kernel32.dll以及GetProcAddress这个API函数）；壳实际上还需要其他API函数来完成一些事情，它为了隐藏这些API，一般只在壳的代码中用显式链接的方式来动态加载这些API</p>
+<p>​            （2）解密原程序的各个区块（Section）的数据<br>壳一般是按区块加密的，那么解密的时候也是按区块解密，并且把解密的区块数据按照区块的定义放在合适的内存位置；如果加壳时用到了压缩技术，那么在解密之前，需要用对应的解压缩技术。</p>
+<p>​            （3）重定位</p>
+<p>​            （4）HOOK-API<br>程序文件中的输入表的作用：让Windows系统在程序运行时提供API的实际地址给程序使用，这个是在程序的第一行代码执行之前，由Windows系统完成的操作。<br>而壳一般是修改了原程序文件的输入表，然后仿照Windows系统的工作来填充输入表中的相关数据，在填充过程中，外壳就可填充HOOK-API的代码地址，从而可以间接获得程序的控制权。</p>
+<p>​            （5）跳转到程序原入口点<br>这个时候，壳把控制权交还给原程序</p>
+<p>[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-LrESqGdT-1625549563239)(C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210204180643199.png)]</p>
+<p>2.什么是脱壳</p>
+<p>找到程序真正的入口点（OEP）</p>
+<h4 id="3-分类："><a href="#3-分类：" class="headerlink" title="3.分类："></a>3.分类：</h4><p>简单分为两类  压缩壳  加密壳</p>
+<p>压缩壳只是减少程序体积对资源进行压缩，加密壳是程序输入表等等进行加密保护</p>
+<p>[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-Fjfs4YOc-1625549563243)(C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210204172527304.png)]</p>
+<h4 id="4-脱壳工具"><a href="#4-脱壳工具" class="headerlink" title="4.脱壳工具"></a>4.脱壳工具</h4><p>OD   找OEP 利用插件dump也可脱壳</p>
+<p> PEID/Exeinfope..   查壳</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/0e8937b957f4a76897a9845ae697f9ad.png"></p>
+<p>ImportREC  修复的</p>
+<p>LordPE  脱壳的   win10 用不了  </p>
+<p>无法找到进程</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/ce84b24c452bc70903f70a5af679d672.png"></p>
+<p>方法：右击相应的进程, 修复镜像大小, 完整转存.</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/1e6cdab46ee5f0ade906607cf344c58f.png"></p>
+<p>脱壳机也行</p>
+<h4 id="5-预备知识："><a href="#5-预备知识：" class="headerlink" title="5.预备知识："></a>5.预备知识：</h4><p>1.PUSHAD （压栈） 代表程序的入口点,</p>
+<p>●把从EAX到EDI寄存器压入堆栈，保存现场（原来的值）</p>
+<p>2.POPAD （出栈） 代表程序的出口点，与PUSHAD想对应，一般找到这个OEP就在附近<br>3.OEP：程序的入口点，软件加壳就是隐藏了OEP（或者用了假的OEP/FOEP），只要我们找到程序真正的OEP，就可以立刻脱壳。</p>
+<h4 id="6-步骤"><a href="#6-步骤" class="headerlink" title="6.步骤"></a>6.步骤</h4><h5 id="1-识别壳"><a href="#1-识别壳" class="headerlink" title="1.识别壳"></a>1.识别壳</h5><p>1.查壳工具</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/ae2a7ab8e70eb9a30b7d0b2250e003d5.png"></p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/c6c99e4676ca8999a2ff38c7a21779e4.png"></p>
+<p>目的：知道壳的版本和编译程序的语言和编译器</p>
+<p>2.通过入口特征和区段特征来识别</p>
+<p>连接器版本</p>
+<p>区段</p>
+<p>壳的版本</p>
+<p>结合OD看入口点特征 ，需要积累 多看</p>
+<p>常见入口点特征：</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/w_g3366/article/details/94595881">https://blog.csdn.net/w_g3366/article/details/94595881</a></p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/7f0584d2060a14bb49cdeffddd2e192a.png"></p>
+<p>判断是什么语言写的 可以查看区段和入口特征:</p>
+<p>(1)VC6特点：入口点代码是固定的代码，入口调用的API也是相同的，其中有的push地址不同程序可能不同；区段有四个也是固定的.text、.rdata、.data和.rsrc。</p>
+<p>(2)VS特点：入口点只有两行代码，一个CALL后直接JMP，第一个CALL进去后调用的API也是相同的；区段相对于VC6多了一个.reloc。</p>
+<p>(3)易语言独立编译是调用VC的链接程序编译的，所以从区段和入口代码特征和VC相同</p>
+<p>(4)非独立编译比较容易识别，入口特征和模块特征都有krnln.fnr</p>
+<p><strong>入口特征</strong>可以通过<a target="_blank" rel="noopener" href="http://www.52pojie.cn/thread-14986-1-1.html">OllyDBG</a>载入获得，载入后可以按一下“Ctrl+A”，让OD分析一下代码，就可以把入口点一些特征字符串分析出来，对于Shielden、Safengine、VProtect这类加壳程序都可以使用这种方法判断出来。</p>
+<h5 id="2-寻找oep"><a href="#2-寻找oep" class="headerlink" title="2.寻找oep"></a>2.寻找oep</h5><h5 id="3-dump"><a href="#3-dump" class="headerlink" title="3.dump"></a>3.dump</h5><h5 id="4-修复文件"><a href="#4-修复文件" class="headerlink" title="4.修复文件"></a>4.修复文件</h5><h5 id="5-其他"><a href="#5-其他" class="headerlink" title="5.其他"></a>5.其他</h5><p>importREC自动修复失败 手动修复IAT</p>
+<h4 id="7-方法相关知识："><a href="#7-方法相关知识：" class="headerlink" title="7.方法相关知识："></a>7.方法相关知识：</h4><h5 id="（1）ESP定律法："><a href="#（1）ESP定律法：" class="headerlink" title="（1）ESP定律法："></a>（1）ESP定律法：</h5><p><strong>堆栈平衡</strong></p>
+<p>壳代码就像一个函数，进入时会开辟堆栈，保存寄存器环境，退出时会恢复堆栈，恢复寄存器。所以是堆栈平衡</p>
+<p>所以 在壳代码操作了堆栈后对堆栈设置硬件访问断点，然后运行程序，当断点命中的时候，就是退出壳代码的时候</p>
+<p>在其附近单步几次。就可以到达程序原始的OEP</p>
+<p>❤ 第一次回到初始空栈状态就可以找到我们的OEP</p>
+<p>●断点：运行到这个地方就zanting</p>
+<p>●访问断点再次访问这个地方 就停</p>
+<p><strong>！！注意！！</strong></p>
+<p>普通软件断点用于代码段，硬件断点可以用于内存，堆栈上</p>
+<h5 id="（2）内存镜像法："><a href="#（2）内存镜像法：" class="headerlink" title="（2）内存镜像法："></a>（2）内存镜像法：</h5><p>内存镜像法下的内存访问断点</p>
+<p>内存断点一般分为 内存访问断点  内存写入断点</p>
+<p>内存访问断点：当代码读取内存的数据的时候程序暂停</p>
+<p>内存写入断点：当代码向内存中写入数据的时候程序暂停</p>
+<p>❤总结：</p>
+<p>第一次内存访问断点：为了让前面的部分先解码</p>
+<p>第二次内存访问断点：为了让后面部分也解码完成，同时在访问代码段的时候，很可能会直接断在OEP处</p>
+<h4 id="8-脱壳方法："><a href="#8-脱壳方法：" class="headerlink" title="8.脱壳方法："></a>8.脱壳方法：</h4><h5 id="方法一：单步跟踪法"><a href="#方法一：单步跟踪法" class="headerlink" title="方法一：单步跟踪法"></a>方法一：单步跟踪法</h5><p>1.用OD载入，点“不分析代码！”<br>2.单步向下跟踪F8，实现向下的跳。也就是说向上的跳不让其实现！（通过F4）<br>3.遇到程序往回跳的（包括循环），我们在下一句代码处按F4（或者右健单击代码，选择断点——&gt;运行到所选）<br>4.绿色线条表示跳转没实现，不用理会，红色线条表示跳转已经实现！</p>
+<p>●如果让程序向上跳转，则可能程序往反方向跳转，无休无止，也就找不到OEP）</p>
+<p>5.如果刚载入程序，在附近就有一个CALL的，我们就F7跟进去，不然程序很容易跑飞，这样很快就能到程序的OEP<br>6.在跟踪的时候，如果运行到某个CALL程序就运行的，就在这个CALL中F7进入<br>7.一般有很大的跳转（大跨段），比如 jmp XXXXXX 或者 JE XXXXXX 或者有RETN的一般很快就会到程序的OEP。<br> PS:在有些壳无法向下跟踪的时候，我们可以在附近找到没有实现的大跳转，右键–&gt;“跟随”,然后F2下断，Shift+F9运行停在“跟随”的位置，再取消断点，继续F8单步跟踪。一般情况下可以轻松到达OEP！</p>
+<p>❤ OD 不能在nop处下断点</p>
+<h5 id="方法二：ESP定律法"><a href="#方法二：ESP定律法" class="headerlink" title="方法二：ESP定律法"></a>方法二：ESP定律法</h5><p> ESP定理脱壳（ESP在OD的寄存器中，我们只要在命令行下ESP的硬件访问断点，就会一下来到程序的OEP了！）<br>1.开始就点F8，注意观察OD右上角的寄存器中ESP有没突现（变成红色）。<br>（这只是一般情况下，更确切的说我们选择的ESP值是关键句之后的第一个ESP值）<br>2.在命令行下：dd XXXXXXXX(指在当前代码中的ESP地址，或者是hr XXXXXXXX)，按回车！<br>3.选中下断的地址，断点—&gt;硬件访问断点&gt;WORD断点。<br>4.按一下F9运行程序，直接来到了跳转处，按下F8，到达程序OEP。</p>
+<h5 id="方法三：内存镜像法"><a href="#方法三：内存镜像法" class="headerlink" title="方法三：内存镜像法"></a>方法三：内存镜像法</h5><p>1：用OD打开软件！<br>2：点击选项——调试选项——异常，把里面的忽略全部√上！CTRL+F2重载下程序！<br>3：按ALT+M,打开内存镜象，找到程序的第一个.rsrc.按F2下断点，然后按SHIFT+F9运行到断点，接着再按ALT+M,打开内存镜象，找到程序的第一个.rsrc.上面的.CODE（也就是00401000处），按F2下断点！然后按SHIFT+F9（或者是在没异常情况下按F9），直接到达程序OEP！</p>
+<h5 id="方法四：一步到达OEP"><a href="#方法四：一步到达OEP" class="headerlink" title="方法四：一步到达OEP"></a>方法四：一步到达OEP</h5><p>1.开始按Ctrl+F,输入：popad（只适合少数壳，包括UPX，ASPACK壳），然后按下F2，F9运行到此处<br>2.来到大跳转处，点下F8，到达OEP！</p>
+<h5 id="方法五：最后一次异常法"><a href="#方法五：最后一次异常法" class="headerlink" title="方法五：最后一次异常法"></a>方法五：最后一次异常法</h5><p>1：用OD打开软件<br>2：点击选项——调试选项——异常，把里面的√全部去掉！CTRL+F2重载下程序<br>3：一开始程序就是一个跳转，在这里我们按SHIFT+F9，直到程序运行，记下从开始按SHIFT+F9到程序运行的次数m！<br>4：CTRL+F2重载程序，按SHIFT+F9（这次按的次数为程序运行的次数m-1次）<br>5：在OD的右下角我们看见有一个”SE 句柄”，这时我们按CTRL+G，输入SE 句柄前的地址！<br>6：按F2下断点！然后按SHIFT+F9来到断点处！<br>7：去掉断点，按F8慢慢向下走！<br>8：到达程序的OEP！</p>
+<p>❤ 这是总结出来的一种捷径. </p>
+<p> 原理就是. 最后一次异常之后就正常运行了. 这个正常运行必须是真正的OEP. 所以最后一次异常是最靠近的</p>
+<h5 id="方法六：模拟跟踪法"><a href="#方法六：模拟跟踪法" class="headerlink" title="方法六：模拟跟踪法"></a>方法六：模拟跟踪法</h5><p>1：先试运行，跟踪一下程序，看有没有SEH暗桩之类<br>2：ALT+M打开内存镜像，找到（包含=SFX,imports,relocations）<br>内存镜像，项目 30<br>地址=0054B000<br>大小=00002000 (8192.)<br>Owner=check 00400000<br>区段=.aspack<br>包含=SFX,imports,relocations<br>类型=Imag 01001002<br>访问=R<br>初始访问=RWE<br>3：地址为0054B000，如是我们在命令行输入tc eip&lt;0054B000,回车，正在跟踪ing。。<br>PS:大家在使用这个方法的时候，要理解他是要在怎么样的情况下才可以使用</p>
+<h5 id="方法七：“SFX”法"><a href="#方法七：“SFX”法" class="headerlink" title="方法七：“SFX”法"></a>方法七：“SFX”法</h5><p>1：设置OD，忽略所有异常，也就是说异常选项卡里面都打上勾<br>2：切换到SFX选项卡，<strong>选择“字节模式跟踪实际入口（速度非常慢）</strong>”，确定。<br>3：重载程序（如果跳出是否“压缩代码？”选择“否”，OD直接到达OEP）<br>ps:这种方法不要滥用得好，锻炼能力为妙。</p>
+<p> 这里最常用的ESP定律法(堆栈平衡原理)，为什么说是ESP呢，当所有的寄存器都压入栈时(pushad)，esp地址的是指向栈顶的地址的，当壳将执行权交给源程序时，esp地址要回到pushad之前的状态，这时就可以看到esp变化了，这就是源程序的入口点。（汇编，汇编，汇编！）</p>
+<p>SFX:od程序自带的调试功能，用来寻找相应的OEP</p>
+<p>使用注意：SFX使用的范围是当程序载入OD之后，入口点必须是代码段之外才可以使用</p>
+<p>总结：</p>
+<h4 id="9-例子"><a href="#9-例子" class="headerlink" title="9.例子"></a>9.例子</h4><p>upx壳</p>
+<blockquote>
+<p>upx的工作原理其实是这样的：首先将程序压缩。<br>所谓的压缩包括两方面：<br>一方面在程序的开头或者其他合适的地方 插入一段代码。<br>另一方面是将程序的其他地方做压缩（也就是上面讲到的压缩）。压缩也可以叫做加密，因为压缩后的程序比较难看懂，原来的代码有很大的不同。</p>
+<p>当程序执行时：实时的对程序解压缩。解压缩功能是在第一步时插入的代码完成的功能。</p>
+<p>联起来就是：upx可以完成代码的压缩和实时解压执行。且不会影响程序的执行效率。</p>
+</blockquote>
+<p>用upx压缩之后形式为：1–&gt;2–&gt;3–&gt;4–&gt;5–&gt;6 </p>
+<p>最初代码的形式就应该是：7–&gt;8–&gt;9–&gt;5–&gt;6</p>
+<p>执行时的形式变为：1–&gt;7–&gt;8–&gt;9–&gt;5–&gt;6  </p>
+<p>● 1是upx插入的代码</p>
+<p>●内存镜像法： </p>
+<p>○需要读取2 3 4内存空间的代码，这个就会存在内存访问，然后把2 3 4 解压出来，就会有内存写入</p>
+<p>○把2 看作代码段  3 看做数据段 4 看做资源段 </p>
+<p>○假设解码的顺序是按照2 3 4进行</p>
+<p>，<strong>第一个内存访问断点</strong>，下在4 资源段处</p>
+<p>当程序断下来的时候，说明代码段2和数据段3都解码完成了</p>
+<p>1 7 8 4 5 6</p>
+<p>○<strong>第二个内存访问断点</strong> ，下在解压完成的代码段</p>
+<p>为啥：第二次断下来的时候，4肯定解码完成了，这时候就完成了所有解码，</p>
+<p>1 7 8 9 5 6</p>
+<p>接下来就是找OEP了，OEP在代码段7中的代码中，所以我们下的是代码段的访问断点，达到OEP就会访问代码段，所以就可以找到OEP进而完成脱壳</p>
+<blockquote>
+<p>手脱upx方法：</p>
+<p>1.单步跟踪</p>
+<p>2.一步到达（利用popad）</p>
+<p>3.esp定律</p>
+<p>4.内存镜像法</p>
+</blockquote>
+<h4 id="10-dump"><a href="#10-dump" class="headerlink" title="10.dump"></a>10.dump</h4><p>利用od自带的插件ollydump完成脱壳</p>
+<h4 id="11-修复文件"><a href="#11-修复文件" class="headerlink" title="11.修复文件"></a>11.修复文件</h4><p>用importREC修复导入表</p>
+<p>前提（已经找到OEP）</p>
+<p>1、脱壳在当前进程,如脱壳出来的程序不能运行，提示无法定位程序输入点，需要使用<br>importREC修复导入表。<br>2、打开importREC，选正ollydbg正在调试的进程，填入正确的OEP,点ITA AutoSearch，<br>如oep正确将得到正确提示，点GetImport，得到正确的导入表。点Fix Dump，选择脱壳<br>出来的保存文件，Done!（修正后的程序为原程序名后加一下划线，原程序不会被修改。） </p>
+<h4 id="12-emmm"><a href="#12-emmm" class="headerlink" title="12.emmm"></a>12.emmm</h4><p>如果直接Dump文件，修复导入表会发现程序仍然不能正常运行，那么他就不是一个单纯的压缩壳，壳中加密技术一般有IAT加密，混淆花指令，偷取OEP,反调试，代码虚拟化</p>
+<p>importREC自动修复失败 手动修复IAT：</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/5315hejialei/p/7060315.html">https://www.cnblogs.com/5315hejialei/p/7060315.html</a></p>
+<p>原理：</p>
+<p>程序的IAT是连续的排列的，所以我们只需要找到IAT的起始位置和末位置，就可以确定IAT的地址和大小。在压缩壳中，我们只要找一个调用系统的API的Call的地址，然后在数据窗口中查找，确定IAT起始和结束地址。然后在OD中手动修复</p>
+<h4 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h4><p><img src="https://img-blog.csdnimg.cn/2020112721264018.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80Mzc4MTEzOQ==,size_16,color_FFFFFF,t_70" alt="img"></p>
+<p>手脱各种壳：</p>
+<p>手脱 <strong>UPX 壳</strong>的捷径</p>
+<p>1、直接ESP定律</p>
+<p>2、用我们已开始提到的”关键提示“。</p>
+<p> 具体操作：OD载入程序后，直接Ctrl+F，输入 POPAD ;</p>
+<p>点确定后 来到这个命令所在的位置。按F2，在这个地方下断；</p>
+<p>再按F9（运行）；</p>
+<p>停止后，按F2取消刚才下的断点。再F8单步！</p>
+<p>手脱 <strong>ASPCK</strong> 的壳</p>
+<p>脱这个壳用ESP定律，还是相对快捷的。</p>
+<p>可以用载入程序后，第二行（是一个CALL）那里面的ESP。 //多数程序这个壳的第二行都是一个CALL 在左OD左下角的命令行中，输入命令：hr ESP地址（如 hr 0012FFA4）；</p>
+<p>F9 运行。</p>
+<p>然后从OD”调试菜单“中的”硬件断点“<strong>这一项将刚才下的断点删除</strong>，这点很重要！最后F8单步！</p>
+<p>用内存镜像法手脱FSG 1.33 和 PCshrink 的壳</p>
+<p>1、忽略所有异常 </p>
+<p>2、Alt+M 打开内存镜像，找到第一个 ”.rsrc“ </p>
+<p>3、F2（下断），F9（运行） </p>
+<p>4、Alt+M 打开内存镜像，找到”Code“段；</p>
+<p> 5、F2（下断），Shift+F9【这点一定要记住，切记是 Shift+F9】运行；</p>
+<p> 6、先按F8，再按下F4，直接到达OEP</p>
+<p>PEpack 1.0 和 WinUpack 0.37-0.39 和 RLPack v.1.14-16</p>
+<p>用esp定律</p>
+<p>手脱 JDpack 壳</p>
+<p>脱这个壳推荐使用内存镜像法 。</p>
+<p>手脱 PEDiminisher ；Dxpack 0.86 ；</p>
+<p>32lite 0.03a ；PEtite 2.2 这几种壳的简单方法</p>
+<p>脱PEDiminisher ；Dxpack 0.86 ；</p>
+<p>这两种壳的时候，直接用之前讲到的ESP定律，即可完美脱壳。命令：【hr ESP地址】</p>
+<p><strong>用ESP脱 32lite 0.03a 后 要注意的是，需要用 ImportREC 这个工具进行修复。</strong>如：00410D50 在输入框中输入 10D50 就可以了【004舍去】</p>
+<p><strong>在用ESP定律脱 PEtite 2.2 的时候，推荐选择 Pushad 下面那行地址中的 ESP</strong></p>
+<p>手脱 Exestealth 2.72 的壳</p>
+<p>看到这或许会沉迷与ESP定律当中，在这里提醒大家：<strong>Exestealth 2.72 的壳 用我们一开始提到的”懒方法脱壳“是最简单的；</strong></p>
+<hr>
+<p>手脱nspack（北斗）1.3 的壳</p>
+<p>1、ESP定律，命令：hr ESP地址 【脱壳后程序不能正常运行】 </p>
+<p>2、用 ImportREC 这个工具进行修复，修复后程序正常运行。</p>
+<p><strong>另类方法脱 ASPack 2.12R 壳的技巧</strong></p>
+<p>Ctrl+S 搜索：retn 0C【retn和零C 中间有个空格】 找到后向下看，如下：</p>
+<p>retn 0C  push 0 //在 retn 0C 的下面  retn //在这个地方按 F2（下断） ；</p>
+<p>F9（运行）</p>
+<p>停止后按 一下 F8（单步）；</p>
+<p>再按一下 F7（跟进） 观看这看不懂？没关系，要是我，我也看不懂，所以我早有准备；</p>
+<p>详细步骤，如下（这是某程序的一部分）：</p>
+<p>程序中断后来到这里：   0046B3B8 C2 oc00 retn 0C //开始F8（单步）</p>
+<p>  0046B3B9 68 64584500 push registra.00455864 //这里调用来自 00455864 （OEP）  0046B3C0 C3 retn //F7(跟进) 步入到OEP</p>
+<p><strong>注意</strong>：<strong>这种壳</strong>ESP<strong>不能直接脱</strong>。</p>
+<p>脱FSG v2.0技巧</p>
+<p>用od打开之后找到一个三跳转的地方，就是一个判断跳转语句跳过了一个jmp，用F4走到jmp的位置，单步就可以找到oep的位置，用lordpe转存之后在修复的时候还有个坑，fsg会在输入表的地方加一些无用的干扰，所以要手工定位，找到一个API，用d 地址的命令找到输入表开始的地方减去基址为rva，在判断一下大小，最后把无效函数去掉，在修复转存文件就可以了。</p>
+<p>手脱PECompact 2.x</p>
+<p>这个壳一般先给eax赋值然后压栈，那么一定会访问eax，所以我们运行到push eax下面，然后给eax里的地址下一个访问断点，接着不断地f9，会有一个jmp大跳转，单步跟过去就是oep</p>
+<p>手脱KBys Packer</p>
+<p>od载入，先走几步F8，发现了PUSHAD，这就可以用ESP了，再ESP下断点，F9一步，走到oep附近，F8，发现一个jmp大跳转，跟过去就是熟悉的入口指令，这就是oep了</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a  href="/2021/07/05/%E8%84%B1%E5%A3%B3/">脱壳</a></p>
+        <p><span>文章作者:</span><a  href="/" title="访问  的个人博客"></a></p>
+        <p><span>发布时间:</span>2021年07月05日 - 14时37分</p>
+        <p><span>最后更新:</span>2021年07月06日 - 13时33分</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2021/07/05/%E8%84%B1%E5%A3%B3/" title="脱壳">http://example.com/2021/07/05/%E8%84%B1%E5%A3%B3/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://example.com/2021/07/05/%E8%84%B1%E5%A3%B3/　　作者: " title=""></span>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" title="中国大陆 (CC BY-NC-SA 3.0 CN)" target = "_blank">"署名-非商用-相同方式共享 3.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+<nav id="article-nav">
+  
+    <a  href="/2021/07/05/Guard/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          Guard
+        
+      </div>
+    </a>
+  
+  
+    <a  href="/2021/07/05/%E5%88%A9%E7%94%A8%E5%BC%82%E5%B8%B8%E8%BF%9B%E8%A1%8C%E5%8F%8D%E8%B0%83%E8%AF%95/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">利用异常进行反调试</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%84%B1%E5%A3%B3"><span class="toc-number">1.</span> <span class="toc-text">脱壳</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E6%A6%82%E8%BF%B0%EF%BC%9A"><span class="toc-number">1.1.</span> <span class="toc-text">1.概述：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E5%88%86%E7%B1%BB%EF%BC%9A"><span class="toc-number">1.2.</span> <span class="toc-text">3.分类：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E8%84%B1%E5%A3%B3%E5%B7%A5%E5%85%B7"><span class="toc-number">1.3.</span> <span class="toc-text">4.脱壳工具</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-%E9%A2%84%E5%A4%87%E7%9F%A5%E8%AF%86%EF%BC%9A"><span class="toc-number">1.4.</span> <span class="toc-text">5.预备知识：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-%E6%AD%A5%E9%AA%A4"><span class="toc-number">1.5.</span> <span class="toc-text">6.步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-%E8%AF%86%E5%88%AB%E5%A3%B3"><span class="toc-number">1.5.1.</span> <span class="toc-text">1.识别壳</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-%E5%AF%BB%E6%89%BEoep"><span class="toc-number">1.5.2.</span> <span class="toc-text">2.寻找oep</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-dump"><span class="toc-number">1.5.3.</span> <span class="toc-text">3.dump</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-%E4%BF%AE%E5%A4%8D%E6%96%87%E4%BB%B6"><span class="toc-number">1.5.4.</span> <span class="toc-text">4.修复文件</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#5-%E5%85%B6%E4%BB%96"><span class="toc-number">1.5.5.</span> <span class="toc-text">5.其他</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-%E6%96%B9%E6%B3%95%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%EF%BC%9A"><span class="toc-number">1.6.</span> <span class="toc-text">7.方法相关知识：</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%EF%BC%881%EF%BC%89ESP%E5%AE%9A%E5%BE%8B%E6%B3%95%EF%BC%9A"><span class="toc-number">1.6.1.</span> <span class="toc-text">（1）ESP定律法：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E5%86%85%E5%AD%98%E9%95%9C%E5%83%8F%E6%B3%95%EF%BC%9A"><span class="toc-number">1.6.2.</span> <span class="toc-text">（2）内存镜像法：</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8-%E8%84%B1%E5%A3%B3%E6%96%B9%E6%B3%95%EF%BC%9A"><span class="toc-number">1.7.</span> <span class="toc-text">8.脱壳方法：</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%B8%80%EF%BC%9A%E5%8D%95%E6%AD%A5%E8%B7%9F%E8%B8%AA%E6%B3%95"><span class="toc-number">1.7.1.</span> <span class="toc-text">方法一：单步跟踪法</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%BA%8C%EF%BC%9AESP%E5%AE%9A%E5%BE%8B%E6%B3%95"><span class="toc-number">1.7.2.</span> <span class="toc-text">方法二：ESP定律法</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%B8%89%EF%BC%9A%E5%86%85%E5%AD%98%E9%95%9C%E5%83%8F%E6%B3%95"><span class="toc-number">1.7.3.</span> <span class="toc-text">方法三：内存镜像法</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E5%9B%9B%EF%BC%9A%E4%B8%80%E6%AD%A5%E5%88%B0%E8%BE%BEOEP"><span class="toc-number">1.7.4.</span> <span class="toc-text">方法四：一步到达OEP</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%BA%94%EF%BC%9A%E6%9C%80%E5%90%8E%E4%B8%80%E6%AC%A1%E5%BC%82%E5%B8%B8%E6%B3%95"><span class="toc-number">1.7.5.</span> <span class="toc-text">方法五：最后一次异常法</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E5%85%AD%EF%BC%9A%E6%A8%A1%E6%8B%9F%E8%B7%9F%E8%B8%AA%E6%B3%95"><span class="toc-number">1.7.6.</span> <span class="toc-text">方法六：模拟跟踪法</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%B8%83%EF%BC%9A%E2%80%9CSFX%E2%80%9D%E6%B3%95"><span class="toc-number">1.7.7.</span> <span class="toc-text">方法七：“SFX”法</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#9-%E4%BE%8B%E5%AD%90"><span class="toc-number">1.8.</span> <span class="toc-text">9.例子</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#10-dump"><span class="toc-number">1.9.</span> <span class="toc-text">10.dump</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#11-%E4%BF%AE%E5%A4%8D%E6%96%87%E4%BB%B6"><span class="toc-number">1.10.</span> <span class="toc-text">11.修复文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#12-emmm"><span class="toc-number">1.11.</span> <span class="toc-text">12.emmm</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%80%BB%E7%BB%93%EF%BC%9A"><span class="toc-number">1.12.</span> <span class="toc-text">总结：</span></a></li></ol></li></ol>
+</div>
+<style>
+    .left-col .switch-btn {
+        display: none;
+    }
+    .left-col .switch-area {
+        display: none;
+    }
+</style>
+<input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+
+<script>
+    var valueHide = "隐藏目录";
+    var valueShow = "显示目录";
+    if ($(".left-col").is(":hidden")) {
+        $("#tocButton").attr("value", valueShow);
+    }
+    $("#tocButton").click(function() {
+        if ($("#toc").is(":hidden")) {
+            $("#tocButton").attr("value", valueHide);
+            $("#toc").slideDown(320);
+            $(".switch-btn, .switch-area").fadeOut(300);
+        }
+        else {
+            $("#tocButton").attr("value", valueShow);
+            $("#toc").slideUp(350);
+            $(".switch-btn, .switch-area").fadeIn(500);
+        }
+    })
+    if ($(".toc").length < 1) {
+        $("#toc, #tocButton").hide();
+        $(".switch-btn, .switch-area").show();
+    }
+</script>
+
+
+
+
+
+
+    
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a  href="/2021/07/05/Guard/" title="上一篇: Guard">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+        
+            <a  href="/2021/07/05/%E5%88%A9%E7%94%A8%E5%BC%82%E5%B8%B8%E8%BF%9B%E8%A1%8C%E5%8F%8D%E8%B0%83%E8%AF%95/" title="下一篇: 利用异常进行反调试">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2021/07/07/APC%E6%9C%BA%E5%88%B6/">APC机制</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/07/05/Trojan-Dropper.Win32.Convagent.gen/">Trojan-Dropper.Win32.Convagent.gen</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/07/05/Guard/">Guard</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/07/05/%E8%84%B1%E5%A3%B3/">脱壳</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/07/05/%E5%88%A9%E7%94%A8%E5%BC%82%E5%B8%B8%E8%BF%9B%E8%A1%8C%E5%8F%8D%E8%B0%83%E8%AF%95/">利用异常进行反调试</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/07/03/%E9%87%8A%E6%94%BE%E5%99%A8%E5%88%86%E6%9E%90/">释放器分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/07/01/PE/pe%E8%B5%84%E6%BA%90%E6%8F%90%E5%8F%96/">pe资源提取</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/30/HOOK/">HOOK</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/25/CVE-2017-11882%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">CVE-2017-11882漏洞复现</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/25/%E8%BF%9B%E7%A8%8B%E9%9A%90%E8%97%8F%E6%8A%80%E6%9C%AF/">进程隐藏技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/23/%E6%B5%B7%E8%8E%B2%E8%8A%B1%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/">海莲花样本分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/11/Thallium%E7%97%85%E6%AF%92%E5%88%86%E6%9E%90/">Thallium病毒分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/06/Globelmposter/">Globelmposter</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/06/%E5%88%9D%E6%AD%A5%E5%AD%A6%E4%B9%A0linux%E4%B8%8B%E7%9A%84RE/">初步学习linux下的RE</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/06/linux/">linux</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/05/yara%E4%BD%BF%E7%94%A8/">yara使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/04/%E6%83%B3%E6%B3%95/">想法</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/04/%E6%B3%A8%E5%85%A5%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/">注入技术学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/17/MEMZ%E5%88%86%E6%9E%90/">MEMZ分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/13/%E5%8F%8D%E8%B0%83%E8%AF%95/">反调试</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/09/%E7%AE%80%E5%8D%95%E6%80%BB%E7%BB%93%E6%8C%87%E9%92%88/">简单总结指针</a></li></ul>
+    
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+
+    <script>
+        $(".post-list").addClass("toc-article");
+        // $(".post-list-item a").attr("target","_blank");
+        $("#post-nav-button > a:nth-child(2)").click(function() {
+            $(".fa-bars, .fa-times").toggle();
+            $(".post-list").toggle(300);
+            if ($(".toc").length > 0) {
+                $("#toc, #tocButton").toggle(200, function() {
+                    if ($(".switch-area").is(":visible")) {
+                        $("#toc, .switch-btn, .switch-area").toggle();
+                        $("#tocButton").attr("value", valueHide);
+                        }
+                    })
+            }
+            else {
+                $(".switch-btn, .switch-area").fadeToggle(300);
+            }
+        })
+    </script>
+
+
+
+
+    <script>
+        
+    </script>
+
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                &copy; 2021 Pyikaaaa
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank">Hexo &nbsp;&nbsp;</a><a href="https://github.com/Pyikaaaa" target="_blank">Blog</a> ❤ Pyikaaaa
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" >极客到访数: 
+                            <span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>, </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit">本页阅读量: 
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+
+    </div>
+    
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+
+    <script>
+        $(document).ready(function() {
+            var backgroundnum = 1;
+            var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+            $("#mobile-nav").css({"background-image": backgroundimg,"background-size": "cover","background-position": "center"});
+            $(".left-col").css({"background-image": backgroundimg,"background-size": "cover","background-position": "center"});
+        })
+    </script>
+
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    $(document).ready(function() {
+        if ($("#comments").length < 1) {
+            $("#scroll > a:nth-child(2)").hide();
+        };
+    })
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+  <script language="javascript">
+    $(function() {
+        $("a[title]").each(function() {
+            var a = $(this);
+            var title = a.attr('title');
+            if (title == undefined || title == "") return;
+            a.data('title', title).removeAttr('title').hover(
+            function() {
+                var offset = a.offset();
+                $("<div id=\"anchortitlecontainer\"></div>").appendTo($("body")).html(title).css({
+                    top: offset.top - a.outerHeight() - 15,
+                    left: offset.left + a.outerWidth()/2 + 1
+                }).fadeIn(function() {
+                    var pop = $(this);
+                    setTimeout(function() {
+                        pop.remove();
+                    }, pop.text().length * 800);
+                });
+            }, function() {
+                $("#anchortitlecontainer").remove();
+            });
+        });
+    });
+</script>
+
+
+  </div>
+</body>
+</html>
