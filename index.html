@@ -252,7 +252,7 @@
         
   
     <h1 itemprop="name">
-      <a  class="article-title" href="/2021/07/07/windows%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6/">windows异常处理机制</a>
+      <a  class="article-title" href="/2021/07/07/windows%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6/">windows下的异常处理</a>
     </h1>
   
 
@@ -263,7 +263,18 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        
+        <h1 id="Windows下的异常处理"><a href="#Windows下的异常处理" class="headerlink" title="Windows下的异常处理"></a>Windows下的异常处理</h1><p>Windows的异常处理是操作系统处理程序错误或异常的一系列流程和技术的总称。</p>
+<p>两种异常处理技术：<code>SEH结构化异常处理  VEH向量化异常处理</code></p>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>异常是由内部事件产生的，又可分为故障，陷阱和终止三类。终止类异常不可恢复，发生这种异常，系统必须重启。</p>
+<p>所谓异常就是在应用程序正常执行过程中发生的不正常事件。由 CPU 引发的异常称为硬件异常，例如访问一个无效的内存地址。由操作系统或应用程序引发的异常称为软件异常。</p>
+<p><code>常见异常</code>：</p>
+<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210708112233852.png" alt="image-20210708112233852"></p>
+<p>1.CPU能够捕获一个事件并引发一个硬件异常</p>
+<p>2.在代码中可以主动引发一个软件异常,这只需调用 RaiseException0函数。</p>
+<p><img src="C:\Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20210708112609543.png" alt="image-20210708112609543"></p>
+<p><strong>程序捕获软件异常的方法与捕获硬件异常的方法完全相同。</strong></p>
+<p>=】】</p>
+
       
     </div>
     
@@ -328,20 +339,20 @@
 <p>SEH详细说明</p>
 <p> SEH链</p>
 <p>   SEH以链的形式存在。第一个异常处理中未处理相关异常，它就会被传递到下一个异常处理器，直到得到处理。SEH是由_EXCEPTION_REGISTRATION_RECORD结构体组成的链表</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ntdll!_EXCEPTION_REGISTRATION_RECORD&#96;&#96;  &#96;&#96;+0x000 Next       : Ptr32 _EXCEPTION_REGISTRATION_RECORD&#96;&#96;  &#96;&#96;+0x004 Handler     : Ptr32 _EXCEPTION_DISPOSITION &#96;&#96;&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ntdll!_EXCEPTION_REGISTRATION_RECORD</span><br><span class="line">   +0x000 Next             : Ptr32 _EXCEPTION_REGISTRATION_RECORD</span><br><span class="line">   +0x004 Handler          : Ptr32 _EXCEPTION_DISPOSITION </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>   Next成员指向下一个_EXCEPTION_REGISTRATION_RECORD结构体指针，handler成员是异常处理函数（异常处理器）。若Next成员的值为FFFFFFFF，则表示它是链表最后一个结点</p>
 <p>发生异常的时候会按照(A)-&gt;(B)-&gt;(C)的顺序依次传递，直到异常被handler处理</p>
 <p>handler异常处理函数定义：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">EXCEPTION_DISPOSITION __cdecl _except_handler (</span><br><span class="line"> &#96;&#96;EXCEPTION_RECORD   *pRecord,</span><br><span class="line"> &#96;&#96;EXCEPTION_REGISTRATION_RECORD *pFrame,</span><br><span class="line"> &#96;&#96;CONTEXT    *pContext,</span><br><span class="line"> &#96;&#96;PVOID&#96;     &#96;pValue</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">EXCEPTION_DISPOSITION __cdecl _except_handler (</span><br><span class="line">  EXCEPTION_RECORD      *pRecord,</span><br><span class="line">  EXCEPTION_REGISTRATION_RECORD *pFrame,</span><br><span class="line">  CONTEXT        *pContext,</span><br><span class="line">  PVOID          pValue</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
 
 
 
 <p> 由系统调用，是一个回调函数，第一个参数是一个指向EXCEPTION_RECORD结构体的指针</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">typedef&#96; &#96;struct&#96; &#96;_EXCEPTION_RECORD &#123;&#96;&#96;  &#96;&#96;DWORD&#96; &#96;ExceptionCode;  &#96;&#96;&#x2F;&#x2F;异常代码&#96;&#96;  &#96;&#96;DWORD&#96; &#96;ExceptionFlags;&#96;&#96;  &#96;&#96;struct&#96; &#96;_EXCEPTION_RECORD *ExceptionRecord;&#96;&#96;  &#96;&#96;PVOID&#96; &#96;ExceptionAddress;  &#96;&#96;&#x2F;&#x2F;异常发生地址&#96;&#96;  &#96;&#96;DWORD&#96; &#96;NumberParameters;&#96;&#96;  &#96;&#96;ULONG_PTR&#96; &#96;ExceptionInformation[EXCEPTION_MAXIMUM_PARAMETERS];&#96;&#96;&#125; EXCEPTION_RECORD;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">typedef struct _EXCEPTION_RECORD &#123;</span><br><span class="line">    DWORD ExceptionCode;   &#x2F;&#x2F;异常代码</span><br><span class="line">    DWORD ExceptionFlags;</span><br><span class="line">    struct _EXCEPTION_RECORD *ExceptionRecord;</span><br><span class="line">    PVOID ExceptionAddress;   &#x2F;&#x2F;异常发生地址</span><br><span class="line">    DWORD NumberParameters;</span><br><span class="line">    ULONG_PTR ExceptionInformation[EXCEPTION_MAXIMUM_PARAMETERS];</span><br><span class="line">&#125; EXCEPTION_RECORD;</span><br></pre></td></tr></table></figure>
 
 <p>   异常处理函数的第三个参数是指向CONTEXT结构体的指针，CONTEXT结构体的定义如下，  CONTEXT结构体用来备份CPU的值。 </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">typedef&#96; &#96;struct&#96; &#96;_CONTEXT &#123;&#96;&#96;  &#96;&#96;DWORD&#96; &#96;ContextFlags;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;Dr0;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;Dr1;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;Dr2;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;Dr3;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;Dr6;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;Dr7;&#96;&#96;  &#96;&#96;FLOATING_SAVE_AREA FloatSave;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;SegGs;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;SegFs;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;SegEs;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;SegDs;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;Edi;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;Esi;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;Ebx;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;Edx;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;Ecx;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;Eax;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;Ebp;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;Eip;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;SegCs;       &#96;&#96;&#x2F;&#x2F; MUST BE SANITIZED&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;EFlags;       &#96;&#96;&#x2F;&#x2F; MUST BE SANITIZED&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;Esp;&#96;&#96;  &#96;&#96;DWORD&#96;  &#96;SegSs;&#96;&#96;  &#96;&#96;BYTE&#96;  &#96;ExtendedRegisters[MAXIMUM_SUPPORTED_EXTENSION];&#96; &#96;&#125; CONTEXT;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">typedef struct _CONTEXT &#123;</span><br><span class="line">    DWORD ContextFlags;</span><br><span class="line">    DWORD   Dr0;</span><br><span class="line">    DWORD   Dr1;</span><br><span class="line">    DWORD   Dr2;</span><br><span class="line">    DWORD   Dr3;</span><br><span class="line">    DWORD   Dr6;</span><br><span class="line">    DWORD   Dr7;</span><br><span class="line">    FLOATING_SAVE_AREA FloatSave;</span><br><span class="line">    DWORD   SegGs;</span><br><span class="line">    DWORD   SegFs;</span><br><span class="line">    DWORD   SegEs;</span><br><span class="line">    DWORD   SegDs;</span><br><span class="line">    DWORD   Edi;</span><br><span class="line">    DWORD   Esi;</span><br><span class="line">    DWORD   Ebx;</span><br><span class="line">    DWORD   Edx;</span><br><span class="line">    DWORD   Ecx;</span><br><span class="line">    DWORD   Eax;</span><br><span class="line">    DWORD   Ebp;</span><br><span class="line">    DWORD   Eip;</span><br><span class="line">    DWORD   SegCs;              &#x2F;&#x2F; MUST BE SANITIZED</span><br><span class="line">    DWORD   EFlags;             &#x2F;&#x2F; MUST BE SANITIZED</span><br><span class="line">    DWORD   Esp;</span><br><span class="line">    DWORD   SegSs;</span><br><span class="line">    BYTE    ExtendedRegisters[MAXIMUM_SUPPORTED_EXTENSION];</span><br><span class="line"> </span><br><span class="line">&#125; CONTEXT;</span><br></pre></td></tr></table></figure>
 
 <p>​    异常发生的时候，执行异常代码的线程就会发生中断，转而运行SEH，此时OS会把线程 CONTEXT结构体的指针传递给异常处理函数的相应参数。参数里有个eip成员。在异常处理函数中将参数eip的值（由copntext.eip传递）改为其他地址  然后返回处理函数。这样之前暂停的线程会执行新的EIP地址处的代码（反调试中经常使用这个技术）  </p>
 <p>​    3 TEB.NtTib.ExceptionList</p>
@@ -350,7 +361,6 @@
 <blockquote>
 <p>FS寄存器指向当前活动线程的TEB结构（线程结构）<br>偏移 说明<br>000 指向SEH链指针<br>004 线程堆栈顶部<br>008 线程堆栈底部<br>00C SubSystemTib<br>010 FiberData<br>014 ArbitraryUserPointer<br>018 FS段寄存器在内存中的镜像地址<br>020 进程PID<br>024 线程ID<br>02C 指向线程局部存储指针<br>030 PEB结构地址（进程结构）<br>034 上个错误号</p>
 </blockquote>
-<p>no：</p>
 <p>​    4 SEH安装/删除方法</p>
 <p>​    汇编中安装使用</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">push @MyHandler ;异常处理程序&#96;&#96;push FS:[0]    ；SEH Linked List头&#96;&#96;mov dword ptr fs:[0],esp ;添加链表</span><br></pre></td></tr></table></figure>
@@ -360,9 +370,6 @@
 
 <p>5 od中的SEH</p>
 <p>   程序在正常运行与调试运行的时候有不同的分支代码，借助SEH实现的反调试及时很多，这为代码的调试带来了很多不便，使调试更加困难。OD提供了很多调试选项，调试中发生异常的时候，调试器不会暂停，会自动将异常派送给被调试者。od中选择options-debugging options-.exception选项卡：灵活使用od的excettion选项，可以在不暂停调试器的前提下自动规避使用SEH的反调试“花招”，从而继续调试。</p>
-<p>如果我们想动态跟踪这个程序，我们按Shift+F9程序就跑飞了</p>
-<p>显示当异常发生之后程序接下来会怎样执行，我们只要在SE句柄前面的数值处下断就可以继续跟踪程序了</p>
-<p>_Handler？？</p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/thanklife/article/details/85160840">(11条消息) C++及Windows异常处理（try，catch; __try,__finally; __try, __except）_thanklife的专栏-CSDN博客___try</a></p>
 
       
@@ -1028,7 +1035,6 @@
 
 第一种方法，通过在异常处理例程中判断IsDebuggerPresent的返回值:
 </code></pre>
-<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/iBinary/p/7574055.html">常见注入手法第二讲,APC注入 - iBinary - 博客园 (cnblogs.com)</a></p>
 <p><a target="_blank" rel="noopener" href="http://www.cppblog.com/fwxjj/archive/2008/01/25/41914.html">SEH的强大功能之一(转) - 大龙的博客 - C++博客 (cppblog.com)</a></p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_40890756/article/details/89950455">(11条消息) SEH的介绍及实战_For Geek-CSDN博客</a></p>
 
